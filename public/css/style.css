@@ -1,0 +1,131 @@
+@import 'https://fonts.googleapis.com/css?family=Montserrat:400,700';
+body {
+	font-family: 'Montserrat', sans-serif;
+}
+a {
+	color: #000;
+}
+a:hover {
+	color: #444;
+	text-decoration: none;
+}
+
+/*Overrides*/
+
+.navbar {
+	margin-top: 10px;
+}
+
+.navbar-white {
+	color: #000;
+	background-color: #fff;
+}
+
+.form-control {
+	height: 50px;
+	border: 4px solid #111;
+	border-radius: 0;
+}
+
+.btn-default {
+	height: 50px;
+	border: 4px solid #111;
+	border-radius: 0;
+	padding-left: 20px;
+	padding-right: 20px;	
+}
+
+/*Overrides End*/
+
+.top-bottom-padding-md {
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+.padding-md {
+	padding: 50px;
+}
+
+.no-left-right-padding {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.no-padding {
+	padding: 0;
+}
+
+.no-left-right-margin {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.top-bottom-margin-lg {
+	margin-top: 100px;
+	margin-bottom: 100px;
+}
+
+.top-bottom-margin-md {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.top-margin-md {
+	margin-top: 50px;
+}
+
+.bg-black {
+	height: 100%;
+	color: #fefefe;
+	background-color: #000;
+}
+
+.bg-pink {
+	height: 100%;
+	color: #fefefe;
+	background-color: #ee0077;
+}
+
+.bg-purple {
+	height: 100%;
+	color: #fefefe;
+	background-color: #731471;
+}
+
+.bg-grey {
+	height: 100%;
+	color: #444;
+	background-color: #ccc;
+}
+
+.bg-img {
+	height: 100%;
+	background-size: contain;
+	background-position: 50% 50%;
+}
+
+.feature {
+	height: 500px;
+	max-height: 500px;
+}
+
+.icon-lg {
+	font-size: 48px;
+}
+
+.icon-border-rd {
+	border: 4px solid #000;
+	border-radius: 50%;
+	padding: 10px;
+}
+
+#footer {
+	background-color: #333;
+	color: #fefefe;
+	font-size: 12px;
+	padding: 15px 10px;
+}
+
+#footer p {
+	margin: 0;
+}
