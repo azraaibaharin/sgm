@@ -20,3 +20,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::get('/home/edit', 'HomeController@edit');
 Route::post('/home/edit', 'HomeController@update');
+
+Route::get('/products', 'ProductController@index');
+Route::get('/products/create', 'ProductController@create');
+Route::post('/products/create', 'ProductController@store');
+Route::get('/products/{id}', 'ProductController@show');
+Route::get('/products/{id}/edit', 'ProductController@edit');
+Route::post('/products/{id}/edit', 'ProductController@update');
+Route::post('/products/{id}/delete', 'ProductController@destroy');

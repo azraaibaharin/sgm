@@ -106,10 +106,6 @@ class HomeController extends Controller
         }
 
         return $imageName;
-
-        // return back()
-        //     ->with('success','Image Uploaded successfully.')
-        //     ->with('path',$imageName);
     }
 
     /**

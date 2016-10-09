@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Home extends Model
 {
+    /**
+     * The attributes default values.
+     * 
+     * @var array
+     */
 	protected $attributes = [
 		'nuna_text' => '', 
 		'nuna_img' => '', 
