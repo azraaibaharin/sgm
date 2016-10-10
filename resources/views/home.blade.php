@@ -51,7 +51,7 @@
             <h1 class="text-center">{{ $potm_title }}</h1>
             <p>{{ $potm_text }}</p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 feature">
             <div class="bg-img" style="background: url({{ asset('img/'.$potm_img) }})"></div>
         </div>
     </div>
@@ -91,7 +91,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="text-center">
-                <h1>Get In Touch!</h1>
+                <h1 class="bottom-padding-sm">Get In Touch!</h1>
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/contact') }}">
                     <div class="form-group{{ $errors->has('contact_name') || $errors->has('contact_email') ? ' has-error' : '' }}">
                         <div class="col-md-6">

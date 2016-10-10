@@ -42,6 +42,10 @@ a:hover {
 	padding-bottom: 50px;
 }
 
+.bottom-padding-sm {
+	padding-bottom: 25px;
+}
+
 .padding-md {
 	padding: 50px;
 }
