@@ -9,10 +9,10 @@
 <div class="container-fluid no-left-right-padding">
     <div class="row">
         <div class="col-md-6 no-padding">
-            <a href="{{ url('products') }}"><img src="{{ asset('img/'.$nuna_img) }}" class="img-responsive" alt="{{ $nuna_text }}"></a>
+            <a href="{{ url('products/b/nuna') }}"><img src="{{ asset('img/'.$nuna_img) }}" class="img-responsive" alt="{{ $nuna_text }}"></a>
         </div>
         <div class="col-md-6 no-padding">
-            <a href="{{ url('products') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
+            <a href="{{ url('products/b/babyhood') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
         </div>
     </div>
 </div>

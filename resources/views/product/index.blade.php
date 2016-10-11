@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 	<div id="products-search" class="row">
-		<form class="form-horizontal" role="form" method="POST" action="{{ url('products/filter') }}" enctype="multipart/form-data">
+		<form class="form-horizontal" role="form" method="POST" action="{{ url('products') }}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			<div class="col-md-4">
 				<div class="form-group{{ $errors->has('brand') ? ' has-error' : '' }}">
@@ -52,21 +52,31 @@
 			</div>
 		</form>
 	</div>
+</div>
 
+<div class="container-fluid">
 	<div id="products" class="row">
+	@if (sizeof($products) > 0)
+		<div class="col-md-12">
+			<small>{{ count($products) }} item(s)</small>
+		</div>
 		@foreach ($products as $p)
 		<div class="col-md-4 {{ $p->brand }}">
-			<a href="{{ url('products/'.$p->id) }}">
-				<div class="col-md-6">
-					<img src="{{ asset('img/'.$p->getDisplay()) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
-				</div>
-				<div class="col-md-6">
-					<h2>{{ $p->model }}</h2>
-				</div>
-			</a>
+			<div class="col-md-6">
+				<img src="{{ asset('img/'.$p->getDisplay()) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
+			</div>
+			<div class="col-md-6">
+				<h2>{{ $p->model }}</h2>
+				<a href="{{ url('products/'.$p->id) }}">View item</a>
+			</div>
 			<hr/>
 		</div>
 		@endforeach
+	@else
+		<div class="col-md-12 text-center">
+			<small>No products available. Click <a href="{{ url('products/create') }}">here</a> to add.</small>
+		</div>
+	@endif
 	</div>
 </div>
 @endsection

@@ -34,19 +34,58 @@ class ProductController extends Controller
      */
     public function filter(Request $request) 
     {
+
+        $brands = $this->getBrands();
+        $categories = $this->getCategories();
+
         $brand = $request['brand'];
         $category = $request['category'];
 
         $products = $this->product
-                        ->where('brand', $brand)
-                        ->where('category', $category)
+                        ->when($brand != $brands[0], function ($query) use ($brand) {
+                            return $query->where('brand', $brand);
+                        })
+                        ->when($category != $categories[0], function ($query) use ($category) {
+                            return $query->where('category', $category);
+                        })
                         ->orderBy('model', 'asc')
                         ->get();
 
-        // dd($products);
+        return view('product.index')
+                ->with('products', $products)
+                ->with('brands', $brands)
+                ->with('brand', $brand)
+                ->with('categories', $categories)
+                ->with('category', $category);
 
-        return redirect()->action('ProductController@index', ['products' => $products]);
+    }
 
+    /**
+     * Return an array of brands.
+     * 
+     * @return array brands
+     */
+    private function getBrands()
+    {
+        $brands = $this->product->brands;
+        sort($brands);
+        array_unshift($brands, "All");
+
+        return $brands;
+    }
+
+    /**
+     * Returns an array of categories.
+     * 
+     * @return array categories
+     */
+    private function getCategories()
+    {
+        $categories = $this->product->categories;
+        sort($categories);
+        array_unshift($categories, "All");
+
+        return $categories;
     }
 
     /**
@@ -54,22 +93,24 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($products = null)
+    public function index($brand = null)
     {   
-        if (is_null($products) || sizeof($products) < 1)
+        $brands = $this->getBrands();
+        $categories = $this->getCategories();
+
+        if (is_null($brand) || empty($brand))
         {
             $products = $this->product->all();            
+            $brand = $brands[0];
+        } else
+        {
+            $products = $this->product->where('brand', $brand)->orderBy('model', 'asc')->get();
         }
-        $brands = $this->product->brands;
-        $categories = $this->product->categories;
-
-        sort($brands);
-        sort($categories);
 
         return view('product.index')
                 ->with('products', $products)
                 ->with('brands', $brands)
-                ->with('brand', $brands[1])
+                ->with('brand', $brand)
                 ->with('categories', $categories)
                 ->with('category', $categories[0]);
     }
@@ -122,7 +163,8 @@ class ProductController extends Controller
     public function show($id)
     {
         $productArr = $this->product->find($id)->toArray();
-        return view('product.show', $productArr );
+        return view('product.show', $productArr )
+                ->with('images', explode(',', $productArr['image_links']));
     }
 
     /**
@@ -140,7 +182,14 @@ class ProductController extends Controller
         $productArr['image_second'] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
         $productArr['image_third'] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
 
-        return view('product.edit', $productArr)->with('brands', $this->product->brands);
+        $brands = $this->product->brands;
+        $categories = $this->product->categories;
+        sort($brands);
+        sort($categories);
+
+        return view('product.edit', $productArr)
+                    ->with('brands', $brands)
+                    ->with('categories', $categories);
     }
 
     /**
@@ -158,6 +207,7 @@ class ProductController extends Controller
         $product->model = $request['model'];
         $product->description = $request['description'];
         $product->category_id = '1';
+        $product->category = $request['category'];
         $product->image_links = $this->getImageLinks($request, $product);
         $product->video_links = $request['video_links'];
         $product->color = $request['color'];

@@ -124,7 +124,7 @@ a:hover {
 }
 
 #products-search {
-	margin-bottom: 25px;
+	margin-bottom: 15px;
 }
 
 #products-search .form-group {
@@ -149,14 +149,19 @@ a:hover {
 	border-radius: 4px;	
 }
 
-#products img {
-	height: 150px;
-	background-color: #eee;
+#products {
+	padding-top: 15px;
+	border-top: 1px solid #eee;
 }
 
 #products > .col-md-4 {
 	padding-top: 10px;
 	padding-bottom: 10px;
+}
+
+#products img {
+	height: 150px;
+	background-color: #eee;
 }
 
 .babyhood h2 {
@@ -174,6 +179,12 @@ a:hover {
 	padding: 6px 8px;
 	text-align: center;
 	margin-top: 0;
+}
+
+#products a {
+	font-size: 12px;
+	font-weight: 400;
+	text-decoration: underline;
 }
 
 #footer {
