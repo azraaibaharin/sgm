@@ -47,6 +47,27 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
+                            <label for="category" class="col-md-2 control-label">Category</label>
+                            <div class="col-md-9">
+                                <select id="category" class="form-control" name="category">
+                                @foreach ($categories as $c)
+                                    @if (old('category') == $c)
+                                        <option value="{{ $c }}" selected>{{ $c }}</option>
+                                    @else
+                                        <option value="{{ $c }}">{{ $c }}</option>
+                                    @endif
+                                @endforeach
+                                </select>
+
+                                @if ($errors->has('brand'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('brand') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-9">

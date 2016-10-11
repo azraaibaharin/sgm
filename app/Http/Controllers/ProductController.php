@@ -62,28 +62,36 @@ class ProductController extends Controller
 
     /**
      * Return an array of brands.
-     * 
+     *
+     * @param default boolean value to indicates whether a default 'All' value is required
      * @return array brands
      */
-    private function getBrands()
+    private function getBrands($default = true)
     {
         $brands = $this->product->brands;
         sort($brands);
-        array_unshift($brands, "All");
+        if ($default)
+        {
+            array_unshift($brands, "All");            
+        }
 
         return $brands;
     }
 
     /**
      * Returns an array of categories.
-     * 
+     *
+     * @param default boolean value to indicates whether a default 'All' value is required
      * @return array categories
      */
-    private function getCategories()
+    private function getCategories($default = true)
     {
         $categories = $this->product->categories;
         sort($categories);
-        array_unshift($categories, "All");
+        if ($default)
+        {
+            array_unshift($categories, "All");
+        }
 
         return $categories;
     }
@@ -122,7 +130,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create')->with('brands', $this->product->brands);
+        $brands = $this->getBrands(false);
+        $categories = $this->getCategories(false);
+
+        return view('product.create')
+                    ->with('brands', $brands)
+                    ->with('categories', $categories);
     }
 
     /**
@@ -182,10 +195,8 @@ class ProductController extends Controller
         $productArr['image_second'] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
         $productArr['image_third'] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
 
-        $brands = $this->product->brands;
-        $categories = $this->product->categories;
-        sort($brands);
-        sort($categories);
+        $brands = $this->getBrands(false);
+        $categories = $this->getCategories(false);
 
         return view('product.edit', $productArr)
                     ->with('brands', $brands)
