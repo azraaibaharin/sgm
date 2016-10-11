@@ -31,7 +31,7 @@
     <div id="feature" class="row">
         <div class="col-md-6 padding-md bg-black feature">
             <h1 class="text-center">{{ $tagline_title }}</h1>
-            <p>{{ $tagline_text }}</p>
+            <p class="text-center">{{ $tagline_text }}</p>
         </div>
         <div class="col-md-6 no-left-right-padding feature">
             <div class="bg-img" style="background: url({{ asset('img/'.$tagline_img) }})"></div>
@@ -43,13 +43,13 @@
         </div>
         <div class="col-md-6 padding-md bg-pink feature">
             <h1 class="text-center">{{ $event_title }}</h1>
-            {{ $event_text }}
+            <p class="text-center">{{ $event_text }}</p>
         </div>
     </div>
     <div id="potm" class="row">
         <div class="col-md-6 padding-md bg-purple feature">
             <h1 class="text-center">{{ $potm_title }}</h1>
-            <p>{{ $potm_text }}</p>
+            <p class="text-center">{{ $potm_text }}</p>
         </div>
         <div class="col-md-6 feature">
             <div class="bg-img" style="background: url({{ asset('img/'.$potm_img) }})"></div>
