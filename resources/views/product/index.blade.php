@@ -1,9 +1,72 @@
 @extends('layouts.product')
 
 @section('content')
-<h1>Products</h1>
-@foreach ($products as $product)
-    <p><a href="{{ url('products/'.$product->id) }}">{{$product->brand }} {{ $product->model }}</a></p>
-@endforeach
-<a href="{{ url('products/create') }}">Add</a>
+<div class="container">
+	<div id="products-search" class="row">
+		<form class="form-horizontal" role="form" method="POST" action="{{ url('products/filter') }}" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			<div class="col-md-4">
+				<div class="form-group{{ $errors->has('brand') ? ' has-error' : '' }}">
+                    <label for="brand" class="col-md-2 control-label">Brand</label>
+                    <div class="col-md-9">
+                        <select id="brand" class="form-control" name="brand">
+                        @foreach ($brands as $b)
+                            @if ($brand == $b)
+                                <option value="{{ $b }}" selected>{{ $b }}</option>
+                            @else
+                                <option value="{{ $b }}">{{ $b }}</option>
+                            @endif
+                        @endforeach
+                        </select>
+                        @if ($errors->has('brand'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('brand') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
+                    <label for="category" class="col-md-2 control-label">Category</label>
+                    <div class="col-md-9">
+                        <select id="category" class="form-control" name="category">
+                        @foreach ($categories as $c)
+                            @if ($category == $c)
+                                <option value="{{ $c }}" selected>{{ $c }}</option>
+                            @else
+                                <option value="{{ $c }}">{{ $c }}</option>
+                            @endif
+                        @endforeach
+                        </select>
+                        @if ($errors->has('category'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('category') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+			</div>
+			<div class="col-md-2">
+				<button type="submit" class="center-block btn btn-default">Filter</button>
+			</div>
+		</form>
+	</div>
+
+	<div id="products" class="row">
+		@foreach ($products as $p)
+		<div class="col-md-4 {{ $p->brand }}">
+			<a href="{{ url('products/'.$p->id) }}">
+				<div class="col-md-6">
+					<img src="{{ asset('img/'.$p->getDisplay()) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
+				</div>
+				<div class="col-md-6">
+					<h2>{{ $p->model }}</h2>
+				</div>
+			</a>
+			<hr/>
+		</div>
+		@endforeach
+	</div>
+</div>
 @endsection

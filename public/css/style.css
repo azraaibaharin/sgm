@@ -123,6 +123,59 @@ a:hover {
 	padding: 10px;
 }
 
+#products-search {
+	margin-bottom: 25px;
+}
+
+#products-search .form-group {
+}
+
+#products-search label {
+	font-weight: 400;
+}
+
+#products-search .form-control {
+	height: 34px;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+#products-search .btn-default {
+	height: 34px;
+	width: 100%;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;	
+}
+
+#products img {
+	height: 150px;
+	background-color: #eee;
+}
+
+#products > .col-md-4 {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.babyhood h2 {
+	color: #fff;
+	background-color: #0a64a2;
+}
+
+.nuna h2 {
+	color: #fff;
+	background-color: #000;
+}
+
+#products h2 {
+	font-size: 14px;
+	padding: 6px 8px;
+	text-align: center;
+	margin-top: 0;
+}
+
 #footer {
 	background-color: #333;
 	color: #fefefe;

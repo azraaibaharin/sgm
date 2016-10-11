@@ -28,15 +28,50 @@ class ProductController extends Controller
     }
 
     /**
+     * Display a listing of resource based on selected filter.
+     *
+     * @return \Illumninate\Http\Response
+     */
+    public function filter(Request $request) 
+    {
+        $brand = $request['brand'];
+        $category = $request['category'];
+
+        $products = $this->product
+                        ->where('brand', $brand)
+                        ->where('category', $category)
+                        ->orderBy('model', 'asc')
+                        ->get();
+
+        // dd($products);
+
+        return redirect()->action('ProductController@index', ['products' => $products]);
+
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $products = $this->product->all();
+    public function index($products = null)
+    {   
+        if (is_null($products) || sizeof($products) < 1)
+        {
+            $products = $this->product->all();            
+        }
+        $brands = $this->product->brands;
+        $categories = $this->product->categories;
 
-        return view('product.index')->with('products', $products);
+        sort($brands);
+        sort($categories);
+
+        return view('product.index')
+                ->with('products', $products)
+                ->with('brands', $brands)
+                ->with('brand', $brands[1])
+                ->with('categories', $categories)
+                ->with('category', $categories[0]);
     }
 
     /**
@@ -46,7 +81,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        return view('product.create')->with('brands', $this->product->brands);
     }
 
     /**
@@ -105,7 +140,7 @@ class ProductController extends Controller
         $productArr['image_second'] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
         $productArr['image_third'] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
 
-        return view('product.edit', $productArr);
+        return view('product.edit', $productArr)->with('brands', $this->product->brands);
     }
 
     /**
