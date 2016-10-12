@@ -241,11 +241,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
-            	<a href="{{ url('products/'.$id) }}">Back</a>
-                <button type="submit" class="center-block btn btn-default">
-                    Submit
-                </button>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <a href="{{ url('products/'.$id) }}" class="btn btn-link pull-left">Back</a>
+                <button type="submit" class="btn btn-default pull-right">Submit</button>
             </div>
         </div>
     </div>

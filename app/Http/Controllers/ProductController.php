@@ -176,8 +176,13 @@ class ProductController extends Controller
     public function show($id)
     {
         $productArr = $this->product->find($id)->toArray();
+
+
+        // dd(sizeof(preg_split('/,/', $productArr['image_links'], -1, PREG_SPLIT_NO_EMPTY)));
+
         return view('product.show', $productArr )
-                ->with('images', explode(',', $productArr['image_links']));
+                ->with('images', preg_split('/,/', $productArr['image_links'], -1, PREG_SPLIT_NO_EMPTY))
+                ->with('videos', preg_split('/,/', $productArr['video_links'], -1, PREG_SPLIT_NO_EMPTY));
     }
 
     /**
@@ -189,11 +194,11 @@ class ProductController extends Controller
     public function edit($id)
     {
         $productArr = $this->product->find($id)->toArray();
-        $imagesArr = explode(',', $productArr['image_links']);
+        $imagesArr = $this->getImageArr($productArr['image_links']);
 
-        $productArr['image_first'] = sizeof($imagesArr) > 0 ? $imagesArr[0] : '';
-        $productArr['image_second'] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
-        $productArr['image_third'] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
+        $productArr['image_first'] = $imagesArr[0];
+        $productArr['image_second'] = $imagesArr[1];
+        $productArr['image_third'] = $imagesArr[2];
 
         $brands = $this->getBrands(false);
         $categories = $this->getCategories(false);
@@ -243,18 +248,31 @@ class ProductController extends Controller
      */
     private function getImageLinks(Request $request, Product $product)
     {   
-        $imagesArr = explode(',', $product->image_links);
-
-        $image_first_old = sizeof($imagesArr) > 0 ? $imagesArr[0] : '';
-        $image_second_old = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
-        $image_third_old = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
+        $imagesArr = $this->getImageArr($product->image_links);  
 
         $image_prefix = $product->brand.'_'.$product->model;
-        $image_first_link = $this->imageUpload($request, 'image_first', $image_first_old, $image_prefix);
-        $image_second_link = $this->imageUpload($request, 'image_second', $image_second_old, $image_prefix);
-        $image_third_link = $this->imageUpload($request, 'image_third', $image_third_old, $image_prefix);
+        $image_first_link = $this->imageUpload($request, 'image_first', $imagesArr[0], $image_prefix);
+        $image_second_link = $this->imageUpload($request, 'image_second', $imagesArr[1], $image_prefix);
+        $image_third_link = $this->imageUpload($request, 'image_third', $imagesArr[2], $image_prefix);
 
         return $image_first_link.','.$image_second_link.','.$image_third_link;
+    }
+
+    /**
+     * Returns an array of product image links.
+     * 
+     * @param  String $image_links comma separated image links
+     * @return array            an array of product image links
+     */
+    private function getImageArr(String $image_links)
+    {
+        $imagesArr = explode(',', $image_links);
+
+        $arr[0] = sizeof($imagesArr) > 0 ? $imagesArr[0] : '';
+        $arr[1] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
+        $arr[2] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
+
+        return $arr;
     }
 
     /**
