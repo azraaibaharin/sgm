@@ -14,6 +14,7 @@
 				<div class="col-md-12">
 					<ol class="breadcrumb">
 						<li><a href="{{ url('products') }}">Products</a></li>
+						@if (!empty($category))<li>{{ $category }}</li>@endif
 						<li class="active">{{ $model }}</li>
 					</ol>	
 				</div>
@@ -76,7 +77,7 @@
 				<div class="col-md-3"><label>Dimension:</label> {{ $dimension == '' ? 'Not set.' : $dimension }}</div>
 				<div class="col-md-3"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set.' : $weight_capacity }}</div>
 				<div class="col-md-3"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set.' : $age_requirement }}</div>
-				<div class="col-md-3"><label>Manual:</label> @if ($download_links == '') Not set @else <a href="{{ $download_links }}">download</a>@endif</div>
+				<div class="col-md-3"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">download</a>@endif</div>
 				<div class="col-md-3"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}
 			</div>
 			<div class="row">
