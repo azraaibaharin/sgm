@@ -281,6 +281,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->product->destroy($id);
+
+        return $this->index();
     }
 }

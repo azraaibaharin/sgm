@@ -3,6 +3,9 @@
 @section('content')
 <div class="container">
 	<div id="products-search" class="row">
+		@if ($message = Session::get('success'))
+            <div class="alert alert-success" role="alert">{{ $message }}</div>
+        @endif
 		<form class="form-horizontal" role="form" method="POST" action="{{ url('products') }}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			<div class="col-md-4">

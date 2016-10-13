@@ -85,7 +85,8 @@
 			<div class="row">
 				<div class="col-md-12">
 					<a href="{{ url('products') }}" class="btn btn-link">Back</a>
-					<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
+					<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Update</a>		
+					<a href="{{ url('products/'.$id.'/delete') }}"" class="btn btn-link">Remove</a>		
 				</div>
 			</div>
 		</div>
