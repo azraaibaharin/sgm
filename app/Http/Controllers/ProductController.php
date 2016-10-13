@@ -34,14 +34,15 @@ class ProductController extends Controller
      */
     public function filter(Request $request) 
     {
+        $product = $this->product;
 
-        $brands = $this->getBrands();
-        $categories = $this->getCategories();
+        $brands = $product->getBrands();
+        $categories = $product->getCategories();
 
         $brand = $request['brand'];
         $category = $request['category'];
 
-        $products = $this->product
+        $products = $product
                         ->when($brand != $brands[0], function ($query) use ($brand) {
                             return $query->where('brand', $brand);
                         })
@@ -61,59 +62,32 @@ class ProductController extends Controller
     }
 
     /**
-     * Return an array of brands.
-     *
-     * @param default boolean value to indicates whether a default 'All' value is required
-     * @return array brands
-     */
-    private function getBrands($default = true)
-    {
-        $brands = $this->product->brands;
-        sort($brands);
-        if ($default)
-        {
-            array_unshift($brands, "All");            
-        }
-
-        return $brands;
-    }
-
-    /**
-     * Returns an array of categories.
-     *
-     * @param default boolean value to indicates whether a default 'All' value is required
-     * @return array categories
-     */
-    private function getCategories($default = true)
-    {
-        $categories = $this->product->categories;
-        sort($categories);
-        if ($default)
-        {
-            array_unshift($categories, "All");
-        }
-
-        return $categories;
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index($brand = null)
     {   
-        $brands = $this->getBrands();
-        $categories = $this->getCategories();
+        $product = $this->product;
 
-        if (is_null($brand) || empty($brand))
+        $brands = $product->getBrands();
+        $categories = $product->getCategories();
+
+        $products = [];
+        if (!is_null($brand) && !empty($brand))
         {
-            $products = $this->product->all();            
-            $brand = $brands[0];
+            $products = $product->where('brand', $brand)
+                                ->orderBy('model', 'asc')
+                                ->take(15)
+                                ->get();
         } else
         {
-            $products = $this->product->where('brand', $brand)->orderBy('model', 'asc')->get();
+            $brand = $brands[0];
+            $products = $product->orderBy('model', 'asc')
+                                ->take(15)
+                                ->get();
         }
+
 
         return view('product.index')
                 ->with('products', $products)
@@ -130,8 +104,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $brands = $this->getBrands(false);
-        $categories = $this->getCategories(false);
+        $product = $this->product;
+
+        $brands = $product->getBrands(false);
+        $categories = $product->getCategories(false);
 
         return view('product.create')
                     ->with('brands', $brands)
@@ -175,14 +151,12 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $productArr = $this->product->find($id)->toArray();
+        $product = $this->product->find($id);
+        $productArr = $product->toArray();
 
-
-        // dd(sizeof(preg_split('/,/', $productArr['image_links'], -1, PREG_SPLIT_NO_EMPTY)));
-
-        return view('product.show', $productArr )
-                ->with('images', preg_split('/,/', $productArr['image_links'], -1, PREG_SPLIT_NO_EMPTY))
-                ->with('videos', preg_split('/,/', $productArr['video_links'], -1, PREG_SPLIT_NO_EMPTY));
+        return view('product.show', $productArr)
+                ->with('displayImage', $product->getDisplay('image_links'))
+                ->with('displayVideo', $product->getDisplay('video_links'));
     }
 
     /**
@@ -193,15 +167,16 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $productArr = $this->product->find($id)->toArray();
+        $product = $this->product->find($id);
+        $productArr = $product->toArray();
         $imagesArr = $this->getImageArr($productArr['image_links']);
 
         $productArr['image_first'] = $imagesArr[0];
         $productArr['image_second'] = $imagesArr[1];
         $productArr['image_third'] = $imagesArr[2];
 
-        $brands = $this->getBrands(false);
-        $categories = $this->getCategories(false);
+        $brands = $product->getBrands(false);
+        $categories = $product->getCategories(false);
 
         return view('product.edit', $productArr)
                     ->with('brands', $brands)

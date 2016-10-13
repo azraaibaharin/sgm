@@ -39,33 +39,102 @@ class Product extends Model
     	'awards'
     ];
 
-    public $brands = [
+    /**
+     * Available brands.
+     *
+     * @var array
+     */
+    protected $brands = [
     	'babyhood', 'nuna'
     ];
 
-    public $categories = [
-    	'accessories', 'high chair', 'strollers', 'swingers', 'portable cot/playpen', 'car seat', 
+    /**
+     * Product categories.
+     * 
+     * @var array
+     */
+    protected $categories = [
+    	'accessories', 'high chair', 'strollers', 'swingers', 'playpen', 'car seat', 
     	'amani bebe', 'bassinettes', 'bed and bath', 'change mats', 'feeding', 'furniture',
-    	'baby cots', 'bedguard', 'change table', 'chest drawers', 'glider feeding chair', 'kaylula',
-    	'bedding accessories ', 'baby cots', 'cradle', 'chest drawers', 'mattresses', 'portable cots', 
+    	'bedguard', 'change table', 'glider feeding chair', 'kaylula',
+    	'bedding', 'baby cots', 'cradle', 'chest drawers', 'mattresses', 'portable cots', 
     	'strollers', 'travel time', 'walkers, rockers, bouncinette',
     ];
 
     /**
-     * Get link to display image.
+     * Returns an array of categories.
      *
-     * @return String link to image
+     * @param default boolean value to indicates whether a default 'All' value is required
+     * @return array categories
      */
-    public function getDisplay() 
+    public function getCategories($default = true)
     {
-    	$imagesArr = explode(',', $this->attributes['image_links']);
-    	foreach ($imagesArr as $image) {
-    		if (!is_null($image) && !empty($image))
-    		{
-    			return $image;
-    		}
-    	}
+        return $this->getSelectOptions($this->categories, $default);
+    }
 
-    	return '';
+    /**
+     * Return an array of brands.
+     *
+     * @param default boolean value to indicates whether a default 'All' value is required
+     * @return array brands
+     */
+    public function getBrands($default = true)
+    {
+        return $this->getSelectOptions($this->brands, $default);
+    }
+
+    /**
+     * Sorts array and add options for select field.
+     *
+     * @param  Array  	$array 	array to populate and sort
+     * @param  boolean 	$defaut whether the default 'All' option should be included
+     * @return array        sorted and populated array
+     */
+    private function getSelectOptions($array, $default = true)
+    {
+    	$sortedPopulatedArr = $array;
+    	sort($sortedPopulatedArr);
+        if ($default)
+        {
+            array_unshift($sortedPopulatedArr, "All");            
+        }
+
+        return $sortedPopulatedArr;
+    }
+
+    /**
+     * Get an array of image links.
+     *
+     * @return array image links
+     */
+    public function getImages()
+    {
+    	return preg_split('/,/', $this->attributes['image_links'], -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * Get an array of video links.
+     *
+     * @return array video links
+     */
+    public function getVideos()
+    {
+    	return preg_split('/,/', $this->attributes['video_links'], -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * Get display link.
+     *
+     * @return String link to display
+     */
+    public function getDisplay($attribute) 
+    {
+    	$display = '';
+    	$array = preg_split('/,/', $this->attributes[$attribute], -1, PREG_SPLIT_NO_EMPTY);
+    	if (sizeof($array) > 0) 
+    	{
+	    	$display = $array[0];
+	    }
+    	return $display;
     }
 }

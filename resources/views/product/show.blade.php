@@ -50,22 +50,24 @@
 					</a>
 				</div>
 			@else --}}
-			@if (sizeof($images) > 0)
-				<div class="row">
-					<div class="col-md-12">
-						<img src="{{ asset('img/'.$images[0]) }}" alt="{{ $model }}-{{ $images[0] }}" class="center-block img-responsive">
-					</div>
+			<div class="row">
+				<div class="col-md-12">
+				@if (!empty($displayImage))
+					<img src="{{ asset('img/'.$displayImage) }}" alt="{{ $model }}-{{ $displayImage }}" class="center-block img-responsive">
+				@else
+					<p class="text-center"><a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Add image</a></p>
+				@endif
 				</div>
-			@endif
+			</div>
 			{{-- @endif --}}
 			<div id="product-about" class="row">
 				<div class="col-md-12">
 					<h2>{{ $model }}</h1>
 					<p>{{ $description == '' ? 'No description.' : $description }}</p>
-					@if (sizeof($videos) > 0)
+					@if (!empty($displayVideo))
 						<br>
 						<div class="embed-responsive embed-responsive-16by9">
-							{!! $videos[0] !!}
+							{!! $displayVideo !!}
 						</div>
 						<br>
 					@endif
