@@ -66,7 +66,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($brand = null)
+    public function index(Request $request, $brand = null)
     {   
         $product = $this->product;
 
@@ -87,7 +87,6 @@ class ProductController extends Controller
                                 ->take(15)
                                 ->get();
         }
-
 
         return view('product.index')
                 ->with('products', $products)
@@ -140,7 +139,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect('products');
+        return redirect('products/'.$product->id);
     }
 
     /**
@@ -149,9 +148,13 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $product = $this->product->find($id);
+        if (is_null($product))
+        {
+            return redirect('products')->with('message', 'Product not found.');
+        }
         $productArr = $product->toArray();
 
         return view('product.show', $productArr)
@@ -168,6 +171,10 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->product->find($id);
+        if (is_null($product))
+        {
+            return redirect('products')->with('message', 'Product not found.');
+        }
         $productArr = $product->toArray();
         $imagesArr = $this->getImageArr($productArr['image_links']);
 
@@ -193,6 +200,10 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = $this->product->find($id);
+        if (is_null($product))
+        {
+            return redirect('products')->with('message', 'Product not found.');
+        }
 
         $product->brand = $request['brand'];
         $product->model = $request['model'];
@@ -208,12 +219,22 @@ class ProductController extends Controller
         $product->weight_capacity = $request['weight_capacity'];
         $product->age_requirement = $request['age_requirement'];
         $product->awards = $request['awards'];
-
-        // dd($product);
-
         $product->save();
 
         return back()->with('success','Update successful.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        $this->product->destroy($id);
+
+        return redirect('products')->with('message', 'Deleted succesfully.');
     }
 
     /**
@@ -271,18 +292,5 @@ class ProductController extends Controller
         }
 
         return $imageName;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->product->destroy($id);
-
-        return $this->index();
     }
 }

@@ -3,9 +3,6 @@
 @section('content')
 <div class="container">
 	<div id="products-search" class="row">
-		@if ($message = Session::get('success'))
-            <div class="alert alert-success" role="alert">{{ $message }}</div>
-        @endif
 		<form class="form-horizontal" role="form" method="POST" action="{{ url('products') }}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			<div class="col-md-4">
@@ -56,6 +53,17 @@
 		</form>
 	</div>
 </div>
+
+@if ($message = session('message'))
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="alert alert-info" role="alert">{{ $message }}</div>		
+			{{ session()->flush() }}
+		</div>
+	</div>
+</div>
+@endif
 
 <div class="container-fluid">
 	<div id="products" class="row">
