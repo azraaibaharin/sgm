@@ -8,10 +8,10 @@
 {{-- Product --}}
 <div class="container-fluid no-left-right-padding">
     <div class="row">
-        <div class="col-md-6 no-padding">
+        <div class="col-md-6 bg-black no-padding">
             <a href="{{ url('products/b/nuna') }}"><img src="{{ asset('img/'.$nuna_img) }}" class="img-responsive" alt="{{ $nuna_text }}"></a>
         </div>
-        <div class="col-md-6 no-padding">
+        <div class="col-md-6 bg-blue no-padding">
             <a href="{{ url('products/b/babyhood') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
         </div>
     </div>
@@ -28,19 +28,17 @@
 
 {{-- Feature --}}
 <div class="container-fluid top-bottom-margin-md no-left-right-padding">
-    <div id="feature" class="row bg-black">
-        <div class="col-md-6 padding-md feature">
+    <div id="feature" class="row">
+        <div class="col-md-6 padding-md bg-black feature">
             <h1 class="text-center">{{ $tagline_title }}</h1>
             <p class="text-center">{{ $tagline_text }}</p>
         </div>
-        <div class="col-md-6 no-left-right-padding feature">
-            {{-- <div class="bg-img" style="background: url({{ asset('img/'.$tagline_img) }})"></div> --}}
+        <div class="col-md-6 no-left-right-padding bg-black feature">
             <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
         </div>
     </div>
     <div id="event" class="row">
         <div class="col-md-6 no-left-right-padding bg-pink feature">
-            {{-- <div class="bg-img" style="background: url({{ asset('img/'.$event_img) }})"></div> --}}
             <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
         </div>
         <div class="col-md-6 padding-md bg-pink feature">
@@ -54,7 +52,6 @@
             <p class="text-center">{{ $potm_text }}</p>
         </div>
         <div class="col-md-6 feature">
-            {{-- <div class="bg-img" style="background: url({{ asset('img/'.$potm_img) }})"></div> --}}
             <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
         </div>
     </div>

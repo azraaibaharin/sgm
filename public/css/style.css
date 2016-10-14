@@ -107,6 +107,12 @@ a:hover {
 	background-color: #ccc;
 }
 
+.bg-blue {
+	height: 100%;
+	color: #fff;
+	background-color: #0a64a2;
+}
+
 .bg-img {
 	height: 100%;
 	background-size: contain;
