@@ -1,9 +1,5 @@
 @extends('layouts.base')
 
-@section('css')
-<link href="/css/style.css" rel="stylesheet">
-@endsection
-
 @section('navbar-right')
 @if (Auth::guest())
     <li><a href="{{ url('/login') }}">Login</a></li>

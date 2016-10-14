@@ -81,7 +81,7 @@ class HomeController extends Controller
 
         $home->save();
 
-        return back()->with('success','Update successful.');
+        return redirect('/');
     }
 
     /**

@@ -1,0 +1,8 @@
+/*Overrides*/
+.form-control {
+	border: 1px solid #ccc;
+}
+
+.btn-default {
+	border: 1px solid #ccc;	
+}

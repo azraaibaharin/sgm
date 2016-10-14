@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@if ($message = Session::get('success'))
-    <div class="alert alert-success" role="alert">{{ $message }}</div>
-@endif
-
 {{-- Product --}}
 <div class="container-fluid no-left-right-padding">
     <div class="row">
