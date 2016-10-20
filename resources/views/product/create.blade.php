@@ -10,7 +10,7 @@
                     <div class="alert alert-success" role="alert">{{ $message }}</div>
                 @endif
                 <div class="panel panel-default">
-                    <div class="panel-heading">Edit</div>
+                    <div class="panel-heading">Create</div>
                     <div class="panel-body">
 
                     	<div class="form-group{{ $errors->has('brand') ? ' has-error' : '' }}">

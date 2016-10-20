@@ -65,8 +65,8 @@
 </div>
 @endif
 
-<div class="container-fluid">
-	<div id="products" class="row">
+<div id="products" class="container-fluid">
+	<div class="row">
 	@if (sizeof($products) > 0)
 		<div class="col-md-12">
 			<small>{{ count($products) }} item(s)</small>

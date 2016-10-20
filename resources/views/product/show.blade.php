@@ -12,7 +12,7 @@
 		<div class="col-md-9">
 			<div class="row">
 				<div class="col-md-12">
-					<ol class="breadcrumb">
+					<ol class="breadcrumb {{ $brand }}">
 						<li><a href="{{ url('products') }}">Products</a></li>
 						@if (!empty($category))<li>{{ $category }}</li>@endif
 						<li class="active">{{ $model }}</li>

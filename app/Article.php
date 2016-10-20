@@ -16,7 +16,7 @@ class Article extends Model
     	'text' => '',
     	'link' => '',
     	'author' => ''
-    ]
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -25,5 +25,5 @@ class Article extends Model
      */
     protected $fillable = [
     	'title', 'text', 'link', 'author'
-    ]
+    ];
 }

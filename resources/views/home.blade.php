@@ -14,7 +14,7 @@
 </div>
 
 {{-- About --}}
-<div id="about" class="container top-bottom-margin-lg">
+<div id="about" class="container top-bottom-margin-md">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <p>{{ $about_text }}</p>
