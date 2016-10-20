@@ -82,6 +82,10 @@ a:hover {
 	margin-top: 50px;
 }
 
+.bottom-margin-sm {
+	margin-bottom: 25px;
+}
+
 .bg-black {
 	height: 100%;
 	color: #fefefe;
@@ -118,19 +122,28 @@ a:hover {
 	background-position: 50% 50%;
 }
 
-.feature {
-	height: 500px;
-	max-height: 500px;
+.highlight {
+	/*max-height: 300px;*/
+	overflow: hidden;
 }
 
 .icon-lg {
 	font-size: 48px;
 }
 
+.icon-md {
+	font-size: 36px;
+}
+
 .icon-border-rd {
 	border: 3px solid #000;
 	border-radius: 50%;
 	padding: 10px;
+}
+
+.icon-border-rd.bg-blue,
+.icon-border-rd.bg-black {
+	border: none;
 }
 
 #products-search {
@@ -203,6 +216,14 @@ a:hover {
 
 #product img {
 	height: 400px;
+}
+
+#articles .col-md-6 {
+	padding-bottom: 20px;
+}
+
+#articles .col-md-6:hover {
+	background-color: #f6f6f6;
 }
 
 #footer {

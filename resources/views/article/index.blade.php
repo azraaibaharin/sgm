@@ -10,7 +10,7 @@
 	<div class="row">
 	@if (sizeof($articles) > 0)
 		@foreach($articles as $a)
-		<div class="col-md-6">
+		<div class="col-md-6 article">
 			<a href="{{ !empty($a->link) ? $a->link : url('articles/'.$a->id) }}">
 				<h2>{{ $a->title }}</h2>
 				<p>{{ $a->text }}</p>

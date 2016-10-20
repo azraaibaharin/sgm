@@ -74,11 +74,11 @@ class HomeController extends Controller
         $home->potm_title = $request['potm_title'];
         $home->potm_text = $request['potm_text'];
         $home->potm_img = $this->imageUpload($request, 'potm_img', $home->potm_img);
-        $home->facebook_url = $request['facebook_url'];
-        $home->twitter_url = $request['twitter_url'];
-        $home->instagram_url = $request['instagram_url'];
+        $home->facebook_babyhood_url = $request['facebook_babyhood_url'];
+        $home->instagram_babyhood_url = $request['instagram_babyhood_url'];
+        $home->facebook_nuna_url = $request['facebook_nuna_url'];
+        $home->instagram_nuna_url = $request['instagram_nuna_url'];
         $home->contact_email = $request['contact_email'];
-
         $home->save();
 
         return redirect('/');

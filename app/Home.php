@@ -26,9 +26,10 @@ class Home extends Model
         'potm_title' => 'No title',
         'potm_text' => 'No product of the month',
         'potm_img' => 'feature-3.jpg',
-        'facebook_url' => '', 
-        'twitter_url' => '',
-        'instagram_url' => '',
+        'facebook_babyhood_url' => '', 
+        'instagram_babyhood_url' => '',
+        'facebook_nuna_url' => '', 
+        'instagram_nuna_url' => '',
         'contact_email' => 'amir@babyhood.com.my',
 	];
 
@@ -44,7 +45,7 @@ class Home extends Model
         'tagline_title', 'tagline_text', 'tagline_img', 
         'event_title', 'event_text', 'event_img', 
         'potm_title', 'potm_text', 'potm_img',
-        'facebook_url', 'twitter_url', 'instagram_url',
+        'facebook_babyhood_url', 'instagram_babyhood_url', 'facebook_nuna_url', 'instagram_nuna_url',
         'contact_email',
     ];
 }

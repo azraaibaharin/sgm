@@ -5,10 +5,10 @@
 <div class="container-fluid no-left-right-padding">
     <div class="row">
         <div class="col-md-6 bg-black no-padding">
-            <a href="{{ url('products/b/nuna') }}"><img src="{{ asset('img/'.$nuna_img) }}" class="img-responsive" alt="{{ $nuna_text }}"></a>
+            <a href="{{ url('products/b/babyhood') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
         </div>
         <div class="col-md-6 bg-blue no-padding">
-            <a href="{{ url('products/b/babyhood') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
+            <a href="{{ url('products/b/nuna') }}"><img src="{{ asset('img/'.$nuna_img) }}" class="img-responsive" alt="{{ $nuna_text }}"></a>
         </div>
     </div>
 </div>
@@ -24,30 +24,30 @@
 
 {{-- Feature --}}
 <div class="container-fluid top-bottom-margin-md no-left-right-padding">
-    <div id="feature" class="row">
-        <div class="col-md-6 padding-md bg-black feature">
+    <div id="feature" class="row bottom-margin-sm bg-black highlight">
+        <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
             <p class="text-center">{{ $tagline_text }}</p>
         </div>
-        <div class="col-md-6 no-left-right-padding bg-black feature">
+        <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
         </div>
     </div>
-    <div id="event" class="row">
-        <div class="col-md-6 no-left-right-padding bg-pink feature">
+    <div id="event" class="row bottom-margin-sm bg-pink highlight">
+        <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
         </div>
-        <div class="col-md-6 padding-md bg-pink feature">
+        <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $event_title }}</h1>
             <p class="text-center">{{ $event_text }}</p>
         </div>
     </div>
-    <div id="potm" class="row">
-        <div class="col-md-6 padding-md bg-purple feature">
+    <div id="potm" class="row bg-purple highlight">
+        <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $potm_title }}</h1>
             <p class="text-center">{{ $potm_text }}</p>
         </div>
-        <div class="col-md-6 feature">
+        <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
         </div>
     </div>
@@ -128,19 +128,24 @@
 {{-- Social Media --}}
 <div id="followus" class="container-fluid padding-md bg-grey">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="text-center">
-                <a href="{{ $facebook_url }}" target="_blank"><i class="icon-social-facebook icon-lg icon-border-rd"></i></a>
+                <a href="{{ $facebook_babyhood_url }}" target="_blank"><i class="icon-social-facebook icon-md icon-border-rd bg-blue"></i></a>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="text-center">
-                <a href="{{ $instagram_url }}" target="_blank"><i class="icon-social-instagram icon-lg icon-border-rd"></i></a>
+                <a href="{{ $instagram_babyhood_url }}" target="_blank"><i class="icon-social-instagram icon-md icon-border-rd bg-blue"></i></a>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="text-center">
-                <a href="{{ $twitter_url }}" target="_blank"><i class="icon-social-twitter icon-lg icon-border-rd"></i></a>
+                <a href="{{ $facebook_nuna_url }}" target="_blank"><i class="icon-social-facebook icon-md icon-border-rd bg-black"></i></a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <a href="{{ $instagram_nuna_url }}" target="_blank"><i class="icon-social-instagram icon-md icon-border-rd bg-black"></i></a>
             </div>
         </div>
     </div>

@@ -152,7 +152,7 @@
                                 @endif
 
                                 <input id="tagline_img" type="file" class="form-control" name="tagline_img" autofocus>
-                                <small>* for a nice look, minimum size: 735px x 500px</small>
+                                <small>* maximum image height is 300px</small>
 
                                 @if ($errors->has('tagline_img'))
                                     <span class="help-block">
@@ -205,7 +205,7 @@
                                 @endif
 
                                 <input id="event_img" type="file" class="form-control" name="event_img" autofocus>
-                                <small>* for a nice look, minimum size: 735px x 500px</small>
+                                <small>* maximum image height is 300px</small>
 
                                 @if ($errors->has('event_img'))
                                     <span class="help-block">
@@ -259,6 +259,7 @@
                                 @endif
 
                                 <input id="potm_img" type="file" class="form-control" name="potm_img" autofocus>
+                                <small>* maximum image height is 300px</small>
 
                                 @if ($errors->has('potm_img'))
                                     <span class="help-block">
@@ -274,39 +275,30 @@
             {{-- Facebook --}}
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Facebook</div>
+                    <div class="panel-heading">Facebook URL</div>
                     <div class="panel-body">
-                        <div class="form-group{{ $errors->has('facebook_url') ? ' has-error' : '' }}">
-                            <label for="facebook_url" class="col-md-2 control-label">URL</label>
+                        <div class="form-group{{ $errors->has('facebook_babyhood_url') ? ' has-error' : '' }}">
+                            <label for="facebook_babyhood_url" class="col-md-2 control-label">Babyhood</label>
 
                             <div class="col-md-9">
-                                <input id="facebook_url" type="text" class="form-control" name="facebook_url" value="{{ old('facebook_url') ? old('facebook_url') : $facebook_url }}" required autofocus />
+                                <input id="facebook_babyhood_url" type="text" class="form-control" name="facebook_babyhood_url" value="{{ old('facebook_babyhood_url') ? old('facebook_babyhood_url') : $facebook_babyhood_url }}" autofocus />
 
-                                @if ($errors->has('facebook_url'))
+                                @if ($errors->has('facebook_babyhood_url'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('facebook_url') }}</strong>
+                                        <strong>{{ $errors->first('facebook_babyhood_url') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Twitter --}}
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Twitter</div>
-                    <div class="panel-body">
-                        <div class="form-group{{ $errors->has('twitter_url') ? ' has-error' : '' }}">
-                            <label for="twitter_url" class="col-md-2 control-label">URL</label>
+                        <div class="form-group{{ $errors->has('facebook_nuna_url') ? ' has-error' : '' }}">
+                            <label for="facebook_nuna_url" class="col-md-2 control-label">Nuna</label>
 
                             <div class="col-md-9">
-                                <input id="twitter_url" type="text" class="form-control" name="twitter_url" value="{{ old('twitter_url') ? old('twitter_url') : $twitter_url }}" required autofocus />
+                                <input id="facebook_nuna_url" type="text" class="form-control" name="facebook_nuna_url" value="{{ old('facebook_nuna_url') ? old('facebook_nuna_url') : $facebook_nuna_url }}" autofocus />
 
-                                @if ($errors->has('twitter_url'))
+                                @if ($errors->has('facebook_nuna_url'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('twitter_url') }}</strong>
+                                        <strong>{{ $errors->first('facebook_nuna_url') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -318,17 +310,30 @@
             {{-- Instagram --}}
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Instagram</div>
+                    <div class="panel-heading">Instagram URL</div>
                     <div class="panel-body">
-                        <div class="form-group{{ $errors->has('instagram_url') ? ' has-error' : '' }}">
-                            <label for="instagram_url" class="col-md-2 control-label">URL</label>
+                        <div class="form-group{{ $errors->has('instagram_babyhood_url') ? ' has-error' : '' }}">
+                            <label for="instagram_babyhood_url" class="col-md-2 control-label">Babyhood</label>
 
                             <div class="col-md-9">
-                                <input id="instagram_url" type="text" class="form-control" name="instagram_url" value="{{ old('instagram_url') ? old('instagram_url') : $instagram_url }}" required autofocus />
+                                <input id="instagram_babyhood_url" type="text" class="form-control" name="instagram_babyhood_url" value="{{ old('instagram_babyhood_url') ? old('instagram_babyhood_url') : $instagram_babyhood_url }}" autofocus />
 
-                                @if ($errors->has('instagram_url'))
+                                @if ($errors->has('instagram_babyhood_url'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('instagram_url') }}</strong>
+                                        <strong>{{ $errors->first('instagram_babyhood_url') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('instagram_nuna_url') ? ' has-error' : '' }}">
+                            <label for="instagram_nuna_url" class="col-md-2 control-label">Nuna</label>
+
+                            <div class="col-md-9">
+                                <input id="instagram_nuna_url" type="text" class="form-control" name="instagram_nuna_url" value="{{ old('instagram_nuna_url') ? old('instagram_nuna_url') : $instagram_nuna_url }}" autofocus />
+
+                                @if ($errors->has('instagram_nuna_url'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('instagram_nuna_url') }}</strong>
                                     </span>
                                 @endif
                             </div>
