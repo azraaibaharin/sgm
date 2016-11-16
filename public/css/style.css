@@ -69,8 +69,8 @@ a:hover {
 }
 
 .top-bottom-margin-lg {
-	margin-top: 100px;
-	margin-bottom: 100px;
+	margin-top: 125px;
+	margin-bottom: 125px;
 }
 
 .top-bottom-margin-md {
@@ -84,6 +84,10 @@ a:hover {
 
 .bottom-margin-sm {
 	margin-bottom: 25px;
+}
+
+.bottom-margin-lg {
+	margin-bottom: 125px;
 }
 
 .bg-black {

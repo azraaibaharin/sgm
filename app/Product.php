@@ -14,7 +14,9 @@ class Product extends Model
 	protected $attributes = [
 		'brand' => '', 
 		'model' => '',
+        'price' => '',
 		'description' => '', 
+        'status' => '',
 		'category_id' => '', 
 		'category' => '',
 		'image_links' => '', 
@@ -34,8 +36,8 @@ class Product extends Model
 	 * @var array
 	 */
     protected $fillable = [
-    	'brand', 'model', 'description', 'category_id', 'category', 'image_links', 'video_links',
-    	'color', 'download_links', 'weight', 'dimension', 'weight_capacity', 'age_requirement',
+    	'brand', 'model', 'price', 'description', 'category_id', 'category', 'image_links', 'video_links',
+    	'status', 'color', 'download_links', 'weight', 'dimension', 'weight_capacity', 'age_requirement',
     	'awards'
     ];
 
@@ -60,6 +62,27 @@ class Product extends Model
     	'bedding', 'baby cots', 'cradle', 'chest drawers', 'mattresses', 'portable cots', 
     	'strollers', 'travel time', 'walkers, rockers, bouncinette',
     ];
+
+    /**
+     * Product status.
+     * 
+     * @var array
+     */
+    protected $statuses = [
+        'In Stock', 'Out of Stock'
+    ];
+
+    /**
+     * Returns an array of statuses.
+     *
+     * @return array statuses
+     */
+    public function getStatuses()
+    {
+        $array = $this->statuses;
+        sort($array);
+        return $array;
+    }
 
     /**
      * Returns an array of categories.

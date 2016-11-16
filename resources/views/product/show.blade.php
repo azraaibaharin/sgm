@@ -74,13 +74,15 @@
 				</div>
 			</div>
 			<div id="product-spec" class="row">
+				<div class="col-md-12"><label>Price:</label> {{ $price == '0.00' ? 'Not set.' : 'RM'.$price }}</div>
 				<div class="col-md-12"><label>Color:</label> {{ $color == '' ? 'Not set.' : $color }}</div>
 				<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set.' : $weight }}</div>
 				<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set.' : $dimension }}</div>
 				<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set.' : $weight_capacity }}</div>
 				<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set.' : $age_requirement }}</div>
-				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">download</a>@endif</div>
-				<div class="col-md-3"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}
+				<div class="col-md-12"><label>Availability:</label> {{ $status == '' ? 'Not set.' : $status }}</div>
+				<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}</div>
+				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12">

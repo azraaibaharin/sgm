@@ -107,10 +107,12 @@ class ProductController extends Controller
 
         $brands = $product->getBrands(false);
         $categories = $product->getCategories(false);
+        $statuses = $product->getStatuses();
 
         return view('product.create')
                     ->with('brands', $brands)
-                    ->with('categories', $categories);
+                    ->with('categories', $categories)
+                    ->with('statuses', $statuses);
     }
 
     /**
@@ -125,7 +127,9 @@ class ProductController extends Controller
 
         $product->brand = $request['brand'];
         $product->model = $request['model'];
+        $product->price = $request['price'];
         $product->description = $request['description'];
+        $product->status = $request['status'];
         $product->category_id = '1';
         $product->image_links = $this->getImageLinks($request, $product);
         $product->video_links = $request['video_links'];
@@ -184,10 +188,12 @@ class ProductController extends Controller
 
         $brands = $product->getBrands(false);
         $categories = $product->getCategories(false);
+        $statuses = $product->getStatuses();
 
         return view('product.edit', $productArr)
                     ->with('brands', $brands)
-                    ->with('categories', $categories);
+                    ->with('categories', $categories)
+                    ->with('statuses', $statuses);
     }
 
     /**
@@ -207,7 +213,9 @@ class ProductController extends Controller
 
         $product->brand = $request['brand'];
         $product->model = $request['model'];
+        $product->price = $request['price'];
         $product->description = $request['description'];
+        $product->status = $request['status'];
         $product->category_id = '1';
         $product->category = $request['category'];
         $product->image_links = $this->getImageLinks($request, $product);

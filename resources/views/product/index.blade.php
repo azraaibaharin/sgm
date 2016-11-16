@@ -72,7 +72,7 @@
 			<small>{{ count($products) }} item(s)</small>
 		</div>
 		@foreach ($products as $p)
-		<div class="col-md-4 {{ $p->brand }}">
+		<div class="col-md-4 {{ $p->brand }} bottom-margin-sm">
 			<div class="col-md-6">
 				<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
 			</div>

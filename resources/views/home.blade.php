@@ -24,7 +24,7 @@
 
 {{-- Feature --}}
 <div class="container-fluid top-bottom-margin-md no-left-right-padding">
-    <div id="feature" class="row bottom-margin-sm bg-black highlight">
+    <div id="feature" class="row bottom-margin-lg bg-black highlight">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
             <p class="text-center">{{ $tagline_text }}</p>
@@ -33,7 +33,7 @@
             <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
         </div>
     </div>
-    <div id="event" class="row bottom-margin-sm bg-pink highlight">
+    <div id="event" class="row bottom-margin-lg highlight">
         <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
         </div>
@@ -42,7 +42,7 @@
             <p class="text-center">{{ $event_text }}</p>
         </div>
     </div>
-    <div id="potm" class="row bg-purple highlight">
+    <div id="potm" class="row bg-black highlight">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $potm_title }}</h1>
             <p class="text-center">{{ $potm_text }}</p>

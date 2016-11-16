@@ -47,6 +47,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
+                            <label for="price" class="col-md-2 control-label">Price</label>
+                            <div class="col-md-9">
+                                <input id="price" class="form-control" name="price" value="{{ old('price') }}" required />
+
+                                @if ($errors->has('price'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('price') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                             <label for="category" class="col-md-2 control-label">Category</label>
                             <div class="col-md-9">
@@ -60,9 +73,9 @@
                                 @endforeach
                                 </select>
 
-                                @if ($errors->has('brand'))
+                                @if ($errors->has('category'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('brand') }}</strong>
+                                        <strong>{{ $errors->first('category') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -76,6 +89,27 @@
                                 @if ($errors->has('description'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('description') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="status" class="col-md-2 control-label">Status</label>
+                            <div class="col-md-9">
+                                <select id="status" class="form-control" name="status">
+                                @foreach ($statuses as $s)
+                                    @if (old('status') == $s)
+                                        <option value="{{ $s }}" selected>{{ $s }}</option>
+                                    @else
+                                        <option value="{{ $s }}">{{ $s }}</option>
+                                    @endif
+                                @endforeach
+                                </select>
+
+                                @if ($errors->has('status'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('status') }}</strong>
                                     </span>
                                 @endif
                             </div>
