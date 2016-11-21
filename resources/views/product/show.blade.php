@@ -47,7 +47,7 @@
 			<div id="product-about" class="row">
 				<div class="col-md-12">
 					<h2>{{ $model }}</h1>
-					<p>{{ $description == '' ? 'No description.' : $description }}</p>
+					<p>{!! $description == '' ? 'No description.' : $description !!}</p>
 					@if (!empty($displayVideo))
 						<br>
 						<div class="embed-responsive embed-responsive-16by9">

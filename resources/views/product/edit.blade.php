@@ -1,5 +1,11 @@
 @extends('layouts.admin')
 
+@section('js-head')
+    @parent
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
+@endsection
+
 @section('content')
 <form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/'.$id.'/edit') }}" enctype="multipart/form-data">
 {{ csrf_field() }}
@@ -84,7 +90,7 @@
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                             <label for="description" class="col-md-2 control-label">Description</label>
                             <div class="col-md-9">
-                                <textarea id="description" class="form-control" name="description" rows="5">{{ old('description') ? old('description') : $description }}</textarea>
+                                <textarea id="description" class="form-control" name="description" rows="8">{{ old('description') ? old('description') : $description }}</textarea>
 
                                 @if ($errors->has('description'))
                                     <span class="help-block">
