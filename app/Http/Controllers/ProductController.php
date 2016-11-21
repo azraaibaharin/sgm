@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManagerStatic as Image;
 
 use App\Http\Requests;
 use App\Product;
@@ -291,14 +292,48 @@ class ProductController extends Controller
         if ($request->hasFile($field_name))
         {
             $this->validate($request, [
-                $field_name => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                $field_name => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
             ]);
 
-            $image = $request->file($field_name);
-            $imageName = $prefix.'_'.$field_name.'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('img'), $imageName);
+            $imageFile = $request->file($field_name);
+            $imageName = $prefix.'_'.$field_name.'.'.$imageFile->getClientOriginalExtension();
+            $imageMoved = $imageFile->move(public_path('img'), $imageName);
+
+            $imgBig = Image::make($imageMoved->getRealPath())->heighten(2000)->save($this->getBigImagePath($imageName), 100);
+            $imgSmall = Image::make($imageMoved->getRealPath())->heighten(560)->save($this->getSmallImagePath($imageName), 100);
+            $imgTiny = Image::make($imageMoved->getRealPath())->heighten(60)->save($this->getTinyImagePath($imageName), 100);
         }
 
         return $imageName;
+    }
+
+    /**
+     * Return full file path for product tiny image.
+     *
+     * @param  String $imageName name of the image
+     * @return String            full file path of the image
+     */
+    protected function getTinyImagePath($imageName) {
+        return public_path('img').'/tiny_'.$imageName;
+    }
+
+    /**
+     * Return full file path for product small image.
+     *
+     * @param  String $imageName name of the image
+     * @return String            full file path of the image
+     */
+    protected function getSmallImagePath($imageName) {
+        return public_path('img').'/small_'.$imageName;   
+    }
+
+    /**
+     * Return full file path for product big image.
+     *
+     * @param  String $imageName name of the image
+     * @return String            full file path of the image
+     */
+    protected function getBigImagePath($imageName) {
+        return public_path('img').'/big_'.$imageName;
     }
 }

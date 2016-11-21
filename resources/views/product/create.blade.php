@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<form class="form-horizontal" role="form" method="POST" action="{{ url('products/create') }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/create') }}" enctype="multipart/form-data">
 {{ csrf_field() }}
     <div class="container">
         <div class="row">

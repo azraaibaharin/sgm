@@ -1,7 +1,12 @@
 @extends('layouts.product')
 
+@section('css')
+    @parent
+    <link type="text/css" rel="stylesheet" href="/magiczoomplus/magiczoomplus.css"/>
+@endsection
+
 @section('content')
-<div id="product" class="container">
+<div id="product" class="container bottom-margin-sm">
 	<div class="row">
 		<div class="col-md-3">
 			<ul class="nav nav-pills nav-stacked">
@@ -19,47 +24,26 @@
 					</ol>	
 				</div>
 			</div>
-			{{-- @if (sizeof($images) > 1)
-				<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-					<!-- Indicators -->
-					<ol class="carousel-indicators">
-						<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-						<li data-target="#carousel-example-generic" data-slide-to="1"></li>
-						<li data-target="#carousel-example-generic" data-slide-to="2"></li>
-					</ol>
-
-					<!-- Wrapper for slides -->
-					<div class="carousel-inner" role="listbox">
-					@foreach ($images as $image)
-						@if (!empty($image))
-							<div class="item active">
-								<img src="{{ asset('img/'.$image) }}" alt="{{ $model }}-{{ $image }}">
-							</div>
-						@endif
-					@endforeach
-					</div>
-
-					<!-- Controls -->
-					<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-						<span class="sr-only">Previous</span>
-					</a>
-					<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-						<span class="sr-only">Next</span>
-					</a>
-				</div>
-			@else --}}
 			<div class="row">
 				<div class="col-md-12">
 				@if (!empty($displayImage))
-					<img src="{{ asset('img/'.$displayImage) }}" alt="{{ $model }}-{{ $displayImage }}" class="center-block img-responsive">
+					<div class="text-center">
+						<a href="{{ asset('img/big_'.$displayImage) }}" class="MagicZoom" id="product-image" data-options="zoomMode: false"><img src="{{ asset('img/small_'.$displayImage) }}"></a>
+
+						<div class="top-margin-sm bottom-margin-xs">
+							<!-- Thumbnails -->
+							@foreach (explode(',', $image_links) as $image_link)
+								@if ($image_link != '')
+									<a data-zoom-id="product-image" href="{{ asset('img/big_'.$image_link) }}" data-image="{{ asset('img/small_'.$image_link) }}"><img src="{{ asset('img/tiny_'.$image_link) }}"></a>
+								@endif
+							@endforeach
+						</div>
+					</div>
 				@else
 					<p class="text-center"><a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Add image</a></p>
 				@endif
 				</div>
 			</div>
-			{{-- @endif --}}
 			<div id="product-about" class="row">
 				<div class="col-md-12">
 					<h2>{{ $model }}</h1>
@@ -84,14 +68,20 @@
 				<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}</div>
 				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
 			</div>
+
 			<div class="row">
 				<div class="col-md-12">
 					<a href="{{ url('products') }}" class="btn btn-link">Back</a>
-					<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Update</a>		
+					<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 					<a href="{{ url('products/'.$id.'/delete') }}"" class="btn btn-link">Remove</a>		
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+@endsection
+
+@section('js')
+    @parent
+    <script type="text/javascript" src="/magiczoomplus/magiczoomplus.js"></script>
 @endsection

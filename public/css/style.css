@@ -82,6 +82,14 @@ a:hover {
 	margin-top: 50px;
 }
 
+.top-margin-sm {
+	margin-top: 25px;
+}
+
+.bottom-margin-xs {
+	margin-bottom: 10px;
+}
+
 .bottom-margin-sm {
 	margin-bottom: 25px;
 }
@@ -215,10 +223,9 @@ a:hover {
 }
 
 #product {
-	padding-bottom: 50px;
 }
 
-#product img {
+#product .product-display-img {
 	height: 400px;
 }
 
