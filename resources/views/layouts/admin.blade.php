@@ -4,6 +4,12 @@
 <link href="/css/admin.css" rel="stylesheet">
 @endsection
 
+@section('js-head')
+    @parent
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
+@endsection
+
 @section('navbar-right')
 @if (Auth::guest())
     <li><a href="{{ url('/login') }}">Login</a></li>

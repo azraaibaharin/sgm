@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactFormSubmitted;
+use App\Http\Requests\ContactFormRequest;
 use App\Home;
 
 class HomeController extends Controller
@@ -100,7 +103,6 @@ class HomeController extends Controller
             ]);
 
             $image = $request->file($field_name);
-            // $imageName = $field_name.'-'.time().'.'.$image->getClientOriginalExtension();
             $imageName = $field_name.'.'.$image->getClientOriginalExtension();
             $image->move(public_path('img'), $imageName);
         }
@@ -111,11 +113,12 @@ class HomeController extends Controller
     /**
      * Process contact inquiry.
      *
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * @param  ContactFormRequest $request contact form request type
+     * @return void
      */
-    protected function contact(Request $request) {
-
+    protected function contact(ContactFormRequest $request) {
+        Mail::send(new ContactFormSubmitted());
+        return redirect('/')->with('message', 'Thanks for contacting us!');
     }
 
     /**

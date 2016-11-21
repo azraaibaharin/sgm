@@ -87,8 +87,13 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="text-center">
+                @if ($message = session('message'))
+                    <div class="alert alert-info" role="alert">{{ $message }}</div>     
+                    {{ session()->flush() }}
+                @endif
                 <h1 class="bottom-padding-sm">Get In Touch!</h1>
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/contact') }}">
+                    {{ csrf_field() }}
                     <div class="form-group{{ $errors->has('contact_name') || $errors->has('contact_email') ? ' has-error' : '' }}">
                         <div class="col-md-6">
                             <input type="text" class="form-control" name="contact_name" required value="{{ old('contact_name') }}" placeholder="Name" />

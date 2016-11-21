@@ -1,11 +1,5 @@
 @extends('layouts.admin')
 
-@section('js-head')
-    @parent
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>tinymce.init({ selector:'textarea' });</script>
-@endsection
-
 @section('content')
 <form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/'.$id.'/edit') }}" enctype="multipart/form-data">
 {{ csrf_field() }}
