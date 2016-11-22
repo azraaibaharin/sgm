@@ -17,7 +17,7 @@
 <div id="about" class="container top-bottom-margin-md">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <p>{{ $about_text }}</p>
+            <p>{!! $about_text !!}</p>
         </div>
     </div>
 </div>
@@ -27,7 +27,7 @@
     <div id="feature" class="row bottom-margin-lg bg-black highlight">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
-            <p class="text-center">{{ $tagline_text }}</p>
+            <p class="text-center">{!! $tagline_text !!}</p>
         </div>
         <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
@@ -39,13 +39,13 @@
         </div>
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $event_title }}</h1>
-            <p class="text-center">{{ $event_text }}</p>
+            <p class="text-center">{!! $event_text !!}</p>
         </div>
     </div>
     <div id="potm" class="row bg-black highlight">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $potm_title }}</h1>
-            <p class="text-center">{{ $potm_text }}</p>
+            <p class="text-center">{!! $potm_text !!}</p>
         </div>
         <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
@@ -93,7 +93,7 @@
                 @endif
                 <h1 class="bottom-padding-sm">Get In Touch!</h1>
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/contact') }}">
-                    {{ csrf_field() }}
+                    {{ csrf_field() }}kk
                     <div class="form-group{{ $errors->has('contact_name') || $errors->has('contact_email') ? ' has-error' : '' }}">
                         <div class="col-md-6">
                             <input type="text" class="form-control" name="contact_name" required value="{{ old('contact_name') }}" placeholder="Name" />
