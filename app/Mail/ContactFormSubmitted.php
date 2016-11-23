@@ -12,13 +12,31 @@ class ContactFormSubmitted extends Mailable
     use Queueable, SerializesModels;
 
     /**
+     * Name of contact.
+     * @var String
+     */
+    protected $name;
+    /**
+     * Email of contact.
+     * @var String
+     */
+    protected $email;
+    /**
+     * Message of contact.
+     * @var String
+     */
+    protected $message;
+
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(String $contact_name, String $contact_email, String $contact_message)
     {
-        //
+        $this->name = $contact_name;
+        $this->email = $contact_email;
+        $this->message = $contact_message;
     }
 
     /**
@@ -28,6 +46,12 @@ class ContactFormSubmitted extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.contactformsubmitted');
+        return $this->subject('Contact Request From Supremeglobal.com.my')
+                    ->view('emails.contactformsubmitted')
+                    ->with([
+                        'name' => $this->name,
+                        'email' => $this->email,
+                        'message_text' => $this->message,
+                    ]);
     }
 }

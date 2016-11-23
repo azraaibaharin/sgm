@@ -117,7 +117,14 @@ class HomeController extends Controller
      * @return void
      */
     protected function contact(ContactFormRequest $request) {
-        Mail::send(new ContactFormSubmitted());
+        $contactEmail = $this->home->firstOrFail()->contact_email;
+        
+        Mail::to($contactEmail)->send(new ContactFormSubmitted(
+            $request['contact_name'],
+            $request['contact_email'],
+            $request['contact_message']
+        ));
+
         return redirect('/')->with('message', 'Thanks for contacting us!');
     }
 
