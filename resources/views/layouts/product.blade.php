@@ -12,6 +12,7 @@
 
         <ul class="dropdown-menu" role="menu">
             <li>
+                <a href="{{ url('/products/import') }}">Import products</a>
                 <a href="{{ url('/products/create') }}">Add product</a>
                 <a href="{{ url('/logout') }}"
                     onclick="event.preventDefault();

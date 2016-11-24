@@ -364,7 +364,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 bottom-margin-sm">
                 <button type="submit" class="center-block btn btn-default">
                     Submit
                 </button>

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Intervention\Image\ImageManagerStatic as Image;
+use Image;
+use Excel;
 
 use App\Http\Requests;
 use App\Product;
@@ -59,7 +60,6 @@ class ProductController extends Controller
                 ->with('brand', $brand)
                 ->with('categories', $categories)
                 ->with('category', $category);
-
     }
 
     /**
@@ -97,6 +97,11 @@ class ProductController extends Controller
                 ->with('category', $categories[0]);
     }
 
+    public function import()
+    {
+        return view('product.import');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -124,27 +129,106 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = $this->product;
-
-        $product->brand = $request['brand'];
-        $product->model = $request['model'];
-        $product->price = $request['price'];
-        $product->description = $request['description'];
-        $product->status = $request['status'];
-        $product->category_id = '1';
-        $product->image_links = $this->getImageLinks($request, $product);
-        $product->video_links = $request['video_links'];
-        $product->color = $request['color'];
-        $product->download_links = $request['download_links'];
-        $product->weight = $request['weight'];
-        $product->dimension = $request['dimension'];
-        $product->weight_capacity = $request['weight_capacity'];
-        $product->age_requirement = $request['age_requirement'];
-        $product->awards = $request['awards'];
-
-        $product->save();
+        $product = $this->save($this->product, $request['brand'], $request['model'], $request['price'], $request['description'], $request['status'], '1', $this->getImageLinks($request, $this->product), $request['video_links'], $request['color'], $request['download_links'], $request['weight'], $request['dimension'], $request['weight_capacity'], $request['age_requirement'], $request['awards']);
 
         return redirect('products/'.$product->id);
+    }
+
+    /**
+     * Store resources based on imported file.
+     *
+     * @return [type] [description]
+     */
+    public function store2(Request $request)
+    {
+        if ($request->hasFile('csv_file'))
+        {
+            $csvFile = $request->file('csv_file');
+            $csvFileName = 'products'.$csvFile->getClientOriginalExtension();
+            $csvFileMoved = $csvFile->move(storage_path('imports'), $csvFileName);
+
+            $results = Excel::load($csvFileMoved->getRealPath())->get();
+
+            // Loop through all sheets
+            $rows = 0;
+            $count = 0;
+            foreach($results as $sheet) 
+            {
+                // Loop through all rows
+                foreach($sheet as $row) 
+                {
+                    if ($row->brand != null && $row->model !=null)
+                    {
+                        $this->save(
+                            new Product(), 
+                            strtolower($row->brand), 
+                            $row->model, 
+                            $row->price_inclusive_gst, 
+                            $row->description, 
+                            '1', 
+                            '1', 
+                            '', 
+                            '', 
+                            $row->colour, 
+                            $row->download_links, 
+                            $row->weight, 
+                            $row->dimension, 
+                            $row->weight_capacity, 
+                            $row->age_requirement, 
+                            $row->awards
+                        );
+                        $count++;
+                    }
+                    $rows++;
+                };
+            };
+            return redirect('products')->with('message','Import successful. '.$count.' products added. '.$rows.' rows processed.');
+        } else
+        {
+            return redirect('products')->with('message','Import aborted. Import file not found.');
+        }
+    }
+
+    /**
+     * Save product.
+     * @param  [type] $product         [description]
+     * @param  [type] $brand           [description]
+     * @param  [type] $model           [description]
+     * @param  [type] $price           [description]
+     * @param  [type] $description     [description]
+     * @param  [type] $status          [description]
+     * @param  [type] $category_id     [description]
+     * @param  [type] $image_links     [description]
+     * @param  [type] $video_links     [description]
+     * @param  [type] $color           [description]
+     * @param  [type] $download_links  [description]
+     * @param  [type] $weight          [description]
+     * @param  [type] $dimension       [description]
+     * @param  [type] $weight_capacity [description]
+     * @param  [type] $age_requirement [description]
+     * @param  [type] $awards          [description]
+     * @return [type]                  [description]
+     */
+    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $image_links, $video_links, $color, $download_links, $weight, $dimension, $weight_capacity, $age_requirement, $awards)
+    {
+        $product->brand = $brand;
+        $product->model = $model;
+        $product->price = $price;
+        $product->description = $description;
+        $product->status = $status;
+        $product->category_id = $category_id;
+        $product->image_links = $image_links;
+        $product->video_links = $video_links;
+        $product->color = $color;
+        $product->download_links = $download_links;
+        $product->weight = $weight;
+        $product->dimension = $dimension;
+        $product->weight_capacity = $weight_capacity;
+        $product->age_requirement = $age_requirement;
+        $product->awards = $awards;
+        $product->save();
+
+        return $product;
     }
 
     /**
@@ -313,7 +397,8 @@ class ProductController extends Controller
      * @param  String $imageName name of the image
      * @return String            full file path of the image
      */
-    protected function getTinyImagePath($imageName) {
+    private function getTinyImagePath($imageName) 
+    {
         return public_path('img').'/tiny_'.$imageName;
     }
 
@@ -323,7 +408,8 @@ class ProductController extends Controller
      * @param  String $imageName name of the image
      * @return String            full file path of the image
      */
-    protected function getSmallImagePath($imageName) {
+    private function getSmallImagePath($imageName) 
+    {
         return public_path('img').'/small_'.$imageName;   
     }
 
@@ -333,7 +419,8 @@ class ProductController extends Controller
      * @param  String $imageName name of the image
      * @return String            full file path of the image
      */
-    protected function getBigImagePath($imageName) {
+    private function getBigImagePath($imageName) 
+    {
         return public_path('img').'/big_'.$imageName;
     }
 }

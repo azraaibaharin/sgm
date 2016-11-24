@@ -30,6 +30,8 @@ Route::get('/products/b/{brand}', 'ProductController@index');
 Route::post('/products', 'ProductController@filter');
 Route::get('/products/create', 'ProductController@create');
 Route::post('/products/create', 'ProductController@store');
+Route::get('/products/import', 'ProductController@import');
+Route::post('/products/import', 'ProductController@store2');
 Route::get('/products/{id}', 'ProductController@show');
 Route::get('/products/{id}/edit', 'ProductController@edit');
 Route::post('/products/{id}/edit', 'ProductController@update');

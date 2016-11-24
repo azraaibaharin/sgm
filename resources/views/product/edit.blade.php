@@ -279,7 +279,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <a href="{{ url('products/'.$id) }}" class="btn btn-link pull-left">Back</a>
-                <button type="submit" class="btn btn-default pull-right">Update</button>
+                <button type="submit" class="btn btn-link pull-right">Update</button>
             </div>
         </div>
     </div>

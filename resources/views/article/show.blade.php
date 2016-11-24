@@ -10,7 +10,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 top-margin-sm">
 			<a href="{{ url('articles') }}" class="btn btn-link">Back</a>
 			<a href="{{ url('articles/'.$id.'/edit') }}"" class="btn btn-link">Update</a>		
 			<a href="{{ url('articles/'.$id.'/delete') }}"" class="btn btn-link">Remove</a>		
