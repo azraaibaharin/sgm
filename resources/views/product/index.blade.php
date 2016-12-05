@@ -8,7 +8,7 @@
 			<div class="col-md-4">
 				<div class="form-group{{ $errors->has('brand') ? ' has-error' : '' }}">
                     <label for="brand" class="col-md-2 control-label">Brand</label>
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <select id="brand" class="form-control" name="brand">
                         @foreach ($brands as $b)
                             @if ($brand == $b)
@@ -48,7 +48,7 @@
                 </div>
 			</div>
 			<div class="col-md-2">
-				<button type="submit" class="center-block btn btn-default">Filter</button>
+				<button type="submit" class="center-block btn btn-default">Search</button>
 			</div>
 		</form>
 	</div>
@@ -65,10 +65,10 @@
 </div>
 @endif
 
-<div id="products" class="container-fluid">
+<div id="products" class="container">
 	<div class="row">
 	@if (sizeof($products) > 0)
-		<div class="col-md-12">
+		<div class="col-md-12 bottom-margin-sm">
 			<small>{{ count($products) }} item(s)</small>
 		</div>
 		@foreach ($products as $p)

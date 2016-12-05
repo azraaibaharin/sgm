@@ -1,21 +1,10 @@
-@extends('layouts.base')
+@extends('layouts.app')
 
 @section('navbar-right')
 @if (Auth::guest())
     <li><a href="{{ url('/login') }}">Login</a></li>
     <li><a href="{{ url('/register') }}">Register</a></li>
 @else
-    <li><a href="#feature">Feature</a></li>
-    <li><a href="#event">Event</a></li>
-    <li><a href="#potm">Product of The Month</a></li>
-    <li><a href="#getintouch">Get In Touch</a></li>
-    <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">More <span class="caret"></span></a>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="{{ url('articles') }}">Articles</a></li>
-            <li><a href="{{ url('testimonials') }}">Testimonials</a></li>
-        </ul>
-    </li>
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
             {{ Auth::user()->name }} <span class="caret"></span>
@@ -23,7 +12,7 @@
 
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a href="{{ url('/home/edit') }}">Edit Home</a>
+                <a href="{{ url('/testimonials/create') }}">Add testimonial</a>
                 <a href="{{ url('/logout') }}"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">

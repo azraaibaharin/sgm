@@ -26,6 +26,24 @@
                             </div>
                         </div>
 
+                        {{-- <div class="form-group{{ $errors->has('image_link') ? ' has-error' : '' }}">
+                            <label for="image_link" class="col-md-2 control-label">Image</label>
+
+                            <div class="col-md-9">
+                                @if ($image_link)
+                                    <img src="{{ asset('img/'.$image_link) }}" class="img-thumbnail" alt="">
+                                @endif
+                                
+                                <input id="image_link" type="file" class="form-control" name="image_link">
+        
+                                @if ($errors->has('image_link'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('image_link') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div> --}}
+
                         <div class="form-group{{ $errors->has('text') ? ' has-error' : '' }}">
                             <label for="text" class="col-md-2 control-label">Text</label>
                             <div class="col-md-9">
@@ -69,7 +87,7 @@
             </div>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <a href="{{ url('articles') }}" class="btn btn-link pull-left">Back</a>
+                    <a href="{{ url('articles/'.$id) }}" class="btn btn-link pull-left">Back</a>
                     <button type="submit" class="btn btn-default pull-right">Submit</button>
                 </div>
             </div>

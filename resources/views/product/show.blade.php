@@ -71,9 +71,13 @@
 
 			<div class="row">
 				<div class="col-md-12 top-margin-sm">
-					<a href="{{ url('products') }}" class="btn btn-link">Back</a>
-					<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
-					<a href="{{ url('products/'.$id.'/delete') }}"" class="btn btn-link">Remove</a>		
+					<form method="POST" action="{{ url('products/delete') }}">
+						{{ csrf_field() }}
+						<input type="hidden" name="product_id" value="{{ $id }}">
+						<a href="{{ url('products') }}" class="btn btn-link">Back</a>
+						<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
+						<button type="submit" class="btn btn-link">Delete</button>
+					</form>		
 				</div>
 			</div>
 		</div>

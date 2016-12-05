@@ -33,7 +33,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = $this->article->take(50)->orderBy('title')->get();
+        $articles = $this->article->take(50)->orderBy('updated_at')->get();
         return view('article.index')->with('articles', $articles);
     }
 
@@ -58,6 +58,7 @@ class ArticleController extends Controller
         $article = $this->article;
 
         $article->title = $request['title'];
+        $article->image_link = $this->imageUpload($request, 'image_link', $article->image_link, 'article_'.$article->id);
         $article->text = $request['text'];
         $article->link = $request['link'];
         $article->author = $request['author'];
@@ -114,6 +115,7 @@ class ArticleController extends Controller
         }
 
         $article->title = $request['title'];
+        $article->image_link = $this->imageUpload($request, 'image_link', $article->image_link, 'article_'.$article->id);
         $article->text = $request['text'];
         $article->link = $request['link'];
         $article->author = $request['author'];
@@ -125,11 +127,39 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $article_id = $request['article_id'];
+        $article = $this->article->findOrFail($article_id);
+        $articleTitle = $article->title;
+        $this->article->destroy($article_id);
+
+        return redirect('articles')->with('message', 'Successfully deleted \''.$articleTitle.'\'');
+    }
+
+    /**
+     * Manage image upload.
+     *
+     * @return void
+     */
+    public function imageUpload(Request $request, $field_name, $old_value, $prefix)
+    {
+        $imageName = $old_value;
+
+        if ($request->hasFile($field_name))
+        {
+            $this->validate($request, [
+                $field_name => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
+            ]);
+
+            $imageFile = $request->file($field_name);
+            $imageName = $prefix.'.'.$imageFile->getClientOriginalExtension();
+            $imageMoved = $imageFile->move(public_path('img'), $imageName);
+        }
+
+        return $imageName;
     }
 }

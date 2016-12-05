@@ -35,7 +35,7 @@ Route::post('/products/import', 'ProductController@store2');
 Route::get('/products/{id}', 'ProductController@show');
 Route::get('/products/{id}/edit', 'ProductController@edit');
 Route::post('/products/{id}/edit', 'ProductController@update');
-Route::get('/products/{id}/delete', 'ProductController@destroy');
+Route::post('/products/delete', 'ProductController@destroy');
 
 // Articles
 Route::get('articles', 'ArticleController@index');
@@ -44,4 +44,16 @@ Route::post('articles/create', 'ArticleController@store');
 Route::get('articles/{id}', 'ArticleController@show');
 Route::get('articles/{id}/edit', 'ArticleController@edit');
 Route::post('articles/{id}/edit', 'ArticleController@update');
-Route::post('articles/{id}/delete', 'ArticleController@destroy');
+Route::post('articles/delete', 'ArticleController@destroy');
+
+// Testimonials
+Route::get('testimonials', 'TestimonialController@index');
+Route::post('testimonials', 'TestimonialController@filter');
+Route::get('testimonials/create', 'TestimonialController@create');
+Route::post('testimonials/create', 'TestimonialController@store');
+Route::get('testimonials/{id}', 'TestimonialController@show');
+Route::get('testimonials/{id}/edit', 'TestimonialController@edit');
+Route::post('testimonials/{id}/edit', 'TestimonialController@update');
+Route::post('testimonials/delete', 'TestimonialController@destroy');
+
+

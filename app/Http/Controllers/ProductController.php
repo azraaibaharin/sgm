@@ -129,7 +129,24 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = $this->save($this->product, $request['brand'], $request['model'], $request['price'], $request['description'], $request['status'], '1', $this->getImageLinks($request, $this->product), $request['video_links'], $request['color'], $request['download_links'], $request['weight'], $request['dimension'], $request['weight_capacity'], $request['age_requirement'], $request['awards']);
+        $product = $this->save(
+            $this->product, 
+            $request['brand'], 
+            $request['model'], 
+            $request['price'], 
+            $request['description'], 
+            $request['status'], 
+            '1', 
+            $this->getImageLinks($request, $this->product), 
+            $request['video_links'], 
+            $request['color'], 
+            $request['download_links'], 
+            $request['weight'], 
+            $request['dimension'], 
+            $request['weight_capacity'], 
+            $request['age_requirement'], 
+            $request['awards']
+        );
 
         return redirect('products/'.$product->id);
     }
@@ -320,14 +337,16 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Request request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
-    {
-        $this->product->destroy($id);
+    public function destroy(Request $request)
+    {   $product_id = $request['product_id'];
+        $product = $this->product->findOrFail($product_id);
+        $productName = $product->brand.' '.$product->model;
+        $this->product->destroy($product_id);
 
-        return redirect('products')->with('message', 'Deleted succesfully.');
+        return redirect('products')->with('message', 'Successfully deleted \''.$productName.'\'');
     }
 
     /**
@@ -365,7 +384,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Manage Post Request
+     * Manage Image upload Request
      *
      * @return void
      */

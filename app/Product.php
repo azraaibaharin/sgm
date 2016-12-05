@@ -73,6 +73,14 @@ class Product extends Model
     ];
 
     /**
+     * Get the testimonials for the product.
+     */
+    public function testimonials()
+    {
+        return $this->hasMany('App\Testimonial');
+    }
+
+    /**
      * Returns an array of statuses.
      *
      * @return array statuses

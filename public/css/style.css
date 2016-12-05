@@ -158,25 +158,26 @@ a:hover {
 	border: none;
 }
 
-#products-search {
+#products-search,
+#testimonials-search {
 	margin-bottom: 15px;
 }
 
-#products-search .form-group {
-}
-
-#products-search label {
+#products-search label,
+#testimonials-search label {
 	font-weight: 400;
 }
 
-#products-search .form-control {
+#products-search .form-control,
+#testimonials-search .form-control {
 	height: 34px;
 	padding: 6px 12px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 }
 
-#products-search .btn-default {
+#products-search .btn-default,
+#testimonials-search .btn-default {
 	height: 34px;
 	width: 100%;
 	padding: 6px 12px;
@@ -184,7 +185,8 @@ a:hover {
 	border-radius: 4px;	
 }
 
-#products {
+#products,
+#testimonials {
 	padding-top: 15px;
 	border-top: 1px solid #eee;
 }
@@ -216,13 +218,11 @@ a:hover {
 	margin-top: 0;
 }
 
-#products a {
+#products a,
+#testimonials a {
 	font-size: 12px;
 	font-weight: 400;
 	text-decoration: underline;
-}
-
-#product {
 }
 
 #product .product-display-img {
@@ -235,6 +235,18 @@ a:hover {
 
 #articles .col-md-6:hover {
 	background-color: #f6f6f6;
+}
+
+#getintouch .form-control {
+	border: 2px solid #111;
+	border-radius: 0;
+}
+
+#getintouch .btn-default {
+	border: 2px solid #111;
+	border-radius: 0;
+	padding-left: 20px;
+	padding-right: 20px;	
 }
 
 #footer {

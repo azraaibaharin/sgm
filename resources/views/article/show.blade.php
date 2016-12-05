@@ -5,15 +5,16 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{ $title }}</h1>
-			<p>{{ $text }}</p>
-			<small>{{ $author }}</small>
+			@if ($image_link)
+				<img src="{{ asset('img/'.$image_link) }}" alt="">
+			@endif
+			<p>{!! $text !!}</p>
+			<small>By {{ $author }}</small>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 top-margin-sm">
 			<a href="{{ url('articles') }}" class="btn btn-link">Back</a>
-			<a href="{{ url('articles/'.$id.'/edit') }}"" class="btn btn-link">Update</a>		
-			<a href="{{ url('articles/'.$id.'/delete') }}"" class="btn btn-link">Remove</a>		
 		</div>
 	</div>
 </div>

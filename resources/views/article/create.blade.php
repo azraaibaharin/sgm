@@ -26,6 +26,20 @@
                             </div>
                         </div>
 
+                        {{-- <div class="form-group{{ $errors->has('image_link') ? ' has-error' : '' }}">
+                            <label for="image_link" class="col-md-2 control-label">Image</label>
+
+                            <div class="col-md-9">
+                                <input id="image_link" type="file" class="form-control" name="image_link">
+        
+                                @if ($errors->has('image_link'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('image_link') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div> --}}
+
                         <div class="form-group{{ $errors->has('text') ? ' has-error' : '' }}">
                             <label for="text" class="col-md-2 control-label">Text</label>
                             <div class="col-md-9">

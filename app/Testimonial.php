@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class Testimonial extends Model
 {
-	/**
+    /**
 	 * The attributes default values.
 	 * 
 	 * @var array
@@ -14,9 +14,7 @@ class Article extends Model
     protected $attributes = [
     	'title' => '',
     	'text' => '',
-    	'link' => '',
-        'image_link' => '',
-    	'author' => ''
+    	'product_id' => '',
     ];
 
     /**
@@ -25,12 +23,14 @@ class Article extends Model
      * @var array
      */
     protected $fillable = [
-    	'title', 'text', 'link', 'image_link', 'author'
+    	'title', 'text', 'product_id'
     ];
 
-    public function setLinkAttribute($value)
+    /**
+     * Get the product that owns the testimonial.
+     */
+    public function product()
     {
-        $this->attributes['link'] = strtolower($value);
+        return $this->belongsTo('App\Product');
     }
-
 }
