@@ -23,7 +23,7 @@
 </div>
 
 {{-- Feature --}}
-<div id="feature" class="container-fluid bottom-margin-lg">
+<div id="feature" class="container-fluid bottom-margin-md">
     <div class="row bg-black">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
@@ -36,7 +36,7 @@
 </div>
 
 {{-- Testimonial --}}
-<div id="testimonial" class="container-fluid bottom-margin-lg">
+<div id="testimonial" class="container-fluid bottom-margin-md">
     <div class="row">
         <div class="col-md-12">
             <h1 class="text-center">Testimonials</h1>
@@ -51,7 +51,7 @@
 </div>
 
 {{-- Event --}}
-<div id="event" class="container-fluid bottom-margin-lg">
+<div id="event" class="container-fluid bottom-margin-md">
     <div class="row">
         <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
@@ -79,7 +79,7 @@
         <div class="col-md-12 text-center top-margin-md">
             <a href="{{ url('articles') }}" >More Articles</a>
         </div>
-</div> --}}
+</div>
 
 {{-- Product of the month --}}
 <div id="potm" class="container-fluid bottom-margin-lg">
