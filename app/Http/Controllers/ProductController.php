@@ -161,7 +161,7 @@ class ProductController extends Controller
         if ($request->hasFile('csv_file'))
         {
             $csvFile = $request->file('csv_file');
-            $csvFileName = 'products'.$csvFile->getClientOriginalExtension();
+            $csvFileName = 'products.'.$csvFile->getClientOriginalExtension();
             $csvFileMoved = $csvFile->move(storage_path('imports'), $csvFileName);
 
             $results = Excel::load($csvFileMoved->getRealPath())->get();
