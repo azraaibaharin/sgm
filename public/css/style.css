@@ -102,6 +102,10 @@ a:hover {
 	margin-bottom: 25px;
 }
 
+.bottom-margin-md {
+	margin-bottom: 75px;
+}
+
 .bottom-margin-lg {
 	margin-bottom: 125px;
 }

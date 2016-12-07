@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormSubmitted;
 use App\Http\Requests\ContactFormRequest;
 use App\Home;
+use App\Article;
 
 class HomeController extends Controller
 {
@@ -18,15 +19,22 @@ class HomeController extends Controller
     protected $home;
 
     /**
+     * The Article instance.
+     * @var App\Article
+     */
+    protected $article;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Home $home)
+    public function __construct(Home $home, Article $article)
     {
         $this->middleware('auth');
 
         $this->home = $home;
+        $this->article = $article;
 
         if (is_null($this->home->first()))
         {
@@ -42,7 +50,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home', $this->getData());
+        return view('home', $this->getData())
+                ->with('articles', $this->article
+                                ->orderBy('created_at', 'asc')
+                                ->take(3)
+                                ->get());
     }
 
     /**
