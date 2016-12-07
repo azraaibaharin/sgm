@@ -104,6 +104,12 @@ a:hover {
 	background-color: #000;
 }
 
+.bg-dark-grey {
+	height: 100%;
+	color: #fefefe;
+	background-color: #333;	
+}
+
 .bg-pink {
 	height: 100%;
 	color: #fefefe;
@@ -250,10 +256,9 @@ a:hover {
 }
 
 #footer {
-	background-color: #333;
-	color: #fefefe;
 	font-size: 12px;
-	padding: 15px 10px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 #footer p {

@@ -2,7 +2,7 @@
 
 @section('content')
 {{-- Product --}}
-<div class="container-fluid no-left-right-padding">
+<div id="banner" class="container-fluid">
     <div class="row">
         <div class="col-md-6 bg-black no-padding">
             <a href="{{ url('products/b/babyhood') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
@@ -23,7 +23,7 @@
 </div>
 
 {{-- Feature --}}
-<div class="container-fluid top-bottom-margin-md no-left-right-padding">
+<div id="highlight" class="container-fluid top-bottom-margin-md">
     <div id="feature" class="row bottom-margin-lg bg-black highlight">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
@@ -157,12 +157,10 @@
 </div>
 
 {{-- Footer --}}
-<div class="container-fluid no-left-right-padding">
+<div id="footer" class="container-fluid bg-dark-grey">
     <div class="row">
-        <div class="col-md-12">
-            <div id="footer" class="text-center">
-                <p>Copyright Supreme Global Marketing</p>
-            </div>
+        <div class="col-md-12 text-center">
+            <p>Copyright Supreme Global Marketing</p>
         </div>
     </div>
 </div>
