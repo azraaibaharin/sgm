@@ -53,7 +53,21 @@
     </div>
 </div>
 
-{{-- Article --}}
+<div id="testimonial" class="container-fluid top-bottom-margin-md bottom-padding-md border-bottom">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">Testimonials</h1>
+        </div>
+        <div class="col-md-6 text-center babyhood">
+            <h3><a href="{{ url('testimonials/b/babyhood') }}">For Babyhood</a></h3>
+        </div>
+        <div class="col-md-6 text-center nuna">
+            <h3><a href="{{ url('testimonials/b/nuna') }}">For Nuna</a></h3>
+        </div>
+    </div>
+</div>
+
+{{-- Article
 {{-- <div class="container-fluid top-bottom-margin-md">
     <div class="row">
         <div class="col-md-3">

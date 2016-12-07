@@ -44,15 +44,11 @@ class ProductController extends Controller
         $brand = $request['brand'];
         $category = $request['category'];
 
-        $products = $product
-                        ->when($brand != $brands[0], function ($query) use ($brand) {
-                            return $query->where('brand', $brand);
-                        })
-                        ->when($category != $categories[0], function ($query) use ($category) {
-                            return $query->where('category', $category);
-                        })
-                        ->orderBy('model', 'asc')
-                        ->get();
+        $products = $product->when($brand != $brands[0], function ($query) use ($brand) {
+                                return $query->where('brand', $brand);}
+                            )->when($category != $categories[0], function ($query) use ($category) {
+                                return $query->where('category', $category);}
+                            )->orderBy('model', 'asc')->get();
 
         return view('product.index')
                 ->with('products', $products)
@@ -70,7 +66,6 @@ class ProductController extends Controller
     public function index(Request $request, $brand = null)
     {   
         $product = $this->product;
-
         $brands = $product->getBrands();
         $categories = $product->getCategories();
 

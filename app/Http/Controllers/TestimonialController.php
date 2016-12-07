@@ -42,9 +42,9 @@ class TestimonialController extends Controller
      */
     public function index(Request $request, $brand = null)
     {
-        $testimonials = $this->testimonial->take(50)->orderBy('created_at')->get();
         $brands = $this->product->getBrands();
-        $brand = !is_null($brand) && !empty($brand) ? $brands[0] : $brand;
+        $brand = is_null($brand) || empty($brand) ? $brands[0] : $brand;
+        $testimonials = $this->getTestimonials($brand);    
 
         return view('testimonial.index')
                 ->with('testimonials', $testimonials)
@@ -61,20 +61,38 @@ class TestimonialController extends Controller
     {
         $brands = $this->product->getBrands();
         $brand = $request['brand'];
+        $testimonials = $this->getTestimonials($brand);
 
-        $testimonial = $this->testimonial;
-        $testimonials = $testimonial->whereHas('comments', function ($query) {
-            $query->where('content', 'like', 'foo%');
-        })->get();
-
-        $testimonials = $testimonial->when($brand != $brands[0], function ($query) use ($brand) {
-                            return $query->where('brand', $brand);
-                        })->orderBy('model', 'asc')->get();
-
-        return view('product.index')
+        return view('testimonial.index')
                 ->with('testimonials', $testimonials)
                 ->with('brands', $brands)
-                ->with('brand', $brand)
+                ->with('brand', $brand);
+    }
+
+    /**
+     * Returns testimonials that is associated with the provided product brand.
+     * @param  Strubg $brand brand name. default is null.
+     * @return Collection        collection of testimonials
+     */
+    protected function getTestimonials($brand = null)
+    {
+        $brands = $this->product->getBrands();
+        $testimonials;
+
+        if ($brand != $brands[0])
+        {
+            $testimonials = $this->testimonial
+                                    ->join('products', function ($join) use ($brand) {
+                                        $join->on('testimonials.product_id', '=', 'products.id')
+                                                ->where('products.brand', '=', $brand);
+                                    })
+                                    ->get();
+        } else 
+        {
+            $testimonials = $this->testimonial->take(50)->orderBy('created_at')->get();
+        }
+
+        return $testimonials;
     }
 
     /**

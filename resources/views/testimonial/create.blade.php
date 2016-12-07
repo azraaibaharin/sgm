@@ -14,7 +14,7 @@
                     <div class="panel-body">
 
                         <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
-                            <label for="product_id" class="col-md-2 control-label">Brand</label>
+                            <label for="product_id" class="col-md-2 control-label">Product</label>
                             <div class="col-md-9">
                                 <select id="product_id" class="form-control" name="product_id">
                                 @foreach ($products as $product)

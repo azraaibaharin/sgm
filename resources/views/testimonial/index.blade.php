@@ -51,7 +51,7 @@
 			<small>{{ count($testimonials) }} result(s)</small>
 		</div>
 		@foreach($testimonials as $t)
-		<div class="col-md-4 article">
+		<div class="col-md-4 {{ $t->product->brand }}">
 			<h2>{{ $t->title }}</h2>
 			<small>about {{ ucfirst($t->product->brand) }} {{ $t->product->model }}</small>
 			<p>{!! $t->text !!}</p>

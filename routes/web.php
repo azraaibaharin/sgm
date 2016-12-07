@@ -48,6 +48,7 @@ Route::post('articles/delete', 'ArticleController@destroy');
 
 // Testimonials
 Route::get('testimonials', 'TestimonialController@index');
+Route::get('testimonials/b/{brand}', 'TestimonialController@index');
 Route::post('testimonials', 'TestimonialController@filter');
 Route::get('testimonials/create', 'TestimonialController@create');
 Route::post('testimonials/create', 'TestimonialController@store');
