@@ -64,7 +64,7 @@
 </div>
 
 {{-- Article --}}
-<div id="article" class="container-fluid bottom-margin-md">
+{{-- <div id="article" class="container-fluid bottom-margin-md">
     <div class="row">
         <div class="col-md-12">
             <h1 class="text-center">Articles</h1>
@@ -79,7 +79,7 @@
         <div class="col-md-12 text-center top-margin-md">
             <a href="{{ url('articles') }}" >More Articles</a>
         </div>
-</div>
+</div> --}}
 
 {{-- Product of the month --}}
 <div id="potm" class="container-fluid bottom-margin-lg">
