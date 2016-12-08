@@ -35,21 +35,6 @@
     </div>
 </div>
 
-{{-- Testimonial --}}
-<div id="testimonial" class="container-fluid bottom-margin-md">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="text-center">Testimonials</h1>
-        </div>
-        <div class="col-md-6 text-center babyhood">
-            <h3><a href="{{ url('testimonials/b/babyhood') }}">For Babyhood</a></h3>
-        </div>
-        <div class="col-md-6 text-center nuna">
-            <h3><a href="{{ url('testimonials/b/nuna') }}">For Nuna</a></h3>
-        </div>
-    </div>
-</div>
-
 {{-- Event --}}
 <div id="event" class="container-fluid bottom-margin-md">
     <div class="row">
@@ -82,7 +67,7 @@
 </div> --}}
 
 {{-- Product of the month --}}
-<div id="potm" class="container-fluid bottom-margin-lg">
+<div id="potm" class="container-fluid bottom-margin-md">
     <div class="row bg-black">
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $potm_title }}</h1>
@@ -94,8 +79,23 @@
     </div>
 </div>
 
+{{-- Testimonial --}}
+<div id="testimonial" class="container-fluid bottom-margin-md bottom-padding-md border-bottom">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">Testimonials</h1>
+        </div>
+        <div class="col-md-6 text-center babyhood">
+            <h3><a href="{{ url('testimonials/b/babyhood') }}">For Babyhood</a></h3>
+        </div>
+        <div class="col-md-6 text-center nuna">
+            <h3><a href="{{ url('testimonials/b/nuna') }}">For Nuna</a></h3>
+        </div>
+    </div>
+</div>
+
 {{-- Contact --}}
-<div id="getintouch" class="container top-bottom-margin-md">
+<div id="getintouch" class="container bottom-margin-md">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="text-center">
