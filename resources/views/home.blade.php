@@ -80,6 +80,7 @@
 </div>
 
 {{-- Testimonial --}}
+@if (!is_null($latestTestimonialBabyhood) && !is_null($latestTestimonialNuna))
 <div id="testimonial" class="container-fluid bottom-margin-md">
     <div class="row">
         <div class="col-md-12">
@@ -99,6 +100,7 @@
         </div>
     </div>
 </div>
+@endif
 
 {{-- Contact --}}
 <div id="getintouch" class="container bottom-margin-md">
