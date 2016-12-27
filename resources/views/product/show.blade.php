@@ -1,5 +1,9 @@
 @extends('layouts.product')
 
+@section('breadcrumb')
+| Product Details
+@endsection
+
 @section('css')
     @parent
     <link type="text/css" rel="stylesheet" href="/magiczoomplus/magiczoomplus.css"/>
@@ -40,7 +44,11 @@
 						</div>
 					</div>
 				@else
-					<p class="text-center"><a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Add image</a></p>
+					@if (!Auth::guest())
+						<p class="text-center"><a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Add image</a></p>
+					@else
+						<p class="text-center">No image available</p>
+					@endif
 				@endif
 				</div>
 			</div>
@@ -69,17 +77,18 @@
 				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
 			</div>
 
-			<div class="row">
-				<div class="col-md-12 top-margin-sm">
-					<form method="POST" action="{{ url('products/delete') }}">
-						{{ csrf_field() }}
-						<input type="hidden" name="product_id" value="{{ $id }}">
-						<a href="{{ url('products') }}" class="btn btn-link">Back</a>
-						<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
-						<button type="submit" class="btn btn-link">Delete</button>
-					</form>		
+			@if (!Auth::guest())
+				<div class="row">
+					<div class="col-md-12 top-margin-sm">
+						<form method="POST" action="{{ url('products/delete') }}">
+							{{ csrf_field() }}
+							<input type="hidden" name="product_id" value="{{ $id }}">
+							<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
+							<button type="submit" class="btn btn-link">Delete</button>
+						</form>		
+					</div>
 				</div>
-			</div>
+			@endif
 		</div>
 	</div>
 </div>

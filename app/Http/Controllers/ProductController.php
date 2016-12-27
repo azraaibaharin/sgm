@@ -24,8 +24,6 @@ class ProductController extends Controller
      */
     public function __construct(Product $product)
     {
-        $this->middleware('auth');
-
         $this->product = $product;
     }
 
@@ -74,13 +72,12 @@ class ProductController extends Controller
         {
             $products = $product->where('brand', $brand)
                                 ->orderBy('model', 'asc')
-                                ->take(15)
                                 ->get();
-        } else
+        } 
+        else
         {
             $brand = $brands[0];
             $products = $product->orderBy('model', 'asc')
-                                ->take(15)
                                 ->get();
         }
 
@@ -94,6 +91,7 @@ class ProductController extends Controller
 
     public function import()
     {
+        $this->middleware('auth');
         return view('product.import');
     }
 
@@ -103,7 +101,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {   
         $product = $this->product;
 
         $brands = $product->getBrands(false);
@@ -336,7 +334,8 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
-    {   $product_id = $request['product_id'];
+    {  
+        $product_id = $request['product_id'];
         $product = $this->product->findOrFail($product_id);
         $productName = $product->brand.' '.$product->model;
         $this->product->destroy($product_id);
@@ -383,7 +382,7 @@ class ProductController extends Controller
      *
      * @return void
      */
-    public function imageUpload(Request $request, $field_name, $old_value, $prefix)
+    protected function imageUpload(Request $request, $field_name, $old_value, $prefix)
     {
         $imageName = $old_value;
 

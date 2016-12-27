@@ -9,6 +9,8 @@ use App\Product;
 use App\Http\Requests;
 use App\Http\Requests\TestimonialFormRequest;
 
+use DB;
+
 class TestimonialController extends Controller
 {
 
@@ -81,15 +83,21 @@ class TestimonialController extends Controller
 
         if ($brand != $brands[0])
         {
-            $testimonials = $this->testimonial
-                                    ->join('products', function ($join) use ($brand) {
-                                        $join->on('testimonials.product_id', '=', 'products.id')
-                                                ->where('products.brand', '=', $brand);
-                                    })
-                                    ->get();
-        } else 
+            $testimonials = DB::table('testimonials')
+                            ->join('products', 'products.id', '=', 'testimonials.product_id')
+                            ->select('testimonials.*', 'products.brand', 'products.model')
+                            ->where('products.brand', $brand)
+                            ->get();
+        } 
+        else 
         {
-            $testimonials = $this->testimonial->take(50)->orderBy('created_at')->get();
+            $testimonials = DB::table('testimonials')
+                            ->join('products', 'products.id', '=', 'testimonials.product_id')
+                            ->select('testimonials.*', 'products.brand', 'products.model')
+                            ->orderBy('created_at')
+                            ->get();
+
+            // $this->testimonial->take(50)->orderBy('created_at')->get();
         }
 
         return $testimonials;

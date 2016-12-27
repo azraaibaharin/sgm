@@ -1,5 +1,9 @@
 @extends('layouts.testimonial')
 
+@section('breadcrumb')
+| Testimonials
+@endsection
+
 @section('content')
 <div class="container">
 	<div id="testimonials-search" class="row">
@@ -51,9 +55,9 @@
 			<small>{{ count($testimonials) }} result(s)</small>
 		</div>
 		@foreach($testimonials as $t)
-		<div class="col-md-4 {{ $t->product->brand }}">
+		<div class="col-md-4 {{ $t->brand }}">
 			<h2>{{ $t->title }}</h2>
-			<small>about {{ ucfirst($t->product->brand) }} {{ $t->product->model }}</small>
+			<small>about {{ ucfirst($t->brand) }} {{ $t->model }}</small>
 			<p>{!! $t->text !!}</p>
 			<a href="{{ url('testimonials/'.$t->id) }}">Show</a>
 		</div>

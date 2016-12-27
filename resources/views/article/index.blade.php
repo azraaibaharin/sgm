@@ -1,5 +1,9 @@
 @extends('layouts.article')
 
+@section('breadcrumb')
+| Articles
+@endsection
+
 @section('content')
 @if ($message = session('message'))
 <div class="container">
@@ -13,11 +17,6 @@
 @endif
 <div id="articles" class="container">
 	<div class="row">
-		<div class="col-md-12">
-			<h1>Articles</h1>
-		</div>
-	</div>
-	<div class="row">
 	@if (sizeof($articles) > 0)
 		@foreach($articles as $a)
 		<div class="col-md-6 article">
@@ -26,12 +25,14 @@
 				<p>{!! $a->text !!}</p>
 				<small>By {{ $a->author }}</small>
 			</a>
-			<form method="POST" action="{{ url('articles/delete') }}">
-				{{ csrf_field() }}
-				<input type="hidden" name="article_id" value="{{ $a->id }}">
-				<a href="{{ url('articles/'.$a->id.'/edit') }}"" class="btn btn-link">Edit</a>		
-				<button type="submit" class="btn btn-link">Remove</button>		
-			</form>	
+			@if (!Auth::guest())
+				<form method="POST" action="{{ url('articles/delete') }}">
+					{{ csrf_field() }}
+					<input type="hidden" name="article_id" value="{{ $a->id }}">
+					<a href="{{ url('articles/'.$a->id.'/edit') }}"" class="btn btn-link">Edit</a>		
+					<button type="submit" class="btn btn-link">Remove</button>		
+				</form>	
+			@endif
 		</div>
 		@endforeach
 	@else

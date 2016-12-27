@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('breadcrumb')
+| Add Testimonial
+@endsection
+
 @section('content')
 <form class="form-horizontal" role="form" method="POST" action="{{ url('testimonials/create') }}" enctype="multipart/form-data">
 {{ csrf_field() }}

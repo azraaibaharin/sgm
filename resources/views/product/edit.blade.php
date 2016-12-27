@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('breadcrumb')
+| Edit Product
+@endsection
+
 @section('content')
 <form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/'.$id.'/edit') }}" enctype="multipart/form-data">
 {{ csrf_field() }}
@@ -73,9 +77,9 @@
                                 @endforeach
                                 </select>
 
-                                @if ($errors->has('brand'))
+                                @if ($errors->has('category'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('brand') }}</strong>
+                                        <strong>{{ $errors->first('category') }}</strong>
                                     </span>
                                 @endif
                             </div>

@@ -80,16 +80,22 @@
 </div>
 
 {{-- Testimonial --}}
-<div id="testimonial" class="container-fluid bottom-margin-md bottom-padding-md border-bottom">
+<div id="testimonial" class="container-fluid bottom-margin-md">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="text-center">Testimonials</h1>
+            <h1 class="text-center bottom-padding-sm">Testimonials</h1>
         </div>
-        <div class="col-md-6 text-center babyhood">
-            <h3><a href="{{ url('testimonials/b/babyhood') }}">For Babyhood</a></h3>
+        <div class="col-md-6 text-center babyhood bottom-padding-sm">
+            <a href="{{ url('testimonials/b/babyhood') }}">
+                <h3>{!! $latestTestimonialBabyhood->text !!}</h3>
+                <small>was recently said about {{ ucfirst($latestTestimonialBabyhood->brand) }} {{ $latestTestimonialBabyhood->model }}</small>
+            </a>
         </div>
-        <div class="col-md-6 text-center nuna">
-            <h3><a href="{{ url('testimonials/b/nuna') }}">For Nuna</a></h3>
+        <div class="col-md-6 text-center nuna bottom-padding-sm">
+            <a href="{{ url('testimonials/b/nuna') }}">
+                <h3>{!! $latestTestimonialNuna->text !!}</h3>
+                <small>was recently said about {{ ucfirst($latestTestimonialNuna->brand) }} {{ $latestTestimonialNuna->model }}</small>
+            </a>
         </div>
     </div>
 </div>
@@ -172,7 +178,7 @@
 <div id="footer" class="container-fluid bg-dark-grey">
     <div class="row">
         <div class="col-md-12 text-center">
-            <p>Copyright Supreme Global Marketing</p>
+            <p>Copyright Supreme Global Marketing @if (Auth::guest())| <a href="{{ url('/login') }}">Login</a>@endif</p>
         </div>
     </div>
 </div>

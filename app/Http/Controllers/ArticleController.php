@@ -56,7 +56,6 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $article = $this->article;
-
         $article->title = $request['title'];
         $article->image_link = $this->imageUpload($request, 'image_link', $article->image_link, 'article_'.$article->id);
         $article->text = $request['text'];

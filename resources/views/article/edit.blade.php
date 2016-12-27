@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('breadcrumb')
+| Edit Article
+@endsection
+
 @section('content')
 <form class="form-horizontal" role="form" method="POST" action="{{ url('articles/'.$id.'/edit') }}" enctype="multipart/form-data">
 {{ csrf_field() }}

@@ -1,5 +1,9 @@
 @extends('layouts.product')
 
+@section('breadcrumb')
+| Products
+@endsection
+
 @section('content')
 <div class="container">
 	<div id="products-search" class="row">

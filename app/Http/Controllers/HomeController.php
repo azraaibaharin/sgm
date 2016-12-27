@@ -9,6 +9,8 @@ use App\Http\Requests\ContactFormRequest;
 use App\Home;
 use App\Article;
 
+use DB;
+
 class HomeController extends Controller
 {
 
@@ -31,8 +33,6 @@ class HomeController extends Controller
      */
     public function __construct(Home $home, Article $article)
     {
-        $this->middleware('auth');
-
         $this->home = $home;
         $this->article = $article;
 
@@ -50,11 +50,31 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $latestTestimonialBabyhood = DB::table('testimonials')
+                                ->join('products', 'products.id', '=', 'testimonials.product_id')
+                                ->select('testimonials.*', 'products.brand', 'products.model')
+                                ->where('products.brand', 'babyhood')
+                                ->orderBy('created_at')
+                                ->take(1)
+                                ->first();
+
+        $latestTestimonialNuna = DB::table('testimonials')
+                            ->join('products', 'products.id', '=', 'testimonials.product_id')
+                            ->select('testimonials.*', 'products.brand', 'products.model')
+                            ->where('products.brand', 'nuna')
+                            ->orderBy('created_at')
+                            ->take(1)
+                            ->first();
+
+        $articles = $this->article
+                    ->orderBy('created_at', 'asc')
+                    ->take(3)
+                    ->get();
+
         return view('home', $this->getData())
-                ->with('articles', $this->article
-                                ->orderBy('created_at', 'asc')
-                                ->take(3)
-                                ->get());
+                ->with('latestTestimonialBabyhood', $latestTestimonialBabyhood)
+                ->with('latestTestimonialNuna', $latestTestimonialNuna)
+                ->with('articles', $articles);
     }
 
     /**
@@ -104,7 +124,7 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function imageUpload(Request $request, $field_name, $old_value)
+    protected function imageUpload(Request $request, $field_name, $old_value)
     {
         $imageName = $old_value;
 

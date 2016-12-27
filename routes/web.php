@@ -21,40 +21,50 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 Route::post('/contact', 'HomeController@contact');
 Route::get('/home', 'HomeController@index');
-Route::get('/home/edit', 'HomeController@edit');
-Route::post('/home/edit', 'HomeController@update');
+Route::get('/home/edit', 'HomeController@edit')->middleware('auth');
+Route::post('/home/edit', 'HomeController@update')->middleware('auth');
 
 // Products
 Route::get('/products', 'ProductController@index');
 Route::get('/products/b/{brand}', 'ProductController@index');
 Route::post('/products', 'ProductController@filter');
-Route::get('/products/create', 'ProductController@create');
-Route::post('/products/create', 'ProductController@store');
-Route::get('/products/import', 'ProductController@import');
-Route::post('/products/import', 'ProductController@store2');
+Route::get('/products/create', 'ProductController@create')->middleware('auth');
+Route::post('/products/create', 'ProductController@store')->middleware('auth');
+Route::get('/products/import', 'ProductController@import')->middleware('auth');
+Route::post('/products/import', 'ProductController@store2')->middleware('auth');
 Route::get('/products/{id}', 'ProductController@show');
-Route::get('/products/{id}/edit', 'ProductController@edit');
-Route::post('/products/{id}/edit', 'ProductController@update');
-Route::post('/products/delete', 'ProductController@destroy');
+Route::get('/products/{id}/edit', 'ProductController@edit')->middleware('auth');
+Route::post('/products/{id}/edit', 'ProductController@update')->middleware('auth');
+Route::post('/products/delete', 'ProductController@destroy')->middleware('auth');
 
 // Articles
 Route::get('articles', 'ArticleController@index');
-Route::get('articles/create', 'ArticleController@create');
-Route::post('articles/create', 'ArticleController@store');
+Route::get('articles/create', 'ArticleController@create')->middleware('auth');
+Route::post('articles/create', 'ArticleController@store')->middleware('auth');
 Route::get('articles/{id}', 'ArticleController@show');
-Route::get('articles/{id}/edit', 'ArticleController@edit');
-Route::post('articles/{id}/edit', 'ArticleController@update');
-Route::post('articles/delete', 'ArticleController@destroy');
+Route::get('articles/{id}/edit', 'ArticleController@edit')->middleware('auth');
+Route::post('articles/{id}/edit', 'ArticleController@update')->middleware('auth');
+Route::post('articles/delete', 'ArticleController@destroy')->middleware('auth');
 
 // Testimonials
 Route::get('testimonials', 'TestimonialController@index');
 Route::get('testimonials/b/{brand}', 'TestimonialController@index');
 Route::post('testimonials', 'TestimonialController@filter');
-Route::get('testimonials/create', 'TestimonialController@create');
-Route::post('testimonials/create', 'TestimonialController@store');
+Route::get('testimonials/create', 'TestimonialController@create')->middleware('auth');
+Route::post('testimonials/create', 'TestimonialController@store')->middleware('auth');
 Route::get('testimonials/{id}', 'TestimonialController@show');
-Route::get('testimonials/{id}/edit', 'TestimonialController@edit');
-Route::post('testimonials/{id}/edit', 'TestimonialController@update');
-Route::post('testimonials/delete', 'TestimonialController@destroy');
+Route::get('testimonials/{id}/edit', 'TestimonialController@edit')->middleware('auth');
+Route::post('testimonials/{id}/edit', 'TestimonialController@update')->middleware('auth');
+Route::post('testimonials/delete', 'TestimonialController@destroy')->middleware('auth');
+
+// stores
+Route::get('stores', 'StoreController@index');
+Route::post('stores', 'StoreController@filter');
+Route::get('stores/create', 'StoreController@create')->middleware('auth');
+Route::post('stores/create', 'StoreController@store')->middleware('auth');
+Route::get('stores/{id}', 'StoreController@show');
+Route::get('stores/{id}/edit', 'StoreController@edit')->middleware('auth');
+Route::post('stores/{id}/edit', 'StoreController@update')->middleware('auth');
+Route::post('stores/delete', 'StoreController@destroy')->middleware('auth');
 
 
