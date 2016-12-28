@@ -276,6 +276,42 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group{{ $errors->has('image_fourth') ? ' has-error' : '' }}">
+                            <label for="image_fourth" class="col-md-2 control-label">Image 4</label>
+
+                            <div class="col-md-9">
+                                @if ($image_fourth)
+                                    <img src="{{ asset('img/'.$image_fourth) }}" class="img-thumbnail" alt="">
+                                @endif
+
+                                <input id="image_fourth" type="file" class="form-control" name="image_fourth">
+        
+                                @if ($errors->has('image_fourth'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('image_fourth') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('image_fifth') ? ' has-error' : '' }}">
+                            <label for="image_fifth" class="col-md-2 control-label">Image 5</label>
+
+                            <div class="col-md-9">
+                                @if ($image_fifth)
+                                    <img src="{{ asset('img/'.$image_fifth) }}" class="img-thumbnail" alt="">
+                                @endif
+                                
+                                <input id="image_fifth" type="file" class="form-control" name="image_fifth">
+        
+                                @if ($errors->has('image_fifth'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('image_fifth') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

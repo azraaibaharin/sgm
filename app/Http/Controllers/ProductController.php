@@ -35,13 +35,10 @@ class ProductController extends Controller
     public function filter(Request $request) 
     {
         $product = $this->product;
-
-        $brands = $product->getBrands();
-        $categories = $product->getCategories();
-
-        $brand = $request['brand'];
         $category = $request['category'];
-
+        $categories = $product->getCategories();
+        $brand = $request['brand'];
+        $brands = $product->getBrands();
         $products = $product->when($brand != $brands[0], function ($query) use ($brand) {
                                 return $query->where('brand', $brand);}
                             )->when($category != $categories[0], function ($query) use ($category) {
@@ -66,8 +63,8 @@ class ProductController extends Controller
         $product = $this->product;
         $brands = $product->getBrands();
         $categories = $product->getCategories();
-
         $products = [];
+
         if (!is_null($brand) && !empty($brand))
         {
             $products = $product->where('brand', $brand)
@@ -103,7 +100,6 @@ class ProductController extends Controller
     public function create()
     {   
         $product = $this->product;
-
         $brands = $product->getBrands(false);
         $categories = $product->getCategories(false);
         $statuses = $product->getStatuses();
@@ -250,10 +246,12 @@ class ProductController extends Controller
     public function show(Request $request, $id)
     {
         $product = $this->product->find($id);
+
         if (is_null($product))
         {
             return redirect('products')->with('message', 'Product not found.');
         }
+
         $productArr = $product->toArray();
 
         return view('product.show', $productArr)
@@ -270,17 +268,19 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->product->find($id);
+        
         if (is_null($product))
         {
             return redirect('products')->with('message', 'Product not found.');
         }
+
         $productArr = $product->toArray();
         $imagesArr = $this->getImageArr($productArr['image_links']);
-
         $productArr['image_first'] = $imagesArr[0];
         $productArr['image_second'] = $imagesArr[1];
         $productArr['image_third'] = $imagesArr[2];
-
+        $productArr['image_fourth'] = $imagesArr[3];
+        $productArr['image_fifth'] = $imagesArr[4];
         $brands = $product->getBrands(false);
         $categories = $product->getCategories(false);
         $statuses = $product->getStatuses();
@@ -301,6 +301,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = $this->product->find($id);
+
         if (is_null($product))
         {
             return redirect('products')->with('message', 'Product not found.');
@@ -351,13 +352,14 @@ class ProductController extends Controller
     private function getImageLinks(Request $request, Product $product)
     {   
         $imagesArr = $this->getImageArr($product->image_links);  
-
         $image_prefix = $product->brand.'_'.$product->model;
         $image_first_link = $this->imageUpload($request, 'image_first', $imagesArr[0], $image_prefix);
         $image_second_link = $this->imageUpload($request, 'image_second', $imagesArr[1], $image_prefix);
         $image_third_link = $this->imageUpload($request, 'image_third', $imagesArr[2], $image_prefix);
+        $image_fourth_link = $this->imageUpload($request, 'image_fourth', $imagesArr[3], $image_prefix);
+        $image_fifth_link = $this->imageUpload($request, 'image_fifth', $imagesArr[4], $image_prefix);
 
-        return $image_first_link.','.$image_second_link.','.$image_third_link;
+        return $image_first_link.','.$image_second_link.','.$image_third_link.','.$image_fourth_link.','.$image_fifth_link;
     }
 
     /**
@@ -369,10 +371,11 @@ class ProductController extends Controller
     private function getImageArr(String $image_links)
     {
         $imagesArr = explode(',', $image_links);
-
         $arr[0] = sizeof($imagesArr) > 0 ? $imagesArr[0] : '';
         $arr[1] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
         $arr[2] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
+        $arr[3] = sizeof($imagesArr) > 3 ? $imagesArr[3] : '';
+        $arr[4] = sizeof($imagesArr) > 4 ? $imagesArr[4] : '';
 
         return $arr;
     }
