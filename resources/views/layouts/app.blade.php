@@ -11,6 +11,7 @@
             <li><a href="{{ url('articles') }}">Articles</a></li>
             <li><a href="{{ url('testimonials') }}">Testimonials</a></li>
             <li><a href="{{ url('stores') }}">Stores</a></li>
+            <li><a href="{{ url('warranties/create') }}">Register Warranty</a></li>
         </ul>
     </li>
     <li class="dropdown">
@@ -20,8 +21,9 @@
         </a>
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a href="{{ url('/home/edit') }}">Edit Home</a>
-                <a href="{{ url('/logout') }}"
+                <a href="{{ url('home/edit') }}">Edit Home</a>
+                <a href="{{ url('warranties') }}">View Warranties</a>
+                <a href="{{ url('logout') }}"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">
                     Logout

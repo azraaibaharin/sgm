@@ -57,7 +57,7 @@ Route::get('testimonials/{id}/edit', 'TestimonialController@edit')->middleware('
 Route::post('testimonials/{id}/edit', 'TestimonialController@update')->middleware('auth');
 Route::post('testimonials/delete', 'TestimonialController@destroy')->middleware('auth');
 
-// stores
+// Stores
 Route::get('stores', 'StoreController@index');
 Route::post('stores', 'StoreController@filter');
 Route::get('stores/create', 'StoreController@create')->middleware('auth');
@@ -67,4 +67,11 @@ Route::get('stores/{id}/edit', 'StoreController@edit')->middleware('auth');
 Route::post('stores/{id}/edit', 'StoreController@update')->middleware('auth');
 Route::post('stores/delete', 'StoreController@destroy')->middleware('auth');
 
-
+// Warranties
+Route::get('warranties', 'WarrantyController@index')->middleware('auth');
+Route::get('warranties/create', 'WarrantyController@create');
+Route::post('warranties/create', 'WarrantyController@store');
+Route::get('warranties/{id}', 'WarrantyController@show');
+Route::get('warranties/{id}/edit', 'WarrantyController@edit')->middleware('auth');
+Route::post('warranties/{id}/edit', 'WarrantyController@update')->middleware('auth');
+Route::post('warranties/delete', 'WarrantyController@destroy')->middleware('auth');

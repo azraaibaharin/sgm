@@ -74,13 +74,10 @@
 						<td>{{ $s->state }}</td>
 						<td><a href="{{ url('stores/'.$s->id) }}">Show</a></td>
 					</tr>				
-					{{-- <div class="col-md-4">
-						<h2>{{ $s->name }}</h2>
-						<a href="{{ url('stores/'.$s->id) }}">Show</a>
-					</div> --}}
 				@endforeach
 				</tbody>
 			</table>
+		</div>
 	@else
 		<div class="col-md-12 text-center">
 			<small>No stores available. Click <a href="{{ url('stores/create') }}">here</a> to add.</small>
@@ -90,31 +87,3 @@
 </div>
 
 @endsection
-
-{{-- @section('js')
-<script>
-function initMap() {
-	var myLatLng = {lat: 3.0286657, lng: 101.6897512};
-
-	var map = new google.maps.Map(document.getElementById('map'), {
-	  	zoom: 9,
-	  	center: myLatLng,
-	  	zoomControl: true,
-		mapTypeControl: false,
-		scaleControl: false,
-		streetViewControl: false,
-		rotateControl: false,
-		fullscreenControl: true
-	});
-
-	var marker = new google.maps.Marker({
-	  	position: myLatLng,
-	  	map: map,
-	  	title: 'Hello World!'
-	});
-}
-</script>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={{ config('gmaps.key') }}&callback=initMap">
-</script>
-@endsection --}}
