@@ -19,9 +19,9 @@
                                 <select id="brand" class="form-control" name="brand">
                                 @foreach ($brands as $brand)
                                     @if (old('brand') == $brand)
-                                        <option value="{{ $brand }}" selected>{{ $brand }}</option>
+                                        <option value="{{ $brand }}" selected>{{ ucfirst($brand) }}</option>
                                     @else
-                                        <option value="{{ $brand }}">{{ $brand }}</option>
+                                        <option value="{{ $brand }}">{{ ucfirst($brand) }}</option>
                                     @endif
                                 @endforeach
                                 </select>
@@ -66,9 +66,9 @@
                                 <select id="category" class="form-control" name="category">
                                 @foreach ($categories as $c)
                                     @if (old('category') == $c)
-                                        <option value="{{ $c }}" selected>{{ $c }}</option>
+                                        <option value="{{ $c }}" selected>{{ ucfirst($c) }}</option>
                                     @else
-                                        <option value="{{ $c }}">{{ $c }}</option>
+                                        <option value="{{ $c }}">{{ ucfirst($c) }}</option>
                                     @endif
                                 @endforeach
                                 </select>
