@@ -232,6 +232,11 @@ a:hover {
 	background-color: #eee;
 }
 
+#products .babyhood,
+#products .nuna {
+	min-height: 150px;
+}
+
 .babyhood h2 {
 	color: #fff;
 	background-color: #0a64a2;

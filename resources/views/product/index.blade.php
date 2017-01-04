@@ -77,8 +77,12 @@
 		</div>
 		@foreach ($products as $p)
 		<div class="col-md-4 {{ $p->brand }} bottom-margin-sm">
-			<div class="col-md-6">
-				<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
+			<div class="col-md-6 text-center">
+				@if (empty($p->getDisplay('image_links')))
+					<small class="top-margin-md">No image available</small>
+				@else
+					<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
+				@endif
 			</div>
 			<div class="col-md-6">
 				<h2>{{ $p->model }}</h2>
