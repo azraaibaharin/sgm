@@ -82,5 +82,5 @@ Route::get('cart/{id}/add', 'CartController@add');
 Route::get('cart/{id}/remove', 'CartController@remove');
 Route::get('cart/empty', 'CartController@empty');
 Route::get('payment', 'CartController@payment');
-Route::get('payment/response', 'CartController@paymentResponse');
-Route::get('payment/responseBE', 'CartController@paymentResponseBE');
+Route::post('payment/response', 'CartController@paymentResponse');
+Route::post('payment/responseBE', 'CartController@paymentResponseBE');
