@@ -185,6 +185,7 @@ class CartController extends Controller
     function iPay88_signature($source)
 	{
        	return base64_encode(hex2bin(sha1($source)));
+       	// return sha1($source);
 	}
 	
 	/**
