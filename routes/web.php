@@ -75,3 +75,9 @@ Route::get('warranties/{id}', 'WarrantyController@show');
 Route::get('warranties/{id}/edit', 'WarrantyController@edit')->middleware('auth');
 Route::post('warranties/{id}/edit', 'WarrantyController@update')->middleware('auth');
 Route::post('warranties/delete', 'WarrantyController@destroy')->middleware('auth');
+
+// Cart
+Route::resource('cart', 'CartController', ['only' => ['index', 'store', 'update', 'destroy']]);
+Route::get('cart/{id}/add', 'CartController@add');
+Route::get('cart/{id}/remove', 'CartController@remove');
+Route::get('cart/empty', 'CartController@empty');

@@ -27,4 +27,5 @@
         </ul>
     </li>
 @endif
+<li><a href="{{ url('/cart') }}">Cart</a></li>
 @endsection

@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div id="product-spec" class="row">
-				<div class="col-md-12"><label>Price:</label> {{ $price == '0.00' ? 'Not set.' : 'RM'.$price }}</div>
+				<div class="col-md-12"><label>Price:</label> {{ $price == '' ? 'RM 0.00' : 'RM '.$price }}</div>
 				<div class="col-md-12"><label>Color:</label> {{ $color == '' ? 'Not set.' : $color }}</div>
 				<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set.' : $weight }}</div>
 				<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set.' : $dimension }}</div>
@@ -76,6 +76,20 @@
 				<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}</div>
 				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
 			</div>
+
+			@if ($price != '' && $status == 'In Stock') {{-- Only show 'Add to cart' if price is set --}}
+				<div class="row">
+					<div class="col-md-12">
+						<form action="{{ url('cart') }}" method="POST">
+						  	{!! csrf_field() !!}
+						  	<input type="hidden" name="id" value="{{ $id }}">
+						  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
+						  	<input type="hidden" name="price" value="{{ $price }}">
+						  	<input type="submit" class="btn btn-link" value="Add to Cart">
+						</form>
+					</div>
+				</div>
+			@endif
 
 			@if (!Auth::guest())
 				<div class="row">
