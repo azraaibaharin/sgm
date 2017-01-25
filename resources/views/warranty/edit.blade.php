@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
 @section('breadcrumb')
-| Edit Article
+| Edit Warranty
 @endsection
 
 @section('content')
 <form class="form-horizontal" role="form" method="POST" action="{{ url('warranties/'.$id.'/edit') }}" enctype="multipart/form-data">
-{{ csrf_field() }}
+    {{ csrf_field() }}
     <div class="container">
         <div class="row">
         	<div class="col-md-8 col-md-offset-2">

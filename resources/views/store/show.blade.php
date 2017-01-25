@@ -39,14 +39,16 @@
 		</div>
 	</div>
 
+	
 	@if (!Auth::guest())
+		<hr/>
 		<div class="row">
-			<div class="col-md-12 top-margin-sm">
-				<form method="POST" action="{{ url('stores/delete') }}">
+			<div class="col-md-12">
+				<a href="{{ url('stores') }}" class="btn btn-link">Back</a>
+				<a href="{{ url('stores/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
+				<form class="form-inline" method="POST" action="{{ url('stores/delete') }}">
 					{{ csrf_field() }}
 					<input type="hidden" name="store_id" value="{{ $id }}">
-					<a href="{{ url('stores') }}" class="btn btn-link">Back</a>
-					<a href="{{ url('stores/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 					<button type="submit" class="btn btn-link">Delete</button>
 				</form>		
 			</div>

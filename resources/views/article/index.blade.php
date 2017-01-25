@@ -25,11 +25,12 @@
 				<p>{!! $a->text !!}</p>
 				<small>By {{ $a->author }}</small>
 			</a>
+			<hr/>
 			@if (!Auth::guest())
-				<form method="POST" action="{{ url('articles/delete') }}">
+				<a href="{{ url('articles/'.$a->id.'/edit') }}"" class="btn btn-link">Edit</a>		
+				<form class="form-inline" method="POST" action="{{ url('articles/delete') }}">
 					{{ csrf_field() }}
 					<input type="hidden" name="article_id" value="{{ $a->id }}">
-					<a href="{{ url('articles/'.$a->id.'/edit') }}"" class="btn btn-link">Edit</a>		
 					<button type="submit" class="btn btn-link">Remove</button>		
 				</form>	
 			@endif

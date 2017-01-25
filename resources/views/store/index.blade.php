@@ -55,7 +55,7 @@
 			<small>{{ count($stores) }} result(s)</small>
 		</div>
 		<div class="col-md-12 bottom-margin-sm">
-			<table class="table table-striped">
+			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
 						<th>Name</th>

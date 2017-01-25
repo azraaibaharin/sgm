@@ -18,6 +18,7 @@
 			<p><label>Purchase date:</label> {{ $date_of_purchase }}</p>
 		</div>
 	</div>
+	<hr/>
 	<div class="row">
 		<div class="col-md-12 top-bottom-margin-sm">
 			@if (!Auth::guest())

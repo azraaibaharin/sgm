@@ -23,6 +23,7 @@
             <li>
                 <a href="{{ url('home/edit') }}">Edit Home</a>
                 <a href="{{ url('warranties') }}">View Warranties</a>
+                <a href="{{ url('coupons') }}">View Coupons</a>
                 <a href="{{ url('logout') }}"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">

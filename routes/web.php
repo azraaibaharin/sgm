@@ -84,3 +84,12 @@ Route::get('cart/empty', 'CartController@empty');
 Route::get('payment', 'CartController@payment');
 Route::post('payment/response', 'CartController@paymentResponse');
 Route::post('payment/responseBE', 'CartController@paymentResponseBE');
+
+// Coupons
+Route::get('coupons', 'CouponController@index')->middleware('auth');
+Route::get('coupons/create', 'CouponController@create')->middleware('auth');
+Route::post('coupons/create', 'CouponController@store')->middleware('auth');
+Route::get('coupons/{id}', 'CouponController@show')->middleware('auth');
+Route::get('coupons/{id}/edit', 'CouponController@edit')->middleware('auth');
+Route::put('coupons/{id}', 'CouponController@update')->middleware('auth');
+Route::delete('coupons/{id}', 'CouponController@destroy')->middleware('auth');

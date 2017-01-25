@@ -77,32 +77,31 @@
 				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
 			</div>
 
-			@if ($price != '' && $status == 'In Stock') {{-- Only show 'Add to cart' if price is set --}}
-				<div class="row">
-					<div class="col-md-12">
-						<form action="{{ url('cart') }}" method="POST">
+			<hr/>
+
+			<div class="row">	
+				<div class="col-md-12">
+					<a href="{{ url('products') }}"" class="btn btn-link">Back</a>		
+					@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
+						<form class="form-inline" action="{{ url('cart') }}" method="POST">
 						  	{!! csrf_field() !!}
 						  	<input type="hidden" name="id" value="{{ $id }}">
 						  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
 						  	<input type="hidden" name="price" value="{{ $price }}">
 						  	<input type="submit" class="btn btn-link" value="Add to Cart">
 						</form>
-					</div>
-				</div>
-			@endif
-
-			@if (!Auth::guest())
-				<div class="row">
-					<div class="col-md-12 top-margin-sm">
-						<form method="POST" action="{{ url('products/delete') }}">
+					@endif
+					@if (!Auth::guest())
+						<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
+						<form class="form-inline" method="POST" action="{{ url('products/delete') }}">
 							{{ csrf_field() }}
 							<input type="hidden" name="product_id" value="{{ $id }}">
-							<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 							<button type="submit" class="btn btn-link">Delete</button>
-						</form>		
-					</div>
+						</form>
+					@endif
 				</div>
-			@endif
+			</div>
+			
 		</div>
 	</div>
 </div>

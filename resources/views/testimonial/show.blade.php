@@ -22,13 +22,14 @@
 		</div>
 	</div>
 	@if (!Auth::guest())
+		<hr/>
 		<div class="row">
-			<div class="col-md-12 top-margin-sm">
-				<form method="POST" action="{{ url('testimonials/delete') }}">
+			<div class="col-md-12">
+				<a href="{{ url('testimonials') }}" class="btn btn-link">Back</a>
+				<a href="{{ url('testimonials/'.$testimonial->id.'/edit') }}"" class="btn btn-link">Edit</a>		
+				<form class="form-inline" method="POST" action="{{ url('testimonials/delete') }}">
 					{{ csrf_field() }}
 					<input type="hidden" name="testimonial_id" value="{{ $testimonial->id }}">
-					<a href="{{ url('testimonials') }}" class="btn btn-link">Back</a>
-					<a href="{{ url('testimonials/'.$testimonial->id.'/edit') }}"" class="btn btn-link">Edit</a>		
 					<button type="submit" class="btn btn-link">Remove</button>		
 				</form>	
 			</div>

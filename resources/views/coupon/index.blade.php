@@ -1,11 +1,11 @@
-@extends('layouts.warranty')
+@extends('layouts.coupon')
 
 @section('breadcrumb')
-| Warranties
+| Coupons
 @endsection
 
 @section('content')
-@if ($message = session('message'))
+@if (isset($message))
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -27,35 +27,33 @@
 </div>
 @endif
 
-<div id="warranties" class="container">
+<div id="coupons" class="container">
 	<div class="row">
-	@if (sizeof($warranties) > 0)
+	@if (sizeof($coupons) > 0)
 		<div class="col-md-12 bottom-margin-sm">
-			<small>{{ count($warranties) }} result(s)</small>
+			<small>{{ count($coupons) }} result(s)</small>
 		</div>
 		<div class="col-md-12 bottom-margin-sm">
-			<table class="table table-striped table-bordered">
+			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Email</th>
-						<th>Phone</th>
-						<th>Address</th>
-						<th>Model</th>
-						<th>Serial No.</th>
+						<th>Code</th>
+						{{-- <th>Discount</th> --}}
+						<th>Value</th>
+						<th>Issue Date</th>
+						<th>Expiry Date</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-				@foreach($warranties as $w)
+				@foreach($coupons as $c)
 					<tr>
-						<td>{{ $w->full_name }}</td>
-						<td>{{ $w->email }}</td>
-						<td>{{ $w->phone_number }}</td>
-						<td>{{ $w->address }}</td>
-						<td>{{ $w->product_model_name }}</td>
-						<td>{{ $w->product_serial_number }}</td>
-						<td><a href="{{ url('warranties/'.$w->id) }}">Show</a></td>
+						<td>{{ $c->code }}</td>
+						{{-- <td>{{ $c->discount }}</td> --}}
+						<td>{{ $c->value }}</td>
+						<td>{{ $c->date_of_issue }}</td>
+						<td>{{ $c->date_of_expiration }}</td>
+						<td><a href="{{ url('coupons/'.$c->id) }}">Show</a></td>
 					</tr>				
 				@endforeach
 				</tbody>
@@ -63,7 +61,7 @@
 		</div>
 	@else
 		<div class="col-md-12 text-center">
-			<small>No warranties available. Click <a href="{{ url('warranties/create') }}">here</a> to add.</small>
+			<small>No coupons available. Click <a href="{{ url('coupons/create') }}">here</a> to add.</small>
 		</div>
 	@endif		
 	</div>
