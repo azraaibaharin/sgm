@@ -125,7 +125,8 @@ class ProductController extends Controller
             $request['price'], 
             $request['description'], 
             $request['status'], 
-            '1', 
+            '1', // category id
+            strtolower($request['category']),
             $this->getImageLinks($request, $this->product), 
             $request['video_links'], 
             $request['color'], 
@@ -158,6 +159,7 @@ class ProductController extends Controller
             // Loop through all sheets
             $rows = 0;
             $count = 0;
+            $rowsNotProcessed = [];
             foreach($results as $sheet) 
             {
                 // Loop through all rows
@@ -165,16 +167,22 @@ class ProductController extends Controller
                 {
                     if ($row->brand != null && $row->model !=null)
                     {
+                        $product = $this->product->where('brand', $row->brand)->where('model', $row->model)->first();
+                        if ($product == null) {
+                            $product = new Product();
+                        }
+
                         $this->save(
-                            new Product(), 
+                            $product, 
                             strtolower($row->brand), 
                             $row->model, 
-                            $row->price_inclusive_gst, 
+                            is_float($row->price_inclusive_gst) ? $row->price_inclusive_gst : 0.00, 
                             $row->description, 
-                            '1', 
-                            '1', 
-                            '', 
-                            '', 
+                            $this->product->getStatuses()[0],  // status
+                            '1', // category id
+                            strtolower($row->category),
+                            '', // image links
+                            '', // video links
                             $row->colour, 
                             $row->download_links, 
                             $row->weight, 
@@ -184,11 +192,14 @@ class ProductController extends Controller
                             $row->awards
                         );
                         $count++;
+                    } else 
+                    {
+                        array_push($rowsNotProcessed, $row);
                     }
                     $rows++;
                 };
             };
-            return redirect('products')->with('message','Import successful. '.$count.' products added. '.$rows.' rows processed.');
+            return redirect('products')->with('message','Import completed. '.$count.' products added. '.($rows - $count).' rows not processed.');
         } else
         {
             return redirect('products')->with('message','Import aborted. Import file not found.');
@@ -197,6 +208,7 @@ class ProductController extends Controller
 
     /**
      * Save product.
+     *
      * @param  [type] $product         [description]
      * @param  [type] $brand           [description]
      * @param  [type] $model           [description]
@@ -204,6 +216,7 @@ class ProductController extends Controller
      * @param  [type] $description     [description]
      * @param  [type] $status          [description]
      * @param  [type] $category_id     [description]
+     * @param  [type] $category        [description] 
      * @param  [type] $image_links     [description]
      * @param  [type] $video_links     [description]
      * @param  [type] $color           [description]
@@ -213,9 +226,9 @@ class ProductController extends Controller
      * @param  [type] $weight_capacity [description]
      * @param  [type] $age_requirement [description]
      * @param  [type] $awards          [description]
-     * @return [type]                  [description]
+     * @return App/Product             [description]
      */
-    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $image_links, $video_links, $color, $download_links, $weight, $dimension, $weight_capacity, $age_requirement, $awards)
+    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $dimension, $weight_capacity, $age_requirement, $awards)
     {
         $product->brand = $brand;
         $product->model = $model;
@@ -223,6 +236,7 @@ class ProductController extends Controller
         $product->description = $description;
         $product->status = $status;
         $product->category_id = $category_id;
+        $product->category = $category;
         $product->image_links = $image_links;
         $product->video_links = $video_links;
         $product->color = $color;
@@ -253,6 +267,8 @@ class ProductController extends Controller
         }
 
         $productArr = $product->toArray();
+        $productColorArr = explode(',', $productArr['color']);
+        $productArr['colors'] = $productColorArr;
 
         return view('product.show', $productArr)
                 ->with('displayImage', $product->getDisplay('image_links'))

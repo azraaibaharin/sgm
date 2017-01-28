@@ -21,9 +21,10 @@
 						</thead>
 						<tbody>
 							@if (Cart::count() > 0)
-								@foreach(Cart::content() as $row)
+								@foreach(Cart::content() as $row) 
+								{{-- {{ dd($row) }} --}}
 								<tr>
-									<td><a href="{{ url('products/'.$row->id) }}">{{ $row->name }}</a></td>
+									<td><a href="{{ url('products/'.$row->id) }}">{{ $row->name }} ({{ $row->options['color'] }})</a></td>
 									<td class="text-center">
 										<a href="{{ url('cart/'.$row->rowId.'/remove') }}">- </a>| {{ $row->qty }} | <a href="{{ url('cart/'.$row->rowId.'/add') }}">+</a></td>
 									<td>{{ $row->price }}</td>

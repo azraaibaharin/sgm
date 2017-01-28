@@ -67,14 +67,30 @@
 			</div>
 			<div id="product-spec" class="row">
 				<div class="col-md-12"><label>Price:</label> {{ $price == '' ? 'RM 0.00' : 'RM '.$price }}</div>
-				<div class="col-md-12"><label>Color:</label> {{ $color == '' ? 'Not set.' : $color }}</div>
-				<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set.' : $weight }}</div>
-				<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set.' : $dimension }}</div>
-				<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set.' : $weight_capacity }}</div>
-				<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set.' : $age_requirement }}</div>
-				<div class="col-md-12"><label>Availability:</label> {{ $status == '' ? 'Not set.' : $status }}</div>
-				<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}</div>
-				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
+				{{-- <div class="col-md-12"><label>Color:</label> {{ $color == '' ? 'Not set.' : $color }}</div> --}}
+				<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set' : $weight }}</div>
+				<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set' : $dimension }}</div>
+				<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set' : $weight_capacity }}</div>
+				<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set' : $age_requirement }}</div>
+				<div class="col-md-12"><label>Availability:</label> {{ $status == '' ? 'Not set' : $status }}</div>
+				<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None' : $awards }}</div>
+				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
+				@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
+					<div class="col-md-12"><label>Colour:
+						<form class="form-inline" action="{{ url('cart') }}" method="POST">
+						  	{!! csrf_field() !!}
+						  	<input type="hidden" name="id" value="{{ $id }}">
+						  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
+						  	<input type="hidden" name="price" value="{{ $price }}">
+						  	<select name="color">
+						  		@foreach($colors as $c)
+									<option value="{{ trim($c) }}">{{ trim($c) }}</option>
+						  		@endforeach
+						  	</select>
+						  	<input type="submit" class="btn btn-link" value="Add to Cart">
+						</form>
+					</label>
+				@endif
 			</div>
 
 			<hr/>
@@ -82,15 +98,6 @@
 			<div class="row">	
 				<div class="col-md-12">
 					<a href="{{ url('products') }}"" class="btn btn-link">Back</a>		
-					@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
-						<form class="form-inline" action="{{ url('cart') }}" method="POST">
-						  	{!! csrf_field() !!}
-						  	<input type="hidden" name="id" value="{{ $id }}">
-						  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
-						  	<input type="hidden" name="price" value="{{ $price }}">
-						  	<input type="submit" class="btn btn-link" value="Add to Cart">
-						</form>
-					@endif
 					@if (!Auth::guest())
 						<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 						<form class="form-inline" method="POST" action="{{ url('products/delete') }}">
