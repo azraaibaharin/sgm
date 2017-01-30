@@ -46,9 +46,9 @@
 					</div>
 				@else
 					@if (!Auth::guest())
-						<p class="text-center"><a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Add image</a></p>
+						<p class="text-center bg-no-img"><a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Add image</a></p>
 					@else
-						<p class="text-center">No image available</p>
+						<p class="text-center bg-no-img">No image available</p>
 					@endif
 				@endif
 				</div>
@@ -80,31 +80,26 @@
 				</div>
 				<div class="col-md-6">
 					<div class="row">
-						{{-- <div class="col-md-12"><label>Availability:</label> {{ $status == '' ? 'Not set' : $status }}</div> --}}
-						<div class="col-md-12">
-							{{-- <label>Online Price</label> --}}
-							
-						</div>
-						@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
 						<div class="col-md-12">
 							<p style="font-size: 24px;">{{ $price == '' || $status == 'Out of Stock' ? 'Out of Stock' : 'RM'.$price }}</p>
-							<label>Select color</label>
-							<form action="{{ url('cart') }}" method="POST">
-							  	{!! csrf_field() !!}
-							  	<input type="hidden" name="id" value="{{ $id }}">
-							  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
-							  	<input type="hidden" name="price" value="{{ $price }}">
-							  	<select name="color">
-							  		{{-- <option value="nocolor">Select preferred color</option> --}}
-							  		@foreach($colorsWithSku as $c)
-										<option value="{{ trim($c) }}">{{ trim(preg_replace("#\(.*\)#", "", $c)) }}</option>
-							  		@endforeach
-							  	</select>
-							  	<br><br>
-							  	<input type="submit" class="btn btn-primary" value="Add to Cart">
-							</form>
+							@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
+								<label>Select color</label>
+								<form action="{{ url('cart') }}" method="POST">
+								  	{!! csrf_field() !!}
+								  	<input type="hidden" name="id" value="{{ $id }}">
+								  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
+								  	<input type="hidden" name="price" value="{{ $price }}">
+								  	<select name="color">
+								  		{{-- <option value="nocolor">Select preferred color</option> --}}
+								  		@foreach($colorsWithSku as $c)
+											<option value="{{ trim($c) }}">{{ trim(preg_replace("#\(.*\)#", "", $c)) }}</option>
+								  		@endforeach
+								  	</select>
+								  	<br><br>
+								  	<input type="submit" class="btn btn-primary" value="Add to Cart">
+								</form>
+							@endif
 						</div>
-					@endif
 					</div>
 				</div>
 			</div>

@@ -6,7 +6,7 @@
 
 @section('content')
 <form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/'.$id.'/edit') }}" enctype="multipart/form-data">
-{{ csrf_field() }}
+    {{ csrf_field() }}
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">

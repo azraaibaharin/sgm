@@ -5,8 +5,8 @@
 @endsection
 
 @section('content')
-<form class="form-horizontal" role="form" method="POST" action="{{ url('testimonials/'.$id.'/edit') }}" enctype="multipart/form-data">
-{{ csrf_field() }}
+<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('testimonials/'.$id.'/edit') }}" enctype="multipart/form-data">
+    {{ csrf_field() }}
     <div class="container">
         <div class="row">
         	<div class="col-md-8 col-md-offset-2">

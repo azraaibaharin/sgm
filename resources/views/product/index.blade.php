@@ -77,20 +77,25 @@
 		</div>
 		@foreach ($products as $p)
 		<div class="col-md-4 {{ $p->brand }} bottom-margin-sm">
-			<div class="col-md-6 text-center">
-				@if (empty($p->getDisplay('image_links')))
-					<small class="top-margin-md">No image available</small>
-				@else
-					<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
-				@endif
+			<div class="row">
+				<div class="col-md-6 text-center">
+					@if (empty($p->getDisplay('image_links')))
+						<small class="top-margin-md">No image available</small>
+					@else
+						<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
+					@endif
+				</div>
+				<div class="col-md-6">
+					<h2>{{ $p->model }}</h2>
+					<a href="{{ url('products/'.$p->id) }}">View item</a>
+				</div>
 			</div>
-			<div class="col-md-6">
-				<h2>{{ $p->model }}</h2>
-				<a href="{{ url('products/'.$p->id) }}">View item</a>
-			</div>
-			<hr/>
 		</div>
 		@endforeach
+		<div class="col-md-12 bottom-margin-sm">
+			<small>{{ count($products) }} item(s)</small>
+			<hr>
+		</div>
 	@else
 		<div class="col-md-12 text-center">
 			<small>No products available. Click <a href="{{ url('products/create') }}">here</a> to add.</small>

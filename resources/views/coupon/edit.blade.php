@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form class="form-horizontal" role="form" method="POST" action="{{ url('coupons/'.$id) }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('coupons/'.$id) }}" enctype="multipart/form-data">
 	{{ csrf_field() }}
 	{{ method_field('PUT') }}
     <div class="container">

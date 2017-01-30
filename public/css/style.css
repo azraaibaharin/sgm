@@ -164,6 +164,13 @@ a:hover {
 	background-position: 50% 50%;
 }
 
+.bg-no-img {
+	color: #fff;
+	background-color: #dedede;
+	font-size: 20px;
+	padding: 60px 0;
+}
+
 .highlight {
 	/*max-height: 300px;*/
 	overflow: hidden;

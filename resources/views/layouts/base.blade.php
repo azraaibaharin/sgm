@@ -38,7 +38,7 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a> <span class="navbar-brand">@yield('breadcrumb')</span>
+                <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a><span class="navbar-brand">@yield('breadcrumb')</span>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
