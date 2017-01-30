@@ -31,7 +31,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        Cart::add($request->id, $request->name, 1, $request->price);
+        Cart::add($request->id, $request->name, 1, $request->price, ['color' => $request['color']]);
 	    return redirect('cart')->withSuccessMessage('Item was added to your cart!');
     }
 

@@ -21,9 +21,9 @@
 						</thead>
 						<tbody>
 							@if (Cart::count() > 0)
-								@foreach(Cart::content() as $row)
+								@foreach(Cart::content() as $row) 
 								<tr>
-									<td><a href="{{ url('products/'.$row->id) }}">{{ $row->name }}</a></td>
+									<td><a href="{{ url('products/'.$row->id) }}">{{ $row->name }} - {{ $row->options['color'] }}</a></td>
 									<td class="text-center">
 										<a href="{{ url('cart/'.$row->rowId.'/remove') }}">- </a>| {{ $row->qty }} | <a href="{{ url('cart/'.$row->rowId.'/add') }}">+</a></td>
 									<td>{{ $row->price }}</td>
@@ -57,10 +57,7 @@
 						            <td colspan="2">&nbsp;</td>
 						            <td style="vertical-align:middle;">Discount Code</td>
 						            <td>
-						            	<form class="form-inline" action="{{ url('cart/discount') }}">
-						            		<input type="text" name="discount_code">
-						            		<input class="btn btn-link" type="submit" value="Apply">
-						            	</form>
+					            		<input type="text" name="discount_code">
 						            </td>
 						        </tr>
 						    @endif

@@ -23,7 +23,8 @@
 				<div class="col-md-12">
 					<ol class="breadcrumb {{ $brand }}">
 						<li><a href="{{ url('products') }}">Products</a></li>
-						@if (!empty($category))<li>{{ $category }}</li>@endif
+						@if (!empty($brand))<li><a href="{{ url('products/b/'.$brand) }}">{{ ucfirst($brand) }}</a></li>@endif
+						@if (!empty($category))<li><a href="{{ url('products/b/'.$brand.'/c/'.$category) }}">{{ ucfirst($category) }}</a></li>@endif
 						<li class="active">{{ $model }}</li>
 					</ol>	
 				</div>
@@ -65,32 +66,51 @@
 					@endif
 				</div>
 			</div>
-			<div id="product-spec" class="row">
-				<div class="col-md-12"><label>Price:</label> {{ $price == '' ? 'RM 0.00' : 'RM '.$price }}</div>
-				<div class="col-md-12"><label>Color:</label> {{ $color == '' ? 'Not set.' : $color }}</div>
-				<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set.' : $weight }}</div>
-				<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set.' : $dimension }}</div>
-				<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set.' : $weight_capacity }}</div>
-				<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set.' : $age_requirement }}</div>
-				<div class="col-md-12"><label>Availability:</label> {{ $status == '' ? 'Not set.' : $status }}</div>
-				<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None.' : $awards }}</div>
-				<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set. @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
-			</div>
-
 			<hr/>
-
+			<div id="product-spec" class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set' : $weight }}</div>
+						<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set' : $dimension }}</div>
+						<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set' : $weight_capacity }}</div>
+						<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set' : $age_requirement }}</div>
+						<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None' : $awards }}</div>
+						<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						{{-- <div class="col-md-12"><label>Availability:</label> {{ $status == '' ? 'Not set' : $status }}</div> --}}
+						<div class="col-md-12">
+							{{-- <label>Online Price</label> --}}
+							
+						</div>
+						@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
+						<div class="col-md-12">
+							<p style="font-size: 24px;">{{ $price == '' || $status == 'Out of Stock' ? 'Out of Stock' : 'RM'.$price }}</p>
+							<label>Select color</label>
+							<form action="{{ url('cart') }}" method="POST">
+							  	{!! csrf_field() !!}
+							  	<input type="hidden" name="id" value="{{ $id }}">
+							  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
+							  	<input type="hidden" name="price" value="{{ $price }}">
+							  	<select name="color">
+							  		{{-- <option value="nocolor">Select preferred color</option> --}}
+							  		@foreach($colorsWithSku as $c)
+										<option value="{{ trim($c) }}">{{ trim(preg_replace("#\(.*\)#", "", $c)) }}</option>
+							  		@endforeach
+							  	</select>
+							  	<br><br>
+							  	<input type="submit" class="btn btn-primary" value="Add to Cart">
+							</form>
+						</div>
+					@endif
+					</div>
+				</div>
+			</div>
+			<hr/>
 			<div class="row">	
 				<div class="col-md-12">
-					<a href="{{ url('products') }}"" class="btn btn-link">Back</a>		
-					@if ($price != '' && $status != 'Out of Stock') {{-- Only show 'Add to cart' if price is set --}}
-						<form class="form-inline" action="{{ url('cart') }}" method="POST">
-						  	{!! csrf_field() !!}
-						  	<input type="hidden" name="id" value="{{ $id }}">
-						  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
-						  	<input type="hidden" name="price" value="{{ $price }}">
-						  	<input type="submit" class="btn btn-link" value="Add to Cart">
-						</form>
-					@endif
 					@if (!Auth::guest())
 						<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 						<form class="form-inline" method="POST" action="{{ url('products/delete') }}">

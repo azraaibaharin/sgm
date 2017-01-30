@@ -14,7 +14,7 @@
                     <div class="panel-body">
 
                         <div class="form-group{{ $errors->has('csv_file') ? ' has-error' : '' }}">
-                            <label for="csv_file" class="col-md-2 control-label">CSV file</label>
+                            <label for="csv_file" class="col-md-2 control-label">File</label>
 
                             <div class="col-md-9">
                                 <input id="csv_file" type="file" class="form-control" name="csv_file">
@@ -32,8 +32,8 @@
             </div>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <a href="{{ url('products') }}" class="btn btn-info pull-left">Back</a>
-                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <a href="{{ url('products') }}" class="btn btn-link pull-left">Back</a>
+                    <button type="submit" class="btn btn-default pull-right">Submit</button>
                 </div>
             </div>
         </div>

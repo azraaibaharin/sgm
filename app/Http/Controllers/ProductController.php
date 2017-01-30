@@ -8,6 +8,7 @@ use Excel;
 
 use App\Http\Requests;
 use App\Product;
+use Storage;
 
 class ProductController extends Controller
 {
@@ -58,7 +59,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $brand = null)
+    public function index(Request $request, $brand = null, $category = null)
     {   
         $product = $this->product;
         $brands = $product->getBrands();
@@ -67,13 +68,24 @@ class ProductController extends Controller
 
         if (!is_null($brand) && !empty($brand))
         {
-            $products = $product->where('brand', $brand)
-                                ->orderBy('model', 'asc')
-                                ->get();
+            if (!is_null($category) && !empty($category))
+            {
+                $products = $product->where('brand', $brand)
+                                    ->where('category', $category)
+                                    ->orderBy('model', 'asc')
+                                    ->get();
+            } else 
+            {
+                $category = $categories[0];
+                $products = $product->where('brand', $brand)
+                                    ->orderBy('model', 'asc')
+                                    ->get();
+            }
         } 
         else
         {
             $brand = $brands[0];
+            $category = $categories[0];
             $products = $product->orderBy('model', 'asc')
                                 ->get();
         }
@@ -83,9 +95,14 @@ class ProductController extends Controller
                 ->with('brands', $brands)
                 ->with('brand', $brand)
                 ->with('categories', $categories)
-                ->with('category', $categories[0]);
+                ->with('category', $category);
     }
 
+    /**
+     * Show the import products page.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function import()
     {
         $this->middleware('auth');
@@ -125,7 +142,8 @@ class ProductController extends Controller
             $request['price'], 
             $request['description'], 
             $request['status'], 
-            '1', 
+            '1', // category id
+            strtolower($request['category']),
             $this->getImageLinks($request, $this->product), 
             $request['video_links'], 
             $request['color'], 
@@ -151,13 +169,14 @@ class ProductController extends Controller
         {
             $csvFile = $request->file('csv_file');
             $csvFileName = 'products.'.$csvFile->getClientOriginalExtension();
-            $csvFileMoved = $csvFile->move(storage_path('imports'), $csvFileName);
+            $csvFileMoved = $csvFile->move(storage_path('app/imports'), $csvFileName);
 
             $results = Excel::load($csvFileMoved->getRealPath())->get();
 
             // Loop through all sheets
             $rows = 0;
             $count = 0;
+            $rowsNotProcessed = [];
             foreach($results as $sheet) 
             {
                 // Loop through all rows
@@ -165,16 +184,28 @@ class ProductController extends Controller
                 {
                     if ($row->brand != null && $row->model !=null)
                     {
+                        $product = $this->product->where('brand', $row->brand)->where('model', $row->model)->first();
+                        if ($product == null) 
+                        {
+                            $product = new Product();
+                        }
+
+                        // if ($row->model == 'IVVI™ (Caviar)')
+                        // {
+                        //     dd($row);
+                        // }
+
                         $this->save(
-                            new Product(), 
+                            $product, 
                             strtolower($row->brand), 
                             $row->model, 
-                            $row->price_inclusive_gst, 
+                            is_float($row->price_inclusive_gst) ? $row->price_inclusive_gst : 0.00, 
                             $row->description, 
-                            '1', 
-                            '1', 
-                            '', 
-                            '', 
+                            $this->product->getStatuses()[0],  // status
+                            '1', // category id
+                            strtolower($row->category),
+                            '', // image links
+                            '', // video links
                             $row->colour, 
                             $row->download_links, 
                             $row->weight, 
@@ -184,57 +215,21 @@ class ProductController extends Controller
                             $row->awards
                         );
                         $count++;
+                    } else 
+                    {
+                        array_push($rowsNotProcessed, $row);
                     }
                     $rows++;
                 };
             };
-            return redirect('products')->with('message','Import successful. '.$count.' products added. '.$rows.' rows processed.');
+
+            Storage::delete('imports/'.$csvFileName);
+
+            return redirect('products')->with('message','Import completed. '.$count.' products added. '.($rows - $count).' rows not processed.');
         } else
         {
             return redirect('products')->with('message','Import aborted. Import file not found.');
         }
-    }
-
-    /**
-     * Save product.
-     * @param  [type] $product         [description]
-     * @param  [type] $brand           [description]
-     * @param  [type] $model           [description]
-     * @param  [type] $price           [description]
-     * @param  [type] $description     [description]
-     * @param  [type] $status          [description]
-     * @param  [type] $category_id     [description]
-     * @param  [type] $image_links     [description]
-     * @param  [type] $video_links     [description]
-     * @param  [type] $color           [description]
-     * @param  [type] $download_links  [description]
-     * @param  [type] $weight          [description]
-     * @param  [type] $dimension       [description]
-     * @param  [type] $weight_capacity [description]
-     * @param  [type] $age_requirement [description]
-     * @param  [type] $awards          [description]
-     * @return [type]                  [description]
-     */
-    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $image_links, $video_links, $color, $download_links, $weight, $dimension, $weight_capacity, $age_requirement, $awards)
-    {
-        $product->brand = $brand;
-        $product->model = $model;
-        $product->price = $price;
-        $product->description = $description;
-        $product->status = $status;
-        $product->category_id = $category_id;
-        $product->image_links = $image_links;
-        $product->video_links = $video_links;
-        $product->color = $color;
-        $product->download_links = $download_links;
-        $product->weight = $weight;
-        $product->dimension = $dimension;
-        $product->weight_capacity = $weight_capacity;
-        $product->age_requirement = $age_requirement;
-        $product->awards = $awards;
-        $product->save();
-
-        return $product;
     }
 
     /**
@@ -253,6 +248,7 @@ class ProductController extends Controller
         }
 
         $productArr = $product->toArray();
+        $productArr['colorsWithSku'] = explode(',', $productArr['color']);
 
         return view('product.show', $productArr)
                 ->with('displayImage', $product->getDisplay('image_links'))
@@ -307,23 +303,7 @@ class ProductController extends Controller
             return redirect('products')->with('message', 'Product not found.');
         }
 
-        $product->brand = $request['brand'];
-        $product->model = $request['model'];
-        $product->price = $request['price'];
-        $product->description = $request['description'];
-        $product->status = $request['status'];
-        $product->category_id = '1';
-        $product->category = $request['category'];
-        $product->image_links = $this->getImageLinks($request, $product);
-        $product->video_links = $request['video_links'];
-        $product->color = $request['color'];
-        $product->download_links = $request['download_links'];
-        $product->weight = $request['weight'];
-        $product->dimension = $request['dimension'];
-        $product->weight_capacity = $request['weight_capacity'];
-        $product->age_requirement = $request['age_requirement'];
-        $product->awards = $request['awards'];
-        $product->save();
+        $this->save($product, $request['brand'], $request['model'], $request['price'], $request['description'], $request['status'], '1', $request['category'], $this->getImageLinks($request, $product), $request['video_links'], $request['color'], $request['download_links'], $request['weight'], $request['dimension'], $request['weight_capacity'], $request['age_requirement'], $request['awards']);
 
         return back()->with('success','Update successful.');
     }
@@ -342,6 +322,78 @@ class ProductController extends Controller
         $this->product->destroy($product_id);
 
         return redirect('products')->with('message', 'Successfully deleted \''.$productName.'\'');
+    }
+
+    /**
+     * Save product.
+     *
+     * @param  [type] $product         [description]
+     * @param  [type] $brand           [description]
+     * @param  [type] $model           [description]
+     * @param  [type] $price           [description]
+     * @param  [type] $description     [description]
+     * @param  [type] $status          [description]
+     * @param  [type] $category_id     [description]
+     * @param  [type] $category        [description] 
+     * @param  [type] $image_links     [description]
+     * @param  [type] $video_links     [description]
+     * @param  [type] $color           [description]
+     * @param  [type] $download_links  [description]
+     * @param  [type] $weight          [description]
+     * @param  [type] $dimension       [description]
+     * @param  [type] $weight_capacity [description]
+     * @param  [type] $age_requirement [description]
+     * @param  [type] $awards          [description]
+     * @return App/Product             [description]
+     */
+    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $dimension, $weight_capacity, $age_requirement, $awards)
+    {
+        $product->brand = $brand;
+        $product->model = $model;
+        $product->price = $price;
+        $product->description = $description;
+        $product->status = $status;
+        $product->category_id = $category_id;
+        $product->category = $category;
+        $product->image_links = $image_links;
+        $product->video_links = $video_links;
+        $product->color = $this->cleanColor($color);
+        $product->download_links = $download_links;
+        $product->weight = $weight;
+        $product->dimension = $dimension;
+        $product->weight_capacity = $weight_capacity;
+        $product->age_requirement = $age_requirement;
+        $product->awards = $awards;
+        $product->save();
+
+        return $product;
+    }
+
+    /**
+     * Format color string to (if more than 1 color is defined) to '<color_0> (<sku_0>), <color_1> (<sku_1>), <color_2> (<sku_2>)'.
+     * E.g. Bisque(0101),Cinder (0201) , Green Mellow(9301) ,Yellow (8710)
+     *      --> Bisque (0101), Cinder (0201), Green Mellow (9301), Yellow (8710)
+     * 
+     * @param  [type] $color [description]
+     * @return [type]        [description]
+     */
+    private function cleanColor($color) {
+        $colorArr = explode(',', $color);
+        $cleanColorArr = [];
+
+        foreach($colorArr as $c)
+        {
+            $cleanColor = $c;
+            $matches = [];
+            preg_match("#(.*).*\((.*)\)#", $c, $matches);
+            if(sizeof($matches) == 3)
+            {   
+                $cleanColor = trim($matches[1]).' ('.trim($matches[2]).')';
+            }
+            array_push($cleanColorArr, $cleanColor);
+        }
+
+        return implode(', ', $cleanColorArr);
     }
 
     /**

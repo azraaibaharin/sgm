@@ -56,11 +56,11 @@ class Product extends Model
      * @var array
      */
     protected $categories = [
-    	'accessories', 'high chair', 'strollers', 'swingers', 'playpen', 'car seat', 
-    	'amani bebe', 'bassinettes', 'bed and bath', 'change mats', 'feeding', 'furniture',
+    	'accessories', 'high chair', 'swinger', 'playpen', 'car seat', 
+    	'amani bebe', 'bassinettes', 'bed and bath', 'change mat', 'feeding', 'furniture',
     	'bedguard', 'change table', 'glider feeding chair', 'kaylula',
-    	'bedding', 'baby cots', 'cradle', 'chest drawers', 'mattresses', 'portable cots', 
-    	'strollers', 'travel time', 'walkers, rockers, bouncinette',
+    	'bedding', 'baby cots', 'cradle', 'chest drawers', 'mattresses', 'portable cot', 
+    	'stroller', 'travel time', 'walker, rockers, bouncinette',
     ];
 
     /**

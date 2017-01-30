@@ -27,6 +27,7 @@ Route::post('/home/edit', 'HomeController@update')->middleware('auth');
 // Products
 Route::get('/products', 'ProductController@index');
 Route::get('/products/b/{brand}', 'ProductController@index');
+Route::get('/products/b/{brand}/c/{category}', 'ProductController@index');
 Route::post('/products', 'ProductController@filter');
 Route::get('/products/create', 'ProductController@create')->middleware('auth');
 Route::post('/products/create', 'ProductController@store')->middleware('auth');

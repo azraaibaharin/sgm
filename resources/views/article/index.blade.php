@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->flush() }}
+			{{ session()->forget('message') }}
 		</div>
 	</div>
 </div>
