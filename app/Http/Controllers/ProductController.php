@@ -8,6 +8,7 @@ use Excel;
 
 use App\Http\Requests;
 use App\Product;
+use Storage;
 
 class ProductController extends Controller
 {
@@ -152,7 +153,7 @@ class ProductController extends Controller
         {
             $csvFile = $request->file('csv_file');
             $csvFileName = 'products.'.$csvFile->getClientOriginalExtension();
-            $csvFileMoved = $csvFile->move(storage_path('imports'), $csvFileName);
+            $csvFileMoved = $csvFile->move(storage_path('app/imports'), $csvFileName);
 
             $results = Excel::load($csvFileMoved->getRealPath())->get();
 
@@ -168,9 +169,15 @@ class ProductController extends Controller
                     if ($row->brand != null && $row->model !=null)
                     {
                         $product = $this->product->where('brand', $row->brand)->where('model', $row->model)->first();
-                        if ($product == null) {
+                        if ($product == null) 
+                        {
                             $product = new Product();
                         }
+
+                        // if ($row->model == 'IVVI™ (Caviar)')
+                        // {
+                        //     dd($row);
+                        // }
 
                         $this->save(
                             $product, 
@@ -199,6 +206,9 @@ class ProductController extends Controller
                     $rows++;
                 };
             };
+
+            Storage::delete('imports/'.$csvFileName);
+
             return redirect('products')->with('message','Import completed. '.$count.' products added. '.($rows - $count).' rows not processed.');
         } else
         {

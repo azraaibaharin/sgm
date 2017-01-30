@@ -123,6 +123,13 @@
                             <label for="color" class="col-md-2 control-label">Color</label>
                             <div class="col-md-9">
                                 <input id="color" class="form-control" name="color" value="{{ old('color') ? old('color') : $color }}" />
+                                <a href="#" data-toggle="tooltip" title="Some tooltip text!">Hover over me</a>
+                                <div class="tooltip top" role="tooltip">
+                                    <div class="tooltip-arrow"></div>
+                                    <div class="tooltip-inner">
+                                        Some tooltip text!
+                                    </div>
+                                </div>
 
                                 @if ($errors->has('color'))
                                     <span class="help-block">
@@ -319,9 +326,15 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <a href="{{ url('products/'.$id) }}" class="btn btn-link pull-left">Back</a>
-                <button type="submit" class="btn btn-link pull-right">Update</button>
+                <button type="submit" class="btn btn-default pull-right">Update</button>
             </div>
         </div>
     </div>
 </form>
+@endsection
+
+@section('js')
+<script>
+    
+</script>
 @endsection

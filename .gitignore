@@ -1,6 +1,5 @@
 /node_modules
-/public/storage
-/public/img
+/public/img/
 /vendor
 /storage/imports
 /.idea

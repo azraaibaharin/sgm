@@ -22,7 +22,6 @@
 						<tbody>
 							@if (Cart::count() > 0)
 								@foreach(Cart::content() as $row) 
-								{{-- {{ dd($row) }} --}}
 								<tr>
 									<td><a href="{{ url('products/'.$row->id) }}">{{ $row->name }} ({{ $row->options['color'] }})</a></td>
 									<td class="text-center">
@@ -58,10 +57,10 @@
 						            <td colspan="2">&nbsp;</td>
 						            <td style="vertical-align:middle;">Discount Code</td>
 						            <td>
-						            	<form class="form-inline" action="{{ url('cart/discount') }}">
+						            	{{-- <form class="form-inline" action="{{ url('cart/discount') }}">
 						            		<input type="text" name="discount_code">
 						            		<input class="btn btn-link" type="submit" value="Apply">
-						            	</form>
+						            	</form> --}}
 						            </td>
 						        </tr>
 						    @endif
