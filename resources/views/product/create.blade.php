@@ -119,6 +119,7 @@
                             <label for="color" class="col-md-2 control-label">Color</label>
                             <div class="col-md-9">
                                 <input id="color" class="form-control" name="color" value="{{ old('color') }}" />
+                                <small>* Comma separated values with SKU in brackets, e.g. blue(222),green(333),yellow(555)</small>
 
                                 @if ($errors->has('color'))
                                     <span class="help-block">

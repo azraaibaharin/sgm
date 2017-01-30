@@ -123,13 +123,7 @@
                             <label for="color" class="col-md-2 control-label">Color</label>
                             <div class="col-md-9">
                                 <input id="color" class="form-control" name="color" value="{{ old('color') ? old('color') : $color }}" />
-                                <a href="#" data-toggle="tooltip" title="Some tooltip text!">Hover over me</a>
-                                <div class="tooltip top" role="tooltip">
-                                    <div class="tooltip-arrow"></div>
-                                    <div class="tooltip-inner">
-                                        Some tooltip text!
-                                    </div>
-                                </div>
+                                <small>* Comma separated values with SKU in brackets, e.g. blue(222),green(333),yellow(555)</small>
 
                                 @if ($errors->has('color'))
                                     <span class="help-block">
@@ -331,10 +325,4 @@
         </div>
     </div>
 </form>
-@endsection
-
-@section('js')
-<script>
-    
-</script>
 @endsection
