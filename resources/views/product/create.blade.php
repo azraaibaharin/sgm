@@ -133,6 +133,7 @@
                             <label for="weight" class="col-md-2 control-label">Weight</label>
                             <div class="col-md-9">
                                 <input id="weight" class="form-control" name="weight" value="{{ old('weight') }}" />
+                                <small>* In kg, without word 'kg'. E.g. 2.0.</small>
 
                                 @if ($errors->has('weight'))
                                     <span class="help-block">
@@ -146,6 +147,7 @@
                             <label for="delivery_weight" class="col-md-2 control-label">Delivery Weight</label>
                             <div class="col-md-9">
                                 <input id="delivery_weight" class="form-control" name="delivery_weight" value="{{ old('delivery_weight') }}" />
+                                <small>* In kg, without word 'kg'. E.g. 2.0.</small>
 
                                 @if ($errors->has('delivery_weight'))
                                     <span class="help-block">
@@ -172,6 +174,7 @@
                             <label for="weight_capacity" class="col-md-2 control-label">Weight Capacity</label>
                             <div class="col-md-9">
                                 <input id="weight_capacity" class="form-control" name="weight_capacity" value="{{ old('weight_capacity') }}" />
+                                <small>* In kg, without word 'kg'. E.g. 2.0.</small>
 
                                 @if ($errors->has('weight_capacity'))
                                     <span class="help-block">
