@@ -70,6 +70,19 @@ a:hover {
 	padding-bottom: 50px;
 }
 
+.left-right-padding-md {
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+.left-padding-sm {
+	padding-left: 25px;
+}
+
+.right-padding-sm {
+	padding-right: 25px;
+}
+
 .padding-md {
 	padding: 50px;
 }
@@ -303,12 +316,14 @@ a:hover {
 	background-color: #f6f6f6;
 }
 
-#getintouch .form-control {
+#getintouch .form-control,
+#checkout .form-control, {
 	border: 2px solid #111;
 	border-radius: 0;
 }
 
-#getintouch .btn-default {
+#getintouch .btn-default,
+#checkout .btn-default {
 	border: 2px solid #111;
 	border-radius: 0;
 	padding-left: 20px;

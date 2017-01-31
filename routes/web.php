@@ -24,7 +24,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('/home/edit', 'HomeController@edit')->middleware('auth');
 Route::post('/home/edit', 'HomeController@update')->middleware('auth');
 
-// Products
+// Product
 Route::get('/products', 'ProductController@index');
 Route::get('/products/b/{brand}', 'ProductController@index');
 Route::get('/products/b/{brand}/c/{category}', 'ProductController@index');
@@ -38,7 +38,7 @@ Route::get('/products/{id}/edit', 'ProductController@edit')->middleware('auth');
 Route::post('/products/{id}/edit', 'ProductController@update')->middleware('auth');
 Route::post('/products/delete', 'ProductController@destroy')->middleware('auth');
 
-// Articles
+// Article
 Route::get('articles', 'ArticleController@index');
 Route::get('articles/create', 'ArticleController@create')->middleware('auth');
 Route::post('articles/create', 'ArticleController@store')->middleware('auth');
@@ -47,7 +47,7 @@ Route::get('articles/{id}/edit', 'ArticleController@edit')->middleware('auth');
 Route::post('articles/{id}/edit', 'ArticleController@update')->middleware('auth');
 Route::post('articles/delete', 'ArticleController@destroy')->middleware('auth');
 
-// Testimonials
+// Testimonial
 Route::get('testimonials', 'TestimonialController@index');
 Route::get('testimonials/b/{brand}', 'TestimonialController@index');
 Route::post('testimonials', 'TestimonialController@filter');
@@ -58,7 +58,7 @@ Route::get('testimonials/{id}/edit', 'TestimonialController@edit')->middleware('
 Route::post('testimonials/{id}/edit', 'TestimonialController@update')->middleware('auth');
 Route::post('testimonials/delete', 'TestimonialController@destroy')->middleware('auth');
 
-// Stores
+// Store
 Route::get('stores', 'StoreController@index');
 Route::post('stores', 'StoreController@filter');
 Route::get('stores/create', 'StoreController@create')->middleware('auth');
@@ -68,7 +68,7 @@ Route::get('stores/{id}/edit', 'StoreController@edit')->middleware('auth');
 Route::post('stores/{id}/edit', 'StoreController@update')->middleware('auth');
 Route::post('stores/delete', 'StoreController@destroy')->middleware('auth');
 
-// Warranties
+// Warranty
 Route::get('warranties', 'WarrantyController@index')->middleware('auth');
 Route::get('warranties/create', 'WarrantyController@create');
 Route::post('warranties/create', 'WarrantyController@store');
@@ -82,11 +82,16 @@ Route::resource('cart', 'CartController', ['only' => ['index', 'store', 'update'
 Route::get('cart/{id}/add', 'CartController@add');
 Route::get('cart/{id}/remove', 'CartController@remove');
 Route::get('cart/empty', 'CartController@empty');
-Route::get('payment', 'CartController@payment');
-Route::post('payment/response', 'CartController@paymentResponse');
-Route::post('payment/responseBE', 'CartController@paymentResponseBE');
+Route::post('cart/coupon', 'CartController@addCoupon');
 
-// Coupons
+// Order
+Route::post('order/create', 'OrderController@create');
+Route::post('order/store', 'OrderController@store');
+Route::post('order/payment_response', 'OrderController@paymentResponse');
+Route::post('order/payment_response_be', 'CartController@paymentResponseBE');
+Route::get('payment', 'OrderController@payment');
+
+// Coupon
 Route::get('coupons', 'CouponController@index')->middleware('auth');
 Route::get('coupons/create', 'CouponController@create')->middleware('auth');
 Route::post('coupons/create', 'CouponController@store')->middleware('auth');

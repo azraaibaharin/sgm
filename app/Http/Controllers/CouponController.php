@@ -56,7 +56,7 @@ class CouponController extends Controller
     {
         $coupon = $this->coupon;
         $coupon->code = $request['code'];
-        $coupon->discount = $request['discount'];
+        $coupon->discount = '0';
         $coupon->value = $request['value'];
         $coupon->date_of_issue = $this->toDate($request['date_of_issue']);
         $coupon->date_of_expiration = $this->toDate($request['date_of_expiration']);

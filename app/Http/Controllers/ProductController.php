@@ -149,6 +149,7 @@ class ProductController extends Controller
             $request['color'], 
             $request['download_links'], 
             $request['weight'], 
+            $request['delivery_weight'],
             $request['dimension'], 
             $request['weight_capacity'], 
             $request['age_requirement'], 
@@ -209,6 +210,7 @@ class ProductController extends Controller
                             $row->colour, 
                             $row->download_links, 
                             $row->weight, 
+                            $row->delivery_weight,
                             $row->dimension, 
                             $row->weight_capacity, 
                             $row->age_requirement, 
@@ -303,7 +305,7 @@ class ProductController extends Controller
             return redirect('products')->with('message', 'Product not found.');
         }
 
-        $this->save($product, $request['brand'], $request['model'], $request['price'], $request['description'], $request['status'], '1', $request['category'], $this->getImageLinks($request, $product), $request['video_links'], $request['color'], $request['download_links'], $request['weight'], $request['dimension'], $request['weight_capacity'], $request['age_requirement'], $request['awards']);
+        $this->save($product, $request['brand'], $request['model'], $request['price'], $request['description'], $request['status'], '1', $request['category'], $this->getImageLinks($request, $product), $request['video_links'], $request['color'], $request['download_links'], $request['weight'], $request['delivery_weight'], $request['dimension'], $request['weight_capacity'], $request['age_requirement'], $request['awards']);
 
         return back()->with('success','Update successful.');
     }
@@ -340,13 +342,14 @@ class ProductController extends Controller
      * @param  [type] $color           [description]
      * @param  [type] $download_links  [description]
      * @param  [type] $weight          [description]
+     * @param  [type] $delivery_weight [description]
      * @param  [type] $dimension       [description]
      * @param  [type] $weight_capacity [description]
      * @param  [type] $age_requirement [description]
      * @param  [type] $awards          [description]
      * @return App/Product             [description]
      */
-    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $dimension, $weight_capacity, $age_requirement, $awards)
+    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $delivery_weight, $dimension, $weight_capacity, $age_requirement, $awards)
     {
         $product->brand = $brand;
         $product->model = $model;
@@ -360,6 +363,7 @@ class ProductController extends Controller
         $product->color = $this->cleanColor($color);
         $product->download_links = $download_links;
         $product->weight = $weight;
+        $product->delivery_weight = $delivery_weight;
         $product->dimension = $dimension;
         $product->weight_capacity = $weight_capacity;
         $product->age_requirement = $age_requirement;

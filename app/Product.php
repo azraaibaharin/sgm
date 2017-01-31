@@ -28,6 +28,7 @@ class Product extends Model
     	'weight_capacity' => '', 
     	'age_requirement' => '',
     	'awards' => '',
+        'delivery_weight' => 0.00
 	];
 
 	/**
@@ -38,7 +39,7 @@ class Product extends Model
     protected $fillable = [
     	'brand', 'model', 'price', 'description', 'category_id', 'category', 'image_links', 'video_links',
     	'status', 'color', 'download_links', 'weight', 'dimension', 'weight_capacity', 'age_requirement',
-    	'awards'
+    	'awards', 'delivery_weight'
     ];
 
     /**

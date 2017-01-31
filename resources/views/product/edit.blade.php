@@ -146,6 +146,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('delivery_weight') ? ' has-error' : '' }}">
+                            <label for="delivery_weight" class="col-md-2 control-label">Delivery Weight</label>
+                            <div class="col-md-9">
+                                <input id="delivery_weight" class="form-control" name="delivery_weight" value="{{ old('delivery_weight') ? old('delivery_weight') : $delivery_weight }}" />
+
+                                @if ($errors->has('delivery_weight'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('delivery_weight') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('dimension') ? ' has-error' : '' }}">
                             <label for="dimension" class="col-md-2 control-label">Dimension</label>
                             <div class="col-md-9">

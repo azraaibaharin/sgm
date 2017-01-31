@@ -87,7 +87,7 @@
 								<form action="{{ url('cart') }}" method="POST">
 								  	{!! csrf_field() !!}
 								  	<input type="hidden" name="id" value="{{ $id }}">
-								  	<input type="hidden" name="name" value="{{ $brand }} {{ $model }}">
+								  	<input type="hidden" name="name" value="{{ ucfirst($brand) }} {{ ucfirst($model) }}">
 								  	<input type="hidden" name="price" value="{{ $price }}">
 								  	<select name="color">
 								  		{{-- <option value="nocolor">Select preferred color</option> --}}
@@ -96,7 +96,7 @@
 								  		@endforeach
 								  	</select>
 								  	<br><br>
-								  	<input type="submit" class="btn btn-primary" value="Add to Cart">
+								  	<input type="submit" class="btn btn-default" value="Add to Cart">
 								</form>
 							@endif
 						</div>

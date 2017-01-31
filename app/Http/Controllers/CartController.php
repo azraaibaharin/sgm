@@ -5,22 +5,51 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use \Carbon\Carbon;
 use Cart;
+use Hash;
+use App\Coupon;
 
 class CartController extends Controller
 {
-
-	protected $merchantKey = 't31B7FOsuf';
-	protected $merchantCode = 'M00568';
+    protected $couponIdsKey = 'coupon_ids';
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('cart.index');
+        // session([$this->couponIdsKey => '']);
+        $couponIds = session($this->couponIdsKey, '');
+        $couponTotalValue = $this->getCouponTotalValue(explode(',', $couponIds));
+
+        return view('cart.index')
+                ->with('couponTotalValue', $couponTotalValue)
+                ->with('couponIds', $couponIds);
+    }
+
+    /**
+     * Return total value of coupons based on the collection of coupon IDs.
+     *
+     * @param  Collection $couponIdsArr a collection of coupon id
+     * @return [type]                [description]
+     */
+    private function getCouponTotalValue($couponIdsArr)
+    {
+        $value = 0;
+        
+        foreach($couponIdsArr as $couponId)
+        {
+            $coupon = Coupon::find($couponId);
+            if ($coupon != null && $this->isCouponValid($coupon))
+            {
+                $value += $coupon->value;
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -31,12 +60,12 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        Cart::add($request->id, $request->name, 1, $request->price, ['color' => $request['color']]);
-	    return redirect('cart')->withSuccessMessage('Item was added to your cart!');
+		Cart::add($request->id, $request->name, 1, $request->price, ['color' => $request['color']]);
+	    return redirect('cart')->withMessage('Added \''.$request['name'].'\'!');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Increase the quantity of the specified cart item by one, based on the provided row id.
      *
      * @param  int  $rowId cart item row id
      * @return \Illuminate\Http\Response
@@ -46,11 +75,11 @@ class CartController extends Controller
         $cartItem = Cart::get($rowId);
         $newCount = $cartItem->qty + 1;
         Cart::update($rowId, $newCount);
-        return redirect('cart')->withSuccessMessage('Item count has been increased!');
+        return redirect('cart')->withMessage('Added \''.$cartItem->name.'\'!');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Decrease the quantity of the specified cart item by one, based on the provided row id.
      *
      * @param  int  $rowId cart item row id
      * @return \Illuminate\Http\Response
@@ -60,7 +89,7 @@ class CartController extends Controller
         $cartItem = Cart::get($rowId);
         $newCount = $cartItem->qty - 1;
         Cart::update($rowId, $newCount);
-        return redirect('cart')->withSuccessMessage('Item count has been decreased!');
+        return redirect('cart')->withMessage('Removed \''.$cartItem->name.'\'!');
     }
 
     /**
@@ -72,7 +101,7 @@ class CartController extends Controller
     public function destroy($rowId)
     {
         Cart::remove($rowId);
-	    return redirect('cart')->withSuccessMessage('Item has been removed!');
+	    return redirect('cart')->withMessage('Item has been removed!');
     }
 
     /**
@@ -84,122 +113,77 @@ class CartController extends Controller
     public function empty()
     {
         Cart::destroy();
-     	return redirect('cart')->withSuccessMessage('Items has been removed!');   
+     	return redirect('cart')->withMessage('All items has been removed!');   
     }
 
     /**
-     * Process cart payment.
+     * Add coupon to the cart.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request [description]
      */
-    public function payment()
+    public function addCoupon(Request $request)
     {
-    	$merchantKey = $this->merchantKey;
-    	$merchantCode = $this->merchantCode;
-    	$refNo = 'A00000001';
-    	$amount = '1.00';
-    	$amountStr = str_replace(['.', ','], "", $amount);
-    	$currency = 'MYR';
+        $couponCode = $request['coupon_code'];
+        $coupon = Coupon::where('code', $couponCode)->first();
 
-    	$shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+        if ($coupon != null && $this->isCouponValid($coupon))
+        {
+            $couponIds = session($this->couponIdsKey, '');
+            if(!$this->isCouponUsed($couponIds, $coupon->id))
+            {
+                if ($couponIds == '')
+                {
+                    $couponIds = $coupon->id;
+                } else
+                {
+                    $couponIds = $couponIds.','.$coupon->id;                    
+                }
 
-    	// dd($merchantKey.$merchantCode.$refNo.$amountStr.$currency.' : '.$shaStr);
-
-     	return view('cart.payment')
-     				->with('merchantCode', $merchantCode)
-     				->with('refNo', $refNo)
-     				->with('amount', $amount)
-     				->with('currency', $currency)
-     				->with('sha', $shaStr);
+                session([$this->couponIdsKey => $couponIds]);
+                return redirect('cart')->withSuccess('Coupon code \''.$couponCode.'\' applied');
+            } else
+            {
+                return redirect('cart')->withError('Coupon code has been used!');
+            }
+        } else 
+        {
+            return redirect('cart')->withError('Coupon code is invalid');
+        }
     }
 
     /**
-     * Process payment response's POST request.
+     * Checks whether a coupon has been used by checking the used coupon ids collection.
      *
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * @param  Collection  $couponIds the collection of used coupon ids to check against
+     * @param  String      $couponId  the coupon id to check if used
+     * @return boolean            [description]
      */
-    public function paymentResponse(Request $request)
+    private function isCouponUsed($couponIds, $couponId)
     {
-    	$status = $request->Status;
-    	$signature = $request->Signature;
-    	$merchantCode = $request->MerchantCode;
-    	$refNo = $request->RefNo;
-    	$amountStr = $request->Amount;
-    	$currency = $request->Currency;
+        $isUsed = false;
+        
+        foreach(explode(',', $couponIds) as $cid)
+        {
+            if($couponId == $cid)
+            {
+                $isUsed = true;
+                break;
+            }
+        }
 
-    	if ($status == 1)
-    	{
-    		$shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-    		if ($signature == $shaStr)
-    		{
-    			return view('cart.payment_response')->withMessage('Successful!');
-    		} else 
-    		{
-    			return view('cart.payment_response')->withMessage('Failed!');
-    		}
-    	} else 
-    	{
-    		return view('cart.payment_response')->withMessage('Payment transaction failed!');
-    	}
+        return $isUsed;
     }
 
     /**
-     * Process Back End payment response's POST request.
+     * Checks whether the coupon still valid by comparing the current date with the expiry date.
      *
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * @param  Coupon  $coupon App/Coupon instance
+     * @return boolean         whether the coupon is still valid
      */
-    public function paymentResponseBE(Request $request)
+    private function isCouponValid(Coupon $coupon)
     {
-    	$status = $request->Status;
-    	$signature = $request->Signature;
-    	$merchantCode = $request->MerchantCode;
-    	$refNo = $request->RefNo;
-    	$amountStr = $request->Amount;
-    	$currency = $request->Currency;
-
-    	if ($status == 1)
-    	{
-    		$shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-    		if ($signature == $shaStr)
-    		{
-    			echo 'RECEIVEOK';
-    		} else 
-    		{
-    			return view('cart.payment_response_be')->withMessage('Failed!');
-    		}
-    	} else 
-    	{
-    		return view('cart.payment_response_be')->withMessage('Payment transaction failed!');
-    	}
+        $now = Carbon::now();
+        $couponExpireDate = new Carbon($coupon->date_of_expiration);
+        return $couponExpireDate >= $now;
     }
-
-    /**
-     * Generate signature for ipay88 request.
-     *
-     * @param  [type] $source [description]
-     * @return [type]         [description]
-     */
-    function iPay88_signature($source)
-	{
-       	// return base64_encode(hex2bin(sha1($source)));
-       	return sha1($source);
-	}
-	
-	/**
-	 * Generate signature for ipay88 request.
-	 *
-	 * @param  [type] $hexSource [description]
-	 * @return [type]            [description]
-	 */
-	function hex2bin($hexSource)
-	{
-		for ($i=0;$i<strlen($hexSource);$i=$i+2)
-		{
-	       	$bin .= chr(hexdec(substr($hexSource,$i,2)));
-		}
-		return $bin;
-	}
 }
