@@ -8,8 +8,6 @@
 <div id="checkout" class="container">
 	<form class="form-horizontal" role="form" method="POST" action="{{ url('order/store') }}">
 		{{ csrf_field() }}
-		<input type="hidden" name="coupon_total_value" value="{{ $couponTotalValue }}">
-		{{-- <input type="hidden" name="shopping_cart_id" value="{{ $shoppingCartId }}"> --}}
 		<div class="row">
 			<div class="col-md-offset-3 col-md-6">
 				<h3>Personal Details</h3>

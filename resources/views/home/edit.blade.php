@@ -368,6 +368,28 @@
                 </div>
             </div>
 
+            {{-- Shipping rate --}}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Shipping rate</div>
+                    <div class="panel-body">
+                        <div class="form-group{{ $errors->has('shipping_rate_per_kilo') ? ' has-error' : '' }}">
+                            <label for="shipping_rate_per_kilo" class="col-md-2 control-label">Per Kilo</label>
+
+                            <div class="col-md-9">
+                                <input id="shipping_rate_per_kilo" type="text" class="form-control" name="shipping_rate_per_kilo" value="{{ old('shipping_rate_per_kilo') ? old('shipping_rate_per_kilo') : $shipping_rate_per_kilo }}" required autofocus />
+
+                                @if ($errors->has('shipping_rate_per_kilo'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('shipping_rate_per_kilo') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-12 bottom-margin-sm">
                 <button type="submit" class="center-block btn btn-default">
                     Submit

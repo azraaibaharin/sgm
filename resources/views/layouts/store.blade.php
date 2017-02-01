@@ -11,7 +11,7 @@
 
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a href="{{ url('/stores/create') }}">Add store</a>
+                <a href="{{ url('/stores/create') }}">Add Store</a>
                 <a href="{{ url('/logout') }}"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">

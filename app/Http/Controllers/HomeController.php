@@ -8,6 +8,7 @@ use App\Mail\ContactFormSubmitted;
 use App\Http\Requests\ContactFormRequest;
 use App\Home;
 use App\Article;
+use App\Configuration;
 
 use DB;
 
@@ -27,19 +28,41 @@ class HomeController extends Controller
     protected $article;
 
     /**
+     * The Configuration instance.
+     * @var App\Configuration
+     */
+    protected $configuration;
+
+    /**
+     * The configuration key for shipping rate per kilo.
+     * @var string
+     */
+    protected $shippingRatePerKiloKey = 'shipping_rate_per_kilo';
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Home $home, Article $article)
+    public function __construct(Home $home, Article $article, Configuration $configuration)
     {
         $this->home = $home;
         $this->article = $article;
+        $this->configuration = $configuration;
 
         if (is_null($this->home->first()))
         {
             $this->home->about_text = 'New about lah';
             $this->home->save();
+        }
+
+        $shippingRatePerKiloConfig = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
+        if (is_null($shippingRatePerKiloConfig))
+        {
+            $shippingRatePerKiloConfig = $this->configuration;
+            $shippingRatePerKiloConfig->key = $this->shippingRatePerKiloKey;
+            $shippingRatePerKiloConfig->value = '0.00';
+            $shippingRatePerKiloConfig->save;
         }
     }
 
@@ -116,6 +139,15 @@ class HomeController extends Controller
         $home->contact_email = $request['contact_email'];
         $home->save();
 
+        $shippingRatePerKiloConfig = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
+        if (is_null($shippingRatePerKiloConfig))
+        {
+            $shippingRatePerKiloConfig = new Configuration();
+            $shippingRatePerKiloConfig->key = $this->shippingRatePerKiloKey;
+        }
+        $shippingRatePerKiloConfig->value = $request[$this->shippingRatePerKiloKey];
+        $shippingRatePerKiloConfig->save();
+
         return redirect('/');
     }
 
@@ -168,6 +200,8 @@ class HomeController extends Controller
     private function getData()
     {
         $data = $this->home->first()->toArray();
+        $data[$this->shippingRatePerKiloKey] = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first()->value;
+
         return $data;
     }
 }

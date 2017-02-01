@@ -33,7 +33,7 @@
 			<small>{{ count($coupons) }} result(s)</small>
 		</div>
 		<div class="col-md-12 bottom-margin-sm">
-			<table class="table table-bordered">
+			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
 						<th>Code</th>

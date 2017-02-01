@@ -11,7 +11,7 @@
 
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a href="{{ url('/warranties/create') }}">Add warranty</a>
+                <a href="{{ url('/warranties/create') }}">Add Warranty</a>
                 <a href="{{ url('/logout') }}"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">

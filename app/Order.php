@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use \Carbon\Carbon;
 
 class Order extends Model
 {
@@ -37,4 +38,11 @@ class Order extends Model
         'status',
     	'shoppingcart_id'
     ];
+
+    public function since()
+    {
+        $created = $this->attributes['created_at'];
+        $createdDt = new Carbon($created);
+        return $createdDt->diffForHumans(Carbon::now());
+    }
 }

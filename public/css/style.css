@@ -11,6 +11,9 @@ a:hover {
 }
 
 /*Overrides*/
+.table>tbody>tr>td {
+	vertical-align: middle;
+}
 
 .navbar {
 	margin-top: 10px;
@@ -210,19 +213,22 @@ a:hover {
 
 #products-search,
 #testimonials-search,
-#stores-search {
+#stores-search,
+#orders-search {
 	margin-bottom: 15px;
 }
 
 #products-search label,
 #testimonials-search label,
-#stores-search label {
+#stores-search label,
+#orders-search label {
 	font-weight: 400;
 }
 
 #products-search .form-control,
 #testimonials-search .form-control,
-#stores-search .form-control {
+#stores-search .form-control,
+#orders-search .form-control {
 	height: 34px;
 	padding: 6px 12px;
 	border: 1px solid #ccc;
@@ -231,7 +237,8 @@ a:hover {
 
 #products-search .btn-default,
 #testimonials-search .btn-default,
-#stores-search .btn-default {
+#stores-search .btn-default,
+#orders-search .btn-default {
 	height: 34px;
 	width: 100%;
 	padding: 6px 12px;
@@ -241,9 +248,14 @@ a:hover {
 
 #products,
 #testimonials,
-#stores {
+#stores,
+#orders {
 	padding-top: 15px;
 	border-top: 1px solid #eee;
+}
+
+#orders .btn {
+	padding: 0;
 }
 
 #products > .col-md-4 {
@@ -280,7 +292,10 @@ a:hover {
 
 #products a,
 #testimonials a,
-#stores a {
+#stores a,
+#warranties a,
+#coupons a,
+#orders a {
 	font-size: 12px;
 	font-weight: 400;
 	text-decoration: underline;

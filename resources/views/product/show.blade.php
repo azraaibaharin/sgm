@@ -89,6 +89,7 @@
 								  	<input type="hidden" name="id" value="{{ $id }}">
 								  	<input type="hidden" name="name" value="{{ ucfirst($brand) }} {{ ucfirst($model) }}">
 								  	<input type="hidden" name="price" value="{{ $price }}">
+								  	<input type="hidden" name="delivery_weight" value="{{ $delivery_weight }}">
 								  	<select name="color">
 								  		{{-- <option value="nocolor">Select preferred color</option> --}}
 								  		@foreach($colorsWithSku as $c)

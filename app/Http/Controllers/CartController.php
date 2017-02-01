@@ -9,6 +9,7 @@ use \Carbon\Carbon;
 use Cart;
 use Hash;
 use App\Coupon;
+use App\Configuration;
 
 class CartController extends Controller
 {
@@ -21,13 +22,19 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        // session([$this->couponIdsKey => '']);
         $couponIds = session($this->couponIdsKey, '');
         $couponTotalValue = $this->getCouponTotalValue(explode(',', $couponIds));
+        $deliveryCost = $this->getDeliveryCost();
+        $totalPrice = floatval(Cart::total(2, '.', '')) + floatval($deliveryCost) - floatval($couponTotalValue);
+        $finalPrice = $totalPrice < 0 ? 0.00 : $totalPrice;
 
-        return view('cart.index')
-                ->with('couponTotalValue', $couponTotalValue)
-                ->with('couponIds', $couponIds);
+        session([
+            'coupon_total_value' => $couponTotalValue,
+            'delivery_cost' => $deliveryCost,
+            'final_price' => $finalPrice
+        ]);
+
+        return view('cart.index');
     }
 
     /**
@@ -49,7 +56,34 @@ class CartController extends Controller
             }
         }
 
-        return $value;
+        return number_format((float)$value, 2, '.', '');
+    }
+
+    /**
+     * Returns the calculated delivery cost based on delivery weight and rate per kilo.
+     *
+     * @return [type] [description]
+     */
+    private function getDeliveryCost() 
+    {
+        $ratePerKilo = floatval(Configuration::where('key', 'shipping_rate_per_kilo')->first()->value);
+        if (is_null($ratePerKilo))
+        {
+            $ratePerKilo = 1.00;
+        }
+
+        $weightKilo = 0.00;
+        
+        foreach (Cart::content() as $row) {
+            try {
+                $itemWeight = floatval($row->options['delivery_weight'])*floatval($row->qty);
+                $weightKilo += $itemWeight;
+            } catch (\Exception $e) {
+                $weightKilo += 0.00;
+            }
+        }
+
+        return number_format((float)($weightKilo*$ratePerKilo), 2, '.', '');
     }
 
     /**
@@ -60,7 +94,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-		Cart::add($request->id, $request->name, 1, $request->price, ['color' => $request['color']]);
+		Cart::add($request->id, $request->name, 1, $request->price, ['color' => $request['color'], 'delivery_weight' => $request['delivery_weight']]);
 	    return redirect('cart')->withMessage('Added \''.$request['name'].'\'!');
     }
 

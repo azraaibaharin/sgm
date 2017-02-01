@@ -44,11 +44,7 @@
 		<div class="col-md-12">
 			<a class="btn btn-link" href="{{ url('products') }}">Continue Shopping</a>
 			<a class="btn btn-link" href="{{ url('cart/empty') }}">Empty Cart</a>
-			<form class="pull-right form-inline" action="{{ url('order/create') }}" method="POST">
-				{{ csrf_field() }}
-				<input type="hidden" name="coupon_total_value" value="{{ $couponTotalValue }}">
-				<input class="btn btn-default" type="submit" value="Checkout">
-			</form>
+			<a class="btn btn-default pull-right" href="{{ url('order/create') }}">Checkout</a>
 		</div>
 	</div>
 	<hr>
@@ -89,19 +85,24 @@
 					            </form>
 				            </td>
 				            <td class="text-center" style="vertical-align:middle;">Total</td>
-				            <td class="text-center" style="vertical-align:middle;">RM{{ Cart::total() }}</td>
+				            <td class="text-center" style="vertical-align:middle;">RM{{ Cart::total(2, '.', '') }}</td>
 				        </tr>
-				        @if($couponTotalValue > 0)
+				        @if(session('coupon_total_value') > 0)
 							<tr>
 								<td>&nbsp</td>
 								<td class="text-center">Discounted</td>
-								<td class="text-center">-RM{{ $couponTotalValue }}</td>
+								<td class="text-center">-RM{{ session('coupon_total_value') }}</td>
 							</tr>
 						@endif
+						<tr>
+							<td>&nbsp</td>
+							<td class="text-center">Delivery Cost</td>
+							<td class="text-center">RM{{ session('delivery_cost') }}</td>
+						</tr>
 						<tr class="active">
 				            <td>&nbsp</td>
 				            <td class="text-center" style="vertical-align:middle;">Final Price</td>
-				            <td class="text-center" style="vertical-align:middle;">RM{{ Cart::total() - $couponTotalValue > 0 ? Cart::total() - $couponTotalValue : '0.00'}}</td>
+				            <td class="text-center" style="vertical-align:middle;">RM{{ session('final_price') }}</td>
 				        </tr>
 					</tfoot>
 				</table>
@@ -113,11 +114,7 @@
 		<div class="col-md-12">
 			<a class="btn btn-link" href="{{ url('products') }}">Continue Shopping</a>
 			<a class="btn btn-link" href="{{ url('cart/empty') }}">Empty Cart</a>
-			<form class="pull-right form-inline" action="{{ url('order/create') }}" method="POST">
-				{{ csrf_field() }}
-				<input type="hidden" name="coupon_total_value" value="{{ $couponTotalValue }}">
-				<input class="btn btn-default" type="submit" value="Checkout">
-			</form>
+			<a class="btn btn-default pull-right" href="{{ url('order/create') }}">Checkout</a>
 		</div>
 	</div>
 @else
