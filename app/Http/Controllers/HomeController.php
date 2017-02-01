@@ -199,8 +199,15 @@ class HomeController extends Controller
      */
     private function getData()
     {
+        $shippingRatePerKiloConfig = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
+        $shippingRatePerKiloValue = 0.00;
+        if (!is_null($shippingRatePerKiloConfig))
+        {
+            $shippingRatePerKiloValue = $shippingRatePerKiloConfig->value;
+        }
+        
         $data = $this->home->first()->toArray();
-        $data[$this->shippingRatePerKiloKey] = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first()->value;
+        $data[$this->shippingRatePerKiloKey] = $shippingRatePerKiloValue;
 
         return $data;
     }
