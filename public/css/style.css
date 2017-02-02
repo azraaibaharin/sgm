@@ -290,6 +290,7 @@ a:hover {
 	margin-top: 0;
 }
 
+#articles a,
 #products a,
 #testimonials a,
 #stores a,
@@ -324,12 +325,12 @@ a:hover {
 }
 
 #articles .col-md-6 {
-	padding-bottom: 20px;
+	margin-bottom: 20px;
 }
 
-#articles .col-md-6:hover {
+/*#articles .col-md-6:hover {
 	background-color: #f6f6f6;
-}
+}*/
 
 #getintouch .form-control,
 #checkout .form-control, {

@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Requests;
+use App\Http\Requests\StoreArticle;
+use App\Http\Requests\UpdateArticle;
+use App\Traits\FlashModelAttributes;
 use App\Article;
 
 class ArticleController extends Controller
 {
+    use FlashModelAttributes;
 
     /**
      * The Article instance.
@@ -34,6 +39,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = $this->article->take(50)->orderBy('updated_at')->get();
+
         return view('article.index')->with('articles', $articles);
     }
 
@@ -50,20 +56,21 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreArticle $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreArticle $request)
     {
-        $article = $this->article;
-        $article->title = $request['title'];
-        $article->image_link = $this->imageUpload($request, 'image_link', $article->image_link, 'article_'.$article->id);
-        $article->text = $request['text'];
-        $article->link = $request['link'];
-        $article->author = $request['author'];
-        $article->save();
+        Log::info('Storing article');
 
-        return redirect('articles/'.$article->id);
+        $this->article->title = $request->title;
+        $this->article->image_link = $this->imageUpload($request, '', $this->article->id);
+        $this->article->text = $request->text;
+        $this->article->link = $request->link;
+        $this->article->author = $request->author;
+        $this->article->save();
+
+        return redirect('articles/'.$this->article->id);
     }
 
     /**
@@ -74,12 +81,9 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        $article = $this->article->find($id);
-        if (is_null($article))
-        {
-            return redirect('articles')->with('message', 'Article not found.');
-        }
-        return view('article.show', $article->toArray());
+        Log::info('Showing article: '.$id);
+
+        return view('article.show', $this->article->findOrFail($id)->toArray());
     }
 
     /**
@@ -88,39 +92,34 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $article = $this->article->find($id);
-        if (is_null($article))
-        {
-            return redirect('articles')->with('message', 'Article not found.');
-        }
-        return view('article.edit', $article->toArray());
+        $toEditArticle = $this->article->findOrFail($id);
+        $this->flashAttributesToSession($request, $toEditArticle);
+
+        return view('article.edit');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdatArticle  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $article = $this->article->find($id);
-        if (is_null($article))
-        {
-            return redirect('articles')->with('message', 'Article not found.');
-        }
+    public function update(UpdateArticle $request, $id)
+    {   
+        Log::info('Updating article: '.$id);
 
-        $article->title = $request['title'];
-        $article->image_link = $this->imageUpload($request, 'image_link', $article->image_link, 'article_'.$article->id);
-        $article->text = $request['text'];
-        $article->link = $request['link'];
-        $article->author = $request['author'];
-        $article->save();
+        $toUpdateArticle = $this->article->findOrFail($id);
+        $toUpdateArticle->title = $request->title;
+        $toUpdateArticle->image_link = $this->imageUpload($request, $toUpdateArticle->image_link, $toUpdateArticle->id);
+        $toUpdateArticle->text = $request->text;
+        $toUpdateArticle->link = $request->link;
+        $toUpdateArticle->author = $request->author;
+        $toUpdateArticle->save();
 
-        return back()->with('success','Update successful.');
+        return redirect('articles/'.$id)->with('message','Updated');
     }
 
     /**
@@ -131,12 +130,13 @@ class ArticleController extends Controller
      */
     public function destroy(Request $request)
     {
-        $article_id = $request['article_id'];
-        $article = $this->article->findOrFail($article_id);
-        $articleTitle = $article->title;
-        $this->article->destroy($article_id);
+        Log::info('Removing article: '.$request->article_id);
 
-        return redirect('articles')->with('message', 'Successfully deleted \''.$articleTitle.'\'');
+        $articleId = $request->article_id;
+        $articleTitle = $this->article->findOrFail($articleId)->title;
+        $this->article->destroy($articleId);
+
+        return redirect('articles')->with('message', 'Deleted \''.$articleTitle.'\'');
     }
 
     /**
@@ -144,19 +144,22 @@ class ArticleController extends Controller
      *
      * @return void
      */
-    public function imageUpload(Request $request, $field_name, $old_value, $prefix)
+    public function imageUpload(Request $request, $old_value, $articleId)
     {
+        $imageFieldName = 'image_link';
+        $imagePrefix = 'article_';
+        $imageFolderName = 'img';
         $imageName = $old_value;
 
-        if ($request->hasFile($field_name))
+        if ($request->hasFile($imageFieldName))
         {
             $this->validate($request, [
-                $field_name => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
+                $imageFieldName => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000'
             ]);
 
-            $imageFile = $request->file($field_name);
-            $imageName = $prefix.'.'.$imageFile->getClientOriginalExtension();
-            $imageMoved = $imageFile->move(public_path('img'), $imageName);
+            $imageFile = $request->file($imageFieldName);
+            $imageName = $imagePrefix.$articleId.'.'.$imageFile->getClientOriginalExtension();
+            $imageMoved = $imageFile->move(public_path($imageFolderName), $imageName);
         }
 
         return $imageName;
