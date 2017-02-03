@@ -22,20 +22,13 @@ class ArticleController extends Controller
     protected $article;
 
     /**
-     * Log instance.
-     * @var Illuminate\Support\Facades\Log
-     */
-    protected $log;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Article $article, Log $log)
+    public function __construct(Article $article)
     {
         $this->article = $article;
-        $this->log = $log;
     }
 
     /**
@@ -68,7 +61,7 @@ class ArticleController extends Controller
      */
     public function store(StoreArticle $request)
     {
-        $this->log->info('Storing article');
+        Log::info('Storing article');
 
         $this->article->title = $request->title;
         $this->article->image_link = $this->imageUpload($request, '', $this->article->id);
@@ -88,7 +81,7 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        $this->log->info('Showing article: '.$id);
+        Log::info('Showing article: '.$id);
 
         return view('article.show', $this->article->findOrFail($id)->toArray());
     }
@@ -115,7 +108,7 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticle $request, $id)
     {   
-        $this->log->info('Updating article: '.$id);
+        Log::info('Updating article: '.$id);
 
         $toUpdateArticle = $this->article->findOrFail($id);
         $toUpdateArticle->title = $request->title;
@@ -136,7 +129,7 @@ class ArticleController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->log->info('Removing article: '.$request->article_id);
+        Log::info('Removing article: '.$request->article_id);
 
         $articleId = $request->article_id;
         $articleTitle = $this->article->findOrFail($articleId)->title;

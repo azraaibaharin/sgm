@@ -1,0 +1,1 @@
+<a class="btn btn-link pull-left" href="{{ url($link) }}" >Back</a>
