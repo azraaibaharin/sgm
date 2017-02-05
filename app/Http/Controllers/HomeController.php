@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 use App\Mail\ContactFormSubmitted;
 use App\Http\Requests\ContactFormRequest;
+use App\Http\Requests\UpdateHome;
+use App\Traits\FlashModelAttributes;
 use App\Home;
 use App\Article;
+use App\Testimonial;
+use App\Product;
 use App\Configuration;
-
-use DB;
 
 class HomeController extends Controller
 {
+    use FlashModelAttributes;
 
     /**
      * The Home instance.
@@ -26,6 +31,24 @@ class HomeController extends Controller
      * @var App\Article
      */
     protected $article;
+
+    /**
+     * The Testimonial instance.
+     * @var App\Testimonial
+     */
+    protected $testimonial;
+
+    /**
+     * The Product instance.
+     * @var App\Product
+     */
+    protected $product;
+
+    /**
+     * A list of product Ids with the brand as the key.
+     * @var Collectiom
+     */
+    protected $productBrandIds;
 
     /**
      * The Configuration instance.
@@ -44,26 +67,28 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct(Home $home, Article $article, Configuration $configuration)
+    public function __construct(Home $home, Article $article, Testimonial $testimonial, Product $product, Configuration $configuration)
     {
         $this->home = $home;
         $this->article = $article;
+        $this->testimonial = $testimonial;
+        $this->product = $product;
         $this->configuration = $configuration;
 
-        if (is_null($this->home->first()))
-        {
-            $this->home->about_text = 'New about lah';
-            $this->home->save();
-        }
+        $this->init();
+    }
 
-        $shippingRatePerKiloConfig = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
-        if (is_null($shippingRatePerKiloConfig))
-        {
-            $shippingRatePerKiloConfig = $this->configuration;
-            $shippingRatePerKiloConfig->key = $this->shippingRatePerKiloKey;
-            $shippingRatePerKiloConfig->value = '0.00';
-            $shippingRatePerKiloConfig->save;
-        }
+    /**
+     * Initialize values.
+     *
+     * @return void
+     */
+    private function init()
+    {
+        $this->configuration->firstOrCreate(['key' => $this->shippingRatePerKiloKey, 'value' => '0.00']);
+        $babyhoodIds = $this->product->where('brand', 'babyhood')->pluck('id');
+        $nunaIds = $this->product->where('brand', 'nuna')->pluck('id');
+        $this->productBrandIds = collect(['babyhood' => $babyhoodIds,'nuna' => $nunaIds]);
     }
 
     /**
@@ -73,40 +98,48 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $latestTestimonialBabyhood = DB::table('testimonials')
-                                ->join('products', 'products.id', '=', 'testimonials.product_id')
-                                ->select('testimonials.*', 'products.brand', 'products.model')
-                                ->where('products.brand', 'babyhood')
-                                ->orderBy('created_at')
-                                ->take(1)
-                                ->first();
-
-        $latestTestimonialNuna = DB::table('testimonials')
-                            ->join('products', 'products.id', '=', 'testimonials.product_id')
-                            ->select('testimonials.*', 'products.brand', 'products.model')
-                            ->where('products.brand', 'nuna')
-                            ->orderBy('created_at')
-                            ->take(1)
-                            ->first();
-
-        $articles = $this->article
-                    ->orderBy('created_at', 'asc')
-                    ->take(3)
-                    ->get();
-
         return view('home', $this->getData())
-                ->with('latestTestimonialBabyhood', $latestTestimonialBabyhood)
-                ->with('latestTestimonialNuna', $latestTestimonialNuna)
-                ->with('articles', $articles);
+                ->with('latestTestimonialBabyhood', $this->getLatestTestimonial('babyhood'))
+                ->with('latestTestimonialNuna', $this->getLatestTestimonial('nuna'))
+                ->with('articles', $this->getLatestArticles());
+    }
+
+    /**
+     * Return the latest 3 articles.
+     *
+     * @return array
+     */
+    private function getLatestArticles()
+    {
+        return $this->article->orderBy('created_at', 'desc')->take(3)->get();
+    }
+
+    /**
+     * Return the latest testimonial by brand name.
+     *
+     * @param  String $brand brand name
+     * @return \App\Testimonial
+     */
+    private function getLatestTestimonial(String $brand)
+    {
+        $ids = $this->productBrandIds->get($brand);
+
+        return $this->testimonial->whereIn('product_id', $ids)->orderBy('created_at', 'desc')->first();
+        
     }
 
     /**
      * Display edit home page.
-     * 
+     *
+     * @param $request \Illuminate\Http\Request;
+     * @return  void
      */
-    protected function edit()
+    protected function edit(Request $request)
     {
-        return view('home.edit', $this->getData());
+        $this->flashAttributesToSession($request, $this->home->firstOrFail());
+        session()->flash('shipping_rate_per_kilo', $this->configuration->where('key', $this->shippingRatePerKiloKey)->first()->value);
+
+        return view('home.edit');
     }
 
     /**
@@ -114,8 +147,9 @@ class HomeController extends Controller
      *
      * @return void
      */
-    protected function update(Request $request)
+    protected function update(UpdateHome $request)
     {
+        Log::info('Updating home page.');
         $home = $this->home->first();
 
         $home->nuna_text = $request['nuna_text'];
@@ -139,16 +173,11 @@ class HomeController extends Controller
         $home->contact_email = $request['contact_email'];
         $home->save();
 
-        $shippingRatePerKiloConfig = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
-        if (is_null($shippingRatePerKiloConfig))
-        {
-            $shippingRatePerKiloConfig = new Configuration();
-            $shippingRatePerKiloConfig->key = $this->shippingRatePerKiloKey;
-        }
-        $shippingRatePerKiloConfig->value = $request[$this->shippingRatePerKiloKey];
-        $shippingRatePerKiloConfig->save();
+        $configuration = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
+        $configuration->value = $request->shipping_rate_per_kilo;
+        $configuration->save();
 
-        return redirect('/');
+        return back()->withMessage("Update successful!");
     }
 
     /**
@@ -156,7 +185,7 @@ class HomeController extends Controller
      *
      * @return void
      */
-    protected function imageUpload(Request $request, $field_name, $old_value)
+    private function imageUpload(Request $request, $field_name, $old_value)
     {
         $imageName = $old_value;
 
@@ -184,9 +213,9 @@ class HomeController extends Controller
         $contactEmail = $this->home->firstOrFail()->contact_email;
         
         Mail::to($contactEmail)->send(new ContactFormSubmitted(
-            $request['contact_name'],
-            $request['contact_email'],
-            $request['contact_message']
+            $request->contact_name,
+            $request->contact_email,
+            $request->contact_message
         ));
 
         return redirect('/')->with('message', 'Thanks for contacting us!');
@@ -198,17 +227,7 @@ class HomeController extends Controller
      * @return an array of Home attributes' value
      */
     private function getData()
-    {
-        $shippingRatePerKiloConfig = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
-        $shippingRatePerKiloValue = 0.00;
-        if (!is_null($shippingRatePerKiloConfig))
-        {
-            $shippingRatePerKiloValue = $shippingRatePerKiloConfig->value;
-        }
-        
-        $data = $this->home->first()->toArray();
-        $data[$this->shippingRatePerKiloKey] = $shippingRatePerKiloValue;
-
-        return $data;
+    {    
+        return $this->home->first()->toArray();
     }
 }

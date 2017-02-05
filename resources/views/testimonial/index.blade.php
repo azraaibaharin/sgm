@@ -37,16 +37,7 @@
 	</div>
 </div>
 
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->forget('message') }}
-		</div>
-	</div>
-</div>
-@endif
+@include('shared.message')
 
 <div id="testimonials" class="container">
 	<div class="row">
@@ -59,12 +50,12 @@
 			<h2>{{ $t->title }}</h2>
 			<small>about {{ ucfirst($t->brand) }} {{ $t->model }}</small>
 			<p>{!! $t->text !!}</p>
-			<a href="{{ url('testimonials/'.$t->id) }}">Show</a>
+			<a href="{{ url('testimonials/'.$t->id) }}">Read</a>
 		</div>
 		@endforeach
 	@else
 		<div class="col-md-12 text-center">
-			<small>No testimonials available. Click <a href="{{ url('testimonials/create') }}">here</a> to add.</small>
+			<small>No testimonials available. @if (!Auth::guest()) Click <a href="{{ url('testimonials/create') }}">here</a> to add.@endif</small>
 		</div>
 	@endif		
 	</div>

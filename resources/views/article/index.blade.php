@@ -15,10 +15,10 @@
 		@foreach($articles as $a)
 		<div class="col-md-6 article">
 			<h2>{{ $a->title }}</h2>
-			<p>{!! $a->text !!}</p>
 			<small>By {{ $a->author }}</small>
-			<hr/>
-			<a class="btn btn-link" href="{{ url('articles/'.$a->id) }}">Read</a>
+			<p>{!! $a->text !!}</p>
+			<br>
+			<a href="{{ url('articles/'.$a->id) }}">Read</a>
 		</div>
 		@endforeach
 	@else

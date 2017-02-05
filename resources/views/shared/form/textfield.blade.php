@@ -2,9 +2,9 @@
     <label for="{{ $name }}" class="col-md-2 control-label">{{ $text }}</label>
     <div class="col-md-9">
         @if (session($name))
-            <input id="{{ $name }}" class="form-control a" name="{{ $name }}" value="{{ session($name) }}" placeholder="{{ $placeholder }}" />
+            <input id="{{ $name }}" class="form-control a" name="{{ $name }}" value="{{ session($name) }}" placeholder="{{ isset($placeholder) ? $placeholder : '' }}" />
         @else
-            <input id="{{ $name }}" class="form-control" name="{{ $name }}" value="{{ old($name) }}" placeholder="{{ $placeholder }}" />
+            <input id="{{ $name }}" class="form-control" name="{{ $name }}" value="{{ old($name) }}" placeholder="{{ isset($placeholder) ? $placeholder : '' }}" />
         @endif
         @if (isset($help) && !empty($help)) <small>{{ $help }}</small>@endif
         @if ($errors->has($name))

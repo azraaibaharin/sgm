@@ -26,6 +26,11 @@ class Testimonial extends Model
     	'title', 'text', 'product_id'
     ];
 
+    public function productBabyhood() 
+    {
+        return $this->belongsTo('App\Product')->where('brand', 'babyhood');
+    }
+    
     /**
      * Get the product that owns the testimonial.
      */

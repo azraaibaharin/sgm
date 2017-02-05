@@ -8,11 +8,12 @@ use App\Testimonial;
 use App\Product;
 use App\Http\Requests;
 use App\Http\Requests\TestimonialFormRequest;
-
-use DB;
+use App\Traits\FlashModelAttributes;
+use App\Traits\FiltersTestimonial;
 
 class TestimonialController extends Controller
 {
+    use FlashModelAttributes, FiltersTestimonial;
 
     /**
      * The Testimonial instance.
@@ -46,7 +47,16 @@ class TestimonialController extends Controller
     {
         $brands = $this->product->getBrands();
         $brand = is_null($brand) || empty($brand) ? $brands[0] : $brand;
-        $testimonials = $this->getTestimonials($brand);    
+        $testimonials = [];
+        
+        if ($brand != $brands[0])
+        {
+            $testimonials = $this->getTestimonialsByBrand($brand);
+        } 
+        else 
+        {
+            $testimonials = $this->getTestimonials(50);
+        }
 
         return view('testimonial.index')
                 ->with('testimonials', $testimonials)
@@ -63,44 +73,21 @@ class TestimonialController extends Controller
     {
         $brands = $this->product->getBrands();
         $brand = $request['brand'];
-        $testimonials = $this->getTestimonials($brand);
+        $testimonials = [];
+        
+        if ($brand != $brands[0])
+        {
+            $testimonials = $this->getTestimonialsByBrand($brand);
+        } 
+        else 
+        {
+            $testimonials = $this->getTestimonials(50);
+        }
 
         return view('testimonial.index')
                 ->with('testimonials', $testimonials)
                 ->with('brands', $brands)
                 ->with('brand', $brand);
-    }
-
-    /**
-     * Returns testimonials that is associated with the provided product brand.
-     * @param  Strubg $brand brand name. default is null.
-     * @return Collection        collection of testimonials
-     */
-    protected function getTestimonials($brand = null)
-    {
-        $brands = $this->product->getBrands();
-        $testimonials;
-
-        if ($brand != $brands[0])
-        {
-            $testimonials = DB::table('testimonials')
-                            ->join('products', 'products.id', '=', 'testimonials.product_id')
-                            ->select('testimonials.*', 'products.brand', 'products.model')
-                            ->where('products.brand', $brand)
-                            ->get();
-        } 
-        else 
-        {
-            $testimonials = DB::table('testimonials')
-                            ->join('products', 'products.id', '=', 'testimonials.product_id')
-                            ->select('testimonials.*', 'products.brand', 'products.model')
-                            ->orderBy('created_at')
-                            ->get();
-
-            // $this->testimonial->take(50)->orderBy('created_at')->get();
-        }
-
-        return $testimonials;
     }
 
     /**
@@ -110,9 +97,7 @@ class TestimonialController extends Controller
      */
     public function create()
     {
-        $products = $this->product->all();
-        return view('testimonial.create')
-                ->with('products', $products);
+        return view('testimonial.create')->with('products', $this->product->all());
     }
 
     /**
@@ -123,14 +108,12 @@ class TestimonialController extends Controller
      */
     public function store(TestimonialFormRequest $request)
     {
-        $testimonial = $this->testimonial;
+        $this->testimonial->product_id = $request->product_id;
+        $this->testimonial->title = $request->title;
+        $this->testimonial->text = $request->text;
+        $this->testimonial->save();
 
-        $testimonial->product_id = $request['product_id'];
-        $testimonial->title = $request['title'];
-        $testimonial->text = $request['text'];
-        $testimonial->save();
-
-        return redirect('testimonials/'.$testimonial->id);
+        return redirect('testimonials/'.$this->testimonial->id);
     }
 
     /**
@@ -141,14 +124,8 @@ class TestimonialController extends Controller
      */
     public function show($id)
     {
-        $testimonial = $this->testimonial->find($id);
-        if (is_null($testimonial))
-        {
-            return redirect('testimonials')->with('message', 'Testimonial not found.');
-        }
-        return view('testimonial.show')
-                ->with('testimonial', $testimonial)
-                ->with('product', $testimonial->product);
+        $testimonial = $this->testimonial->findOrFail($id);
+        return view('testimonial.show')->with('testimonial', $testimonial);
     }
 
     /**

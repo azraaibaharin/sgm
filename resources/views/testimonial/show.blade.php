@@ -10,14 +10,14 @@
 		<div class="col-md-12">
 			<ol class="breadcrumb">
 				<li><a href="{{ url('testimonials') }}">Testimonials</a></li>
-				<li class="active">{{ $product->brand }} {{ $product->model }}</li>
+				<li class="active">{{ $testimonial->product->brand }} {{ $testimonial->product->model }}</li>
 			</ol>	
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{ $testimonial->title }}</h1>
-			<small>about {{ ucfirst($product->brand) }} {{ $product->model }}</small>
+			<small>about {{ ucfirst($testimonial->product->brand) }} {{ $testimonial->product->model }}</small>
 			<p>{!! $testimonial->text !!}</p>
 		</div>
 	</div>

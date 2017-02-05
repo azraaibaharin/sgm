@@ -16,7 +16,7 @@ class Home extends Model
 		'nuna_img' => '', 
         'babyhood_text' => '', 
         'babyhood_img' => '', 
-        'about_text' => '',
+        'about_text' => 'About you',
         'tagline_title' => 'No title',
         'tagline_text' => 'No tagline', 
         'tagline_img' => 'feature-1.jpg', 
