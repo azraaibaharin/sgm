@@ -7,33 +7,7 @@
 @section('content')
 <div class="container">
 	<div id="testimonials-search" class="row">
-		<form class="form-horizontal" role="form" method="POST" action="{{ url('testimonials') }}" enctype="multipart/form-data">
-			{{ csrf_field() }}
-			<div class="col-md-4">
-				<div class="form-group{{ $errors->has('brand') ? ' has-error' : '' }}">
-                    <label for="brand" class="col-md-2 control-label">Brand</label>
-                    <div class="col-md-10">
-                        <select id="brand" class="form-control" name="brand">
-                        @foreach ($brands as $b)
-                            @if ($brand == $b)
-                                <option value="{{ $b }}" selected>{{ ucfirst($b) }}</option>
-                            @else
-                                <option value="{{ $b }}">{{ ucfirst($b) }}</option>
-                            @endif
-                        @endforeach
-                        </select>
-                        @if ($errors->has('brand'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('brand') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-			</div>
-			<div class="col-md-2">
-				<button type="submit" class="center-block btn btn-default">Search</button>
-			</div>
-		</form>
+		@include('shared.search', ['link' => 'testimonials', 'name' => 'brand', 'text' => 'Brand', 'options' => $brands])
 	</div>
 </div>
 

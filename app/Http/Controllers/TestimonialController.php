@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Testimonial;
 use App\Product;
@@ -46,22 +47,23 @@ class TestimonialController extends Controller
     public function index(Request $request, $brand = null)
     {
         $brands = $this->product->getBrands();
-        $brand = is_null($brand) || empty($brand) ? $brands[0] : $brand;
         $testimonials = [];
         
-        if ($brand != $brands[0])
+        if (is_null($brand))
         {
-            $testimonials = $this->getTestimonialsByBrand($brand);
+            $brand = $brands[0];
+            $testimonials = $this->getTestimonials(50);
         } 
         else 
         {
-            $testimonials = $this->getTestimonials(50);
+            $testimonials = $this->getTestimonialsByBrand($brand);
         }
+
+        $request->session()->flash('brand', $brand);
 
         return view('testimonial.index')
                 ->with('testimonials', $testimonials)
-                ->with('brands', $brands)
-                ->with('brand', $brand);
+                ->with('brands', $brands);
     }
 
     /**
@@ -72,7 +74,7 @@ class TestimonialController extends Controller
     public function filter(Request $request) 
     {
         $brands = $this->product->getBrands();
-        $brand = $request['brand'];
+        $brand = $request->brand;
         $testimonials = [];
         
         if ($brand != $brands[0])
@@ -84,10 +86,11 @@ class TestimonialController extends Controller
             $testimonials = $this->getTestimonials(50);
         }
 
+        $request->session()->flash('brand', $brand);
+
         return view('testimonial.index')
                 ->with('testimonials', $testimonials)
-                ->with('brands', $brands)
-                ->with('brand', $brand);
+                ->with('brands', $brands);
     }
 
     /**
@@ -108,6 +111,8 @@ class TestimonialController extends Controller
      */
     public function store(TestimonialFormRequest $request)
     {
+        Log::info('Storing testimonial id: '.$$request->product_id);
+
         $this->testimonial->product_id = $request->product_id;
         $this->testimonial->title = $request->title;
         $this->testimonial->text = $request->text;
@@ -124,6 +129,8 @@ class TestimonialController extends Controller
      */
     public function show($id)
     {
+        Log::info('Showing testimonial id: '.$id);
+
         $testimonial = $this->testimonial->findOrFail($id);
         return view('testimonial.show')->with('testimonial', $testimonial);
     }
@@ -136,12 +143,9 @@ class TestimonialController extends Controller
      */
     public function edit($id)
     {
-        $testimonial = $this->testimonial->find($id);
-        if (is_null($testimonial))
-        {
-            return redirect('testimonials')->with('message', 'Testimonial not found.');
-        }
+        $testimonial = $this->testimonial->findOrFail($id);
         $products = $this->product->all();
+
         return view('testimonial.edit', $testimonial->toArray())
                 ->with('products', $products);
     }
@@ -155,12 +159,9 @@ class TestimonialController extends Controller
      */
     public function update(TestimonialFormRequest $request, $id)
     {
-        $testimonial = $this->testimonial->find($id);
-        if (is_null($testimonial))
-        {
-            return redirect('testimonial')->with('message', 'Testimonial not found.');
-        }
+        Log::info('Updating testimonial id: '.$id);
 
+        $testimonial = $this->testimonial->findOrFail($id);
         $testimonial->product_id = $request['product_id'];
         $testimonial->title = $request['title'];
         $testimonial->text = $request['text'];
@@ -177,10 +178,12 @@ class TestimonialController extends Controller
      */
     public function destroy(Request $request)
     {
-        $testimonial_id = $request['testimonial_id'];
-        $testimonial = $this->testimonial->findOrFail($testimonial_id);
+        Log::info('Removing testimonial id: '.$request->testimonial_id);
+
+        $testimonialId = $request->testimonial_id;
+        $testimonial = $this->testimonial->findOrFail($testimonialId);
         $testimonialTitle = $testimonial->title;
-        $this->testimonial->destroy($testimonial_id);
+        $this->testimonial->destroy($testimonialId);
 
         return redirect('testimonials')->with('message', 'Successfully deleted \''.$testimonialTitle.'\'');
     }
