@@ -1,7 +1,7 @@
 @extends('layouts.order')
 
 @section('breadcrumb')
-| Review Order
+| Test Payment
 @endsection
 
 @section('content')
