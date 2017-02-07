@@ -90,6 +90,8 @@ Route::post('order/store', 'OrderController@store');
 Route::get('order/complete', 'OrderController@complete');
 Route::post('payment/response', 'OrderController@paymentResponse');
 Route::post('payment/responseBE', 'CartController@paymentResponseBE');
+Route::get('payment/response', 'OrderController@paymentResponse');
+Route::get('payment/responseBE', 'CartController@paymentResponseBE');
 Route::get('payment', 'OrderController@payment');
 Route::get('order', 'OrderController@index');
 Route::post('order/search', 'OrderController@search');
