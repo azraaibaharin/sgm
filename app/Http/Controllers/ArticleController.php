@@ -89,6 +89,7 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -118,7 +119,7 @@ class ArticleController extends Controller
         $toUpdateArticle->author = $request->author;
         $toUpdateArticle->save();
 
-        return redirect('articles/'.$id)->with('message','Updated');
+        return redirect('articles/'.$id)->withMessage('Updated');
     }
 
     /**
@@ -135,7 +136,7 @@ class ArticleController extends Controller
         $articleTitle = $this->article->findOrFail($articleId)->title;
         $this->article->destroy($articleId);
 
-        return redirect('articles')->with('message', 'Deleted \''.$articleTitle.'\'');
+        return redirect('articles')->withMessage('Deleted \''.$articleTitle.'\'');
     }
 
     /**
