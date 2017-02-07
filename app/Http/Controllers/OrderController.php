@@ -234,32 +234,51 @@ class OrderController extends Controller
      */
     public function payment(Request $request)
     {
-        $order = $this->order->find($request->session()->get($this->orderIdKey));
+        $merchantKey = $this->merchantKey;
+        $merchantCode = $this->merchantCode;
+        $refNo = 'OID0001';
+        $amount = '1.00';
+        $amountStr = str_replace(['.', ','], "", $amount);
+        $currency = 'MYR';
 
-        if ($order != null)
-        {
-            $merchantKey = $this->merchantKey;
-            $merchantCode = $this->merchantCode;
-            $refNo = 'OID'.$order->id;
-            $amount = '1.00';
-            $amountStr = str_replace(['.', ','], "", $amount);
-            $currency = 'MYR';
+        $shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
 
-            $shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+        // dd($merchantKey.$merchantCode.$refNo.$amountStr.$currency.' : '.$shaStr);
+        
+        return view('order.payment_test')
+                    // ->with('order', $order)
+                    ->with('merchantCode', $merchantCode)
+                    ->with('refNo', $refNo)
+                    ->with('amount', $amount)
+                    ->with('currency', $currency)
+                    ->with('sha', $shaStr);
 
-            // dd($merchantKey.$merchantCode.$refNo.$amountStr.$currency.' : '.$shaStr);
+        // $order = $this->order->find($request->session()->get($this->orderIdKey));
+
+        // if ($order != null)
+        // {
+        //     $merchantKey = $this->merchantKey;
+        //     $merchantCode = $this->merchantCode;
+        //     $refNo = 'OID'.$order->id;
+        //     $amount = '1.00';
+        //     $amountStr = str_replace(['.', ','], "", $amount);
+        //     $currency = 'MYR';
+
+        //     $shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+
+        //     // dd($merchantKey.$merchantCode.$refNo.$amountStr.$currency.' : '.$shaStr);
             
-            return view('order.payment')
-                        ->with('order', $order)
-                        ->with('merchantCode', $merchantCode)
-                        ->with('refNo', $refNo)
-                        ->with('amount', $amount)
-                        ->with('currency', $currency)
-                        ->with('sha', $shaStr);
-        } else
-        {
-            return redirect('cart')->withMessage('Unable to find order');
-        }
+        //     return view('order.payment')
+        //                 ->with('order', $order)
+        //                 ->with('merchantCode', $merchantCode)
+        //                 ->with('refNo', $refNo)
+        //                 ->with('amount', $amount)
+        //                 ->with('currency', $currency)
+        //                 ->with('sha', $shaStr);
+        // } else
+        // {
+        //     return redirect('cart')->withMessage('Unable to find order');
+        // }
     }
 
     /**
