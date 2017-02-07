@@ -5,144 +5,35 @@
 @endsection
 
 @section('content')
-<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('stores/'.$id.'/edit') }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('stores/'.session('id').'/edit') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="container">
         <div class="row">
         	<div class="col-md-8 col-md-offset-2">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success" role="alert">{{ $message }}</div>
-                @endif
                 <div class="panel panel-default">
                     <div class="panel-heading">Edit</div>
                     <div class="panel-body">
-
-                    	<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-2 control-label">Name</label>
-                            <div class="col-md-9">
-                                <input id="name" class="form-control" name="name" value="{{ old('name') ? old('name') : $name }}" required />
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                            <label for="phone_number" class="col-md-2 control-label">Phone</label>
-                            <div class="col-md-9">
-                                <input id="phone_number" class="form-control" name="phone_number" value="{{ old('phone_number') ? old('phone_number') : $phone_number }}" required />
-
-                                @if ($errors->has('phone_number'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('phone_number') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Brands</label>
-                            <div class="col-md-9">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="brands[]" value="babyhood" {{ str_contains($brands, 'babyhood') ? 'checked' : '' }}> Babyhood
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" name="brands[]" value="nuna" {{ str_contains($brands, 'nuna') ? 'checked' : '' }}> Nuna
-                                    </label>
-                                  </div>
-                            </div>
-                        </div>
-
+                        @include('shared.form.textfield', ['name' => 'name', 'text' => 'Name', 'placeholder' => 'Name'])
+                        @include('shared.form.textfield', ['name' => 'phone_number', 'text' => 'Phone', 'placeholder' => 'Phone number'])
+                        @include('shared.form.checkbox', ['name' => 'brands', 'text' => 'Brands', 'values' => ['nuna', 'babyhood']])
                         <div class="form-group">
                             <div class="col-md-12">
                                 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
                                 <div id="map"></div>
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('lat') ? ' has-error' : '' }}">
-                            <label for="lat" class="col-md-2 control-label">Lat</label>
-                            <div class="col-md-9">
-                                <input id="lat" class="form-control" name="lat" value="{{ old('lat') ? old('lat') : $lat }}" />
-
-                                @if ($errors->has('lat'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('lat') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('lng') ? ' has-error' : '' }}">
-                            <label for="lng" class="col-md-2 control-label">Lng</label>
-                            <div class="col-md-9">
-                                <input id="lng" class="form-control" name="lng" value="{{ old('lng') ? old('lng') : $lng }}" />
-
-                                @if ($errors->has('lng'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('lng') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                            <label for="address" class="col-md-2 control-label">Address</label>
-                            <div class="col-md-9">
-                                <input id="address" class="form-control" name="address" value="{{ old('address') ? old('address') : $address }}" />
-
-                                @if ($errors->has('address'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
-                            <label for="city" class="col-md-2 control-label">City</label>
-                            <div class="col-md-9">
-                                <input id="city" class="form-control" name="city" value="{{ old('city') ? old('city') : $city }}" />
-
-                                @if ($errors->has('city'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('city') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('state') ? ' has-error' : '' }}">
-                            <label for="state" class="col-md-2 control-label">State</label>
-                            <div class="col-md-9">
-                                <select id="state" class="form-control" name="state">
-                                @foreach ($states as $s)
-                                    @if ($state == $s)
-                                        <option value="{{ $s }}" selected>{{ $s }}</option>
-                                    @else
-                                        <option value="{{ $s }}">{{ $s }}</option>
-                                    @endif
-                                @endforeach
-                                </select>
-
-                                @if ($errors->has('state'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('state') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                        @include('shared.form.textfield', ['name' => 'lat', 'text' => 'Lat', 'placeholder' => 'Latitude'])
+                        @include('shared.form.textfield', ['name' => 'lng', 'text' => 'Lng', 'placeholder' => 'Longitude'])
+                        @include('shared.form.textfield', ['name' => 'address', 'text' => 'Address', 'placeholder' => 'Address'])
+                        @include('shared.form.textfield', ['name' => 'city', 'text' => 'City', 'placeholder' => 'City'])
+                        @include('shared.form.textfield', ['name' => 'state', 'text' => 'State', 'placeholder' => 'State'])
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <a href="{{ url('stores') }}" class="btn btn-link pull-left">Back</a>
-                    <button type="submit" class="btn btn-default pull-right">Submit</button>
+                    @include('shared.form.back', ['link' => 'stores/'.session('id')])
+                    @include('shared.form.submit')
                 </div>
             </div>
         </div>
@@ -153,7 +44,7 @@
 @section('js')
 <script>
 function initMap() {
-    var myLatLng = { lat: {{ old('lat') ? old('lat') : $lat }}, lng: {{ old('lng') ? old('lng') : $lng }} };
+    var myLatLng = { lat: {{ old('lat') ? old('lat') : session('lat') }}, lng: {{ old('lng') ? old('lng') : session('lng') }} };
 
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,

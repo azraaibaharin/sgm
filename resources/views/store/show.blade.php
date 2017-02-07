@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@include('shared.message')
 <div id="store" class="container bottom-margin-sm">
 	<div class="row">
 		<div class="col-md-12">
@@ -38,22 +39,20 @@
 			<small>* Please call store to confirm product availability</small>
 		</div>
 	</div>
-
-	
-	@if (!Auth::guest())
-		<hr/>
-		<div class="row">
-			<div class="col-md-12">
-				<a href="{{ url('stores') }}" class="btn btn-link">Back</a>
+	<hr/>
+	<div class="row">
+		<div class="col-md-12">
+			<a href="{{ url('stores') }}" class="btn btn-link">Back</a>
+			@if (!Auth::guest())
 				<a href="{{ url('stores/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 				<form class="form-inline" method="POST" action="{{ url('stores/delete') }}">
 					{{ csrf_field() }}
 					<input type="hidden" name="store_id" value="{{ $id }}">
 					<button type="submit" class="btn btn-link">Delete</button>
 				</form>		
-			</div>
+			@endif
 		</div>
-	@endif
+	</div>
 </div>
 @endsection
 

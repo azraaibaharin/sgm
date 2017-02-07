@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
+use App\Traits\FiltersStore;
+use App\Traits\FlashModelAttributes;
 use App\Http\Requests;
 use App\Store;
 
 class StoreController extends Controller
 {
+    use FlashModelAttributes, FiltersStore;
 
     /**
      * The Store instance.
@@ -27,18 +31,16 @@ class StoreController extends Controller
     }
 
     /**
-     * Display a listing of resource based on selected filter.
+     * Display a listing of the resource.
      *
-     * @return \Illumninate\Http\Response
+     * @return \Illuminate\Http\Response
      */
-    public function filter(Request $request) 
+    public function index(Request $request, $state = null)
     {
         $store = $this->store;
         $states = $store->getStatesOptions();
-        $state = $request['state'];
-        $stores = $store->when($state != $states[0], function ($query) use ($state) {
-                                return $query->where('state', $state);}
-                            )->orderBy('name', 'asc')->get();
+        $state = is_null($state) && empty($state) ? $states[0] : $state;
+        $stores = $this->getStoresByState($state, 100);
 
         return view('store.index')
                 ->with('stores', $stores)
@@ -47,24 +49,16 @@ class StoreController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of resource based on selected filter.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illumninate\Http\Response
      */
-    public function index(Request $request, $state = null)
+    public function filter(Request $request) 
     {
         $store = $this->store;
-        $stores = [];
         $states = $store->getStatesOptions();
-
-        if (!is_null($state) && !empty($state))
-        {
-            $stores = $store->where('state', $state)->orderBy('name', 'asc')->get();
-        } else
-        {
-            $state = $states[0];
-            $stores = $store->orderBy('name', 'asc')->get();
-        }
+        $state = $request->state;
+        $stores = $this->getStoresByState($state, 100);
 
         return view('store.index')
                 ->with('stores', $stores)
@@ -90,18 +84,20 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('Storing store.');
+
         $store = $this->store;
-        $store->name = $request['name'];
-        $store->phone_number = $request['phone_number'];
-        $store->lat = $request['lat'];
-        $store->lng = $request['lng'];
-        $store->address = $request['address'];
-        $store->city = $request['city'];
-        $store->state = $request['state'];
-        $store->brands = count($request['brands']) > 0 ? implode(",", $request['brands']) : '';
+        $store->name = $request->name;
+        $store->phone_number = $request->phone_number;
+        $store->lat = $request->lat;
+        $store->lng = $request->lng;
+        $store->address = $request->address;
+        $store->city = $request->city;
+        $store->state = $request->state;
+        $store->brands = count($request->brands) > 0 ? implode(",", $request->brands) : '';
         $store->save();
 
-        return redirect('stores/'.$store->id);
+        return redirect('stores/'.$store->id)->withMessage('');
     }
 
     /**
@@ -112,28 +108,25 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = $this->store->find($id);
-        if (is_null($store))
-        {
-            return redirect('stores')->with('message', 'Store not found.');
-        }
+        Log::info('Showing store id: '.$id);
+
+        $store = $this->store->findOrFail($id);
+        
         return view('store.show', $store->toArray());
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $store = $this->store->find($id);
-        if (is_null($store))
-        {
-            return redirect('stores')->with('message', 'Store not found.');
-        }
-        return view('store.edit', $store->toArray())->with('states', $this->store->getStates());
+        $this->flashAttributesToSession($request, $this->store->findOrFail($id));
+    
+        return view('store.edit');
     }
 
     /**
@@ -145,22 +138,20 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $store = $this->store->find($id);
-        if (is_null($store))
-        {
-            return redirect('stores')->with('message', 'Store not found.');
-        }
-        $store->name = $request['name'];
-        $store->phone_number = $request['phone_number'];
-        $store->brands = count($request['brands']) > 0 ? implode(",", $request['brands']) : '';
-        $store->lat = $request['lat'];
-        $store->lng = $request['lng'];
-        $store->address = $request['address'];
-        $store->city = $request['city'];
-        $store->state = $request['state'];
+        Log::info('Updating store id: '.$id);
+
+        $store = $this->store->findOrFail($id);
+        $store->name = $request->name;
+        $store->phone_number = $request->phone_number;
+        $store->brands = count($request->brands) > 0 ? implode(",", $request->brands) : '';
+        $store->lat = $request->lat;
+        $store->lng = $request->lng;
+        $store->address = $request->address;
+        $store->city = $request->city;
+        $store->state = $request->state;
         $store->save();
 
-        return redirect('stores/'.$store->id);
+        return redirect('stores/'.$store->id)->withMessage('Updated');
     }
 
     /**
@@ -171,11 +162,13 @@ class StoreController extends Controller
      */
     public function destroy(Request $request)
     {
-        $store_id = $request['store_id'];
-        $store = $this->store->findOrFail($store_id);
-        $storeName = $store->name;
-        $this->store->destroy($store_id);
+        Log::info('Deleting store id: '.$request->store_id);
 
-        return redirect('stores')->with('message', 'Successfully deleted \''.$storeName.'\'');
+        $storeId = $request->store_id;
+        $store = $this->store->findOrFail($storeId);
+        $storeName = $store->name;
+        $this->store->destroy($storeId);
+
+        return redirect('stores')->withMessage('Deleted \''.$storeName.'\'');
     }
 }
