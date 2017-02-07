@@ -6,7 +6,7 @@
 
 @section('content')
 @include('shared.message')
-<div id="article" class="container">
+<div id="article" class="container bottom-margin-sm">
 	<div class="row">
 		<div class="col-md-12">
 			<ol class="breadcrumb">
