@@ -335,11 +335,11 @@ class OrderController extends Controller
     			echo 'RECEIVEOK';
     		} else 
     		{
-    			return view('cart.payment_response_be')->withMessage('Failed!');
+    			return view('cart.payment_response')->withMessage('Failed!');
     		}
     	} else 
     	{
-    		return view('cart.payment_response_be')->withMessage('Payment transaction failed!');
+    		return view('cart.payment_response')->withMessage('Payment transaction failed!');
     	}
     }
 
