@@ -111,7 +111,7 @@ class TestimonialController extends Controller
      */
     public function store(TestimonialFormRequest $request)
     {
-        Log::info('Storing testimonial id: '.$$request->product_id);
+        Log::info('Storing testimonial');
 
         $this->testimonial->product_id = $request->product_id;
         $this->testimonial->title = $request->title;
