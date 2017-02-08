@@ -12,7 +12,7 @@ use CartAlreadyStoredException;
 
 class OrderController extends Controller
 {
-    protected $merchantKey = 't31B7FOsuf';
+    protected $merchantKey = 't31B7FOsUf';
     protected $merchantCode = 'M00568';
     protected $orderIdKey = 'order_id';
     protected $orderEmailKey = 'order_email';
@@ -240,10 +240,10 @@ class OrderController extends Controller
         $amount = '1.00';
         $amountStr = str_replace(['.', ','], "", $amount);
         $currency = 'MYR';
+        $sigStr = $merchantKey.$merchantCode.$refNo.$amountStr.$currency;
+        $shaStr = $this->iPay88_signature($sigStr);
 
-        $shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
-
-        // dd($merchantKey.$merchantCode.$refNo.$amountStr.$currency.' : '.$shaStr);
+        // dd($sigStr.' : '.$shaStr);
         
         return view('order.payment_test')
                     // ->with('order', $order)
@@ -352,20 +352,24 @@ class OrderController extends Controller
     function iPay88_signature($source)
 	{
        	return base64_encode(hex2bin(sha1($source)));
+        // return base64_encode(sha1($source));
 	}
-	
-	/**
-	 * Generate signature for ipay88 request.
-	 *
-	 * @param  [type] $hexSource [description]
-	 * @return [type]            [description]
-	 */
-	function hex2bin($hexSource)
-	{
-		for ($i=0;$i<strlen($hexSource);$i=$i+2)
-		{
-	       	$bin .= chr(hexdec(substr($hexSource,$i,2)));
-		}
-		return $bin;
-	}
+
+    // if (!function_exists('hex2bin'))
+    // {
+        /**
+         * Generate signature for ipay88 request.
+         *
+         * @param  [type] $hexSource [description]
+         * @return [type]            [description]
+         */
+        function hex2bin($hexSource)
+        {
+            for ($i=0;$i<strlen($hexSource);$i=$i+2)
+            {
+               $bin .= chr(hexdec(substr($hexSource,$i,2)));
+            }
+            return $bin;
+        }
+    // }
 }

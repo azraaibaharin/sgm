@@ -13,7 +13,7 @@
 			<p>Response Back End URL: {{ url('payment/responseBE') }}</p>
 			<form class="form-inline" action="https://www.mobile88.com/epayment/entry.asp" method="post">
 				<input type="hidden" name="MerchantCode" value="{{ $merchantCode }}" />
-				<input type="hidden" name="PaymentId" value="0001" />
+				<input type="hidden" name="PaymentId" value="" />
 				<input type="hidden" name="RefNo" value="{{ $refNo }}" />
 				<input type="hidden" name="Amount" value="{{ $amount }}" />
 				<input type="hidden" name="Currency" value="{{ $currency }}" />
