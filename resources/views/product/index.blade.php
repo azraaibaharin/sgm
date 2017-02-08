@@ -58,16 +58,7 @@
 	</div>
 </div>
 
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->forget('message') }}
-		</div>
-	</div>
-</div>
-@endif
+@include('shared.message')
 
 <div id="products" class="container">
 	<div class="row">

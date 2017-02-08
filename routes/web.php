@@ -38,6 +38,28 @@ Route::get('/products/{id}/edit', 'ProductController@edit')->middleware('auth');
 Route::post('/products/{id}/edit', 'ProductController@update')->middleware('auth');
 Route::post('/products/delete', 'ProductController@destroy')->middleware('auth');
 
+// Cart
+Route::resource('cart', 'CartController', ['only' => ['index', 'store', 'update', 'destroy']]);
+Route::get('cart/{id}/add', 'CartController@add');
+Route::get('cart/{id}/remove', 'CartController@remove');
+Route::get('cart/empty', 'CartController@empty');
+Route::post('cart/coupon', 'CartController@addCoupon');
+
+// Order
+Route::get('order/create', 'OrderController@create');
+Route::post('order/store', 'OrderController@store');
+Route::get('order/complete', 'OrderController@complete');
+Route::post('payment/response', 'OrderController@paymentResponse');
+Route::post('payment/responseBE', 'CartController@paymentResponseBE');
+Route::get('payment/response', 'OrderController@paymentResponse');
+Route::get('payment/responseBE', 'CartController@paymentResponseBE');
+Route::get('payment', 'OrderController@payment');
+Route::get('order', 'OrderController@index');
+Route::post('order/search', 'OrderController@search');
+Route::get('order/{id}', 'OrderController@show');
+Route::put('order/{id}', 'OrderController@update');
+Route::delete('order/{id}', 'OrderController@destroy');
+
 // Article
 Route::get('articles', 'ArticleController@index');
 Route::get('articles/create', 'ArticleController@create')->middleware('auth');
@@ -76,28 +98,6 @@ Route::get('warranties/{id}', 'WarrantyController@show');
 Route::get('warranties/{id}/edit', 'WarrantyController@edit')->middleware('auth');
 Route::post('warranties/{id}/edit', 'WarrantyController@update')->middleware('auth');
 Route::post('warranties/delete', 'WarrantyController@destroy')->middleware('auth');
-
-// Cart
-Route::resource('cart', 'CartController', ['only' => ['index', 'store', 'update', 'destroy']]);
-Route::get('cart/{id}/add', 'CartController@add');
-Route::get('cart/{id}/remove', 'CartController@remove');
-Route::get('cart/empty', 'CartController@empty');
-Route::post('cart/coupon', 'CartController@addCoupon');
-
-// Order
-Route::get('order/create', 'OrderController@create');
-Route::post('order/store', 'OrderController@store');
-Route::get('order/complete', 'OrderController@complete');
-Route::post('payment/response', 'OrderController@paymentResponse');
-Route::post('payment/responseBE', 'CartController@paymentResponseBE');
-Route::get('payment/response', 'OrderController@paymentResponse');
-Route::get('payment/responseBE', 'CartController@paymentResponseBE');
-Route::get('payment', 'OrderController@payment');
-Route::get('order', 'OrderController@index');
-Route::post('order/search', 'OrderController@search');
-Route::get('order/{id}', 'OrderController@show');
-Route::put('order/{id}', 'OrderController@update');
-Route::delete('order/{id}', 'OrderController@destroy');
 
 // Coupon
 Route::get('coupons', 'CouponController@index')->middleware('auth');

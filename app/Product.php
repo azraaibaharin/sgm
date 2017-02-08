@@ -74,6 +74,49 @@ class Product extends Model
     ];
 
     /**
+     * Scope a query to only include products of a given brand.
+     * 
+     * @param  \Illuminate\Database\Eloquent\Builder $query 
+     * @param  String $brand 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfBrand($query, $brand)
+    {
+        if ($brand != $this->getBrands()[0])
+        {
+            return $query->where('brand', $brand)->orderBy('updated_at');
+        } else
+        {
+            return $query->orderBy('updated_at');
+        }
+    }
+
+    /**
+     * Scope a query to only include products of a given brand and category.
+     * 
+     * @param  \Illuminate\Database\Eloquent\Builder $query 
+     * @param  String $brand 
+     * @param  String $category 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfBrandAndCategory($query, $brand, $category)
+    {
+        $q = $query;
+
+        if (!is_null($brand) && $brand != $this->getBrands()[0])
+        {
+            $q = $q->where('brand', $brand);
+        }
+
+        if (!is_null($category) && $category != $this->getCategories()[0])
+        {
+            $q = $q->where('category', $category);
+        }
+
+        return $q->orderBy('model', 'asc');
+    }
+
+    /**
      * Get the testimonials for the product.
      */
     public function testimonials()

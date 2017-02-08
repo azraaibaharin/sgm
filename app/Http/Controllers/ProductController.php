@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Image;
 use Excel;
+use Log;
 
+use App\Traits\FlashModelAttributes;
 use App\Http\Requests;
 use App\Product;
 use Storage;
 
 class ProductController extends Controller
 {
+    use FlashModelAttributes;
+
     /**
      * The Product instance.
      * @var App\product
@@ -35,23 +39,18 @@ class ProductController extends Controller
      */
     public function filter(Request $request) 
     {
-        $product = $this->product;
-        $category = $request['category'];
-        $categories = $product->getCategories();
-        $brand = $request['brand'];
-        $brands = $product->getBrands();
-        $products = $product->when($brand != $brands[0], function ($query) use ($brand) {
-                                return $query->where('brand', $brand);}
-                            )->when($category != $categories[0], function ($query) use ($category) {
-                                return $query->where('category', $category);}
-                            )->orderBy('model', 'asc')->get();
+        Log::info('Searching product brand: '.$request->brand.' of category: '.$request->category);
+
+        $brand    = $request->brand;
+        $category = $request->category;
+        $products = $this->product->ofBrandAndCategory($brand, $category)->get();
 
         return view('product.index')
-                ->with('products', $products)
-                ->with('brands', $brands)
+                ->with('brands', $this->product->getBrands())
+                ->with('categories', $this->product->getCategories())
                 ->with('brand', $brand)
-                ->with('categories', $categories)
-                ->with('category', $category);
+                ->with('category', $category)
+                ->with('products', $products);
     }
 
     /**
@@ -61,33 +60,18 @@ class ProductController extends Controller
      */
     public function index(Request $request, $brand = null, $category = null)
     {   
-        $product = $this->product;
-        $brands = $product->getBrands();
-        $categories = $product->getCategories();
-        $products = [];
+        $brands     = $this->product->getBrands();
+        $categories = $this->product->getCategories();
+        $products   = $this->product->ofBrandAndCategory($brand, $category)->get();
 
-        if (!is_null($brand) && !empty($brand))
-        {
-            if (!is_null($category) && !empty($category))
-            {
-                $products = $product->where('brand', $brand)
-                                    ->where('category', $category)
-                                    ->orderBy('model', 'asc')
-                                    ->get();
-            } else 
-            {
-                $category = $categories[0];
-                $products = $product->where('brand', $brand)
-                                    ->orderBy('model', 'asc')
-                                    ->get();
-            }
-        } 
-        else
+        if (is_null($brand)) 
         {
             $brand = $brands[0];
+        }       
+
+        if (is_null($category))
+        {
             $category = $categories[0];
-            $products = $product->orderBy('model', 'asc')
-                                ->get();
         }
 
         return view('product.index')
@@ -105,7 +89,6 @@ class ProductController extends Controller
      */
     public function import()
     {
-        $this->middleware('auth');
         return view('product.import');
     }
 
@@ -114,17 +97,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {   
-        $product = $this->product;
-        $brands = $product->getBrands(false);
-        $categories = $product->getCategories(false);
-        $statuses = $product->getStatuses();
+        $request->session()->flash('brands', $this->product->getBrands(false));
+        $request->session()->flash('categories', $this->product->getCategories(false));
+        $request->session()->flash('statuses', $this->product->getStatuses());
 
-        return view('product.create')
-                    ->with('brands', $brands)
-                    ->with('categories', $categories)
-                    ->with('statuses', $statuses);
+        return view('product.create');
     }
 
     /**
@@ -135,25 +114,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('Storing product');
+
         $product = $this->save(
             $this->product, 
-            $request['brand'], 
-            $request['model'], 
-            $request['price'], 
-            $request['description'], 
-            $request['status'], 
+            $request->brand, 
+            $request->model, 
+            $request->price, 
+            $request->description, 
+            $request->status, 
             '1', // category id
-            strtolower($request['category']),
+            strtolower($request->category),
             $this->getImageLinks($request, $this->product), 
-            $request['video_links'], 
-            $request['color'], 
-            $request['download_links'], 
-            $request['weight'], 
-            $request['delivery_weight'],
-            $request['dimension'], 
-            $request['weight_capacity'], 
-            $request['age_requirement'], 
-            $request['awards']
+            $request->video_links, 
+            $request->color, 
+            $request->download_links, 
+            $request->weight, 
+            $request->delivery_weight,
+            $request->dimension, 
+            $request->weight_capacity, 
+            $request->age_requirement, 
+            $request->awards
         );
 
         return redirect('products/'.$product->id);
@@ -162,10 +143,12 @@ class ProductController extends Controller
     /**
      * Store resources based on imported file.
      *
-     * @return [type] [description]
+     * @return void
      */
     public function store2(Request $request)
     {
+        Log::info('Importing products');
+
         if ($request->hasFile('csv_file'))
         {
             $csvFile = $request->file('csv_file');
@@ -178,6 +161,7 @@ class ProductController extends Controller
             $rows = 0;
             $count = 0;
             $rowsNotProcessed = [];
+
             foreach($results as $sheet) 
             {
                 // Loop through all rows
@@ -186,35 +170,27 @@ class ProductController extends Controller
                     if ($row->brand != null && $row->model !=null)
                     {
                         $product = $this->product->where('brand', $row->brand)->where('model', $row->model)->first();
-                        if ($product == null) 
-                        {
-                            $product = new Product();
-                        }
-
-                        // if ($row->model == 'IVVI™ (Caviar)')
-                        // {
-                        //     dd($row);
-                        // }
+                        $product = is_null($product) ? $this->product : $product;
 
                         $this->save(
                             $product, 
                             strtolower($row->brand), 
-                            $row->model, 
+                            is_null($product->model) ? $row->model : $product->model, 
                             is_float($row->price_inclusive_gst) ? $row->price_inclusive_gst : 0.00, 
-                            $row->description, 
-                            $this->product->getStatuses()[0],  // status
+                            is_null($product->description) ? $row->description : $product->description, 
+                            is_null($product->status) ? $this->product->getStatuses()[0] : $product->status,
                             '1', // category id
-                            strtolower($row->category),
-                            '', // image links
-                            '', // video links
-                            $row->colour, 
-                            $row->download_links, 
-                            $row->weight, 
-                            $row->delivery_weight,
-                            $row->dimension, 
-                            $row->weight_capacity, 
-                            $row->age_requirement, 
-                            $row->awards
+                            is_null($product->category) ? strtolower($row->category) : $product->category,
+                            is_null($product->image_links) ? ',,,,' : $product->image_links, 
+                            is_null($product->video_links) ? '' : $product->video_links,
+                            is_null($product->colour) ? $row->colour : $product->colour, 
+                            is_null($product->download_links) ? $row->download_links : $product->download_links, 
+                            is_null($product->weight) ? $row->weight : $product->weight, 
+                            is_null($row->delivery_weight) ? 0.00 : $row->delivery_weight,
+                            is_null($product->dimension) ? $row->dimension : $product->dimension, 
+                            is_null($product->weight_capacity) ? $row->weight_capacity : $product->weight_capacity, 
+                            is_null($product->age_requirement) ? $row->age_requirement : $product->age_requirement, 
+                            is_null($product->awards) ? $row->awards : $product->awards
                         );
                         $count++;
                     } else 
@@ -242,14 +218,11 @@ class ProductController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $product = $this->product->find($id);
+        Log::info('Showing product id:'.$id);
 
-        if (is_null($product))
-        {
-            return redirect('products')->with('message', 'Product not found.');
-        }
-
+        $product    = $this->product->findOrFail($id);
         $productArr = $product->toArray();
+
         $productArr['colorsWithSku'] = explode(',', $productArr['color']);
 
         return view('product.show', $productArr)
@@ -263,30 +236,25 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $product = $this->product->find($id);
-        
-        if (is_null($product))
-        {
-            return redirect('products')->with('message', 'Product not found.');
-        }
+        Log::info('Editing product id: '.$id);
 
-        $productArr = $product->toArray();
-        $imagesArr = $this->getImageArr($productArr['image_links']);
-        $productArr['image_first'] = $imagesArr[0];
-        $productArr['image_second'] = $imagesArr[1];
-        $productArr['image_third'] = $imagesArr[2];
-        $productArr['image_fourth'] = $imagesArr[3];
-        $productArr['image_fifth'] = $imagesArr[4];
-        $brands = $product->getBrands(false);
-        $categories = $product->getCategories(false);
-        $statuses = $product->getStatuses();
+        $product = $this->product->findOrFail($id);
 
-        return view('product.edit', $productArr)
-                    ->with('brands', $brands)
-                    ->with('categories', $categories)
-                    ->with('statuses', $statuses);
+        $this->flashAttributesToSession($request, $product);
+
+        $images = $this->getImages($product->image_links);
+        $request->session()->flash('image_first', $images[0]);
+        $request->session()->flash('image_second', $images[1]);
+        $request->session()->flash('image_third', $images[2]);
+        $request->session()->flash('image_fourth', $images[3]);
+        $request->session()->flash('image_fifth', $images[4]);
+        $request->session()->flash('brands', $product->getBrands(false));
+        $request->session()->flash('categories', $product->getCategories(false));
+        $request->session()->flash('statuses', $product->getStatuses());
+
+        return view('product.edit');
     }
 
     /**
@@ -298,16 +266,32 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = $this->product->find($id);
+        Log::info('Updating product id: '.$id);
 
-        if (is_null($product))
-        {
-            return redirect('products')->with('message', 'Product not found.');
-        }
+        $product = $this->product->findOrFail($id);
 
-        $this->save($product, $request['brand'], $request['model'], $request['price'], $request['description'], $request['status'], '1', $request['category'], $this->getImageLinks($request, $product), $request['video_links'], $request['color'], $request['download_links'], $request['weight'], $request['delivery_weight'], $request['dimension'], $request['weight_capacity'], $request['age_requirement'], $request['awards']);
+        $this->save(
+            $product, 
+            $request->brand, 
+            $request->model, 
+            $request->price, 
+            $request->description, 
+            $request->status, 
+            '1', // category_id
+            $request->category, 
+            $this->getImageLinks($request, $product), 
+            $request->video_links, 
+            $request->color, 
+            $request->download_links, 
+            $request->weight, 
+            $request->delivery_weight, 
+            $request->dimension, 
+            $request->weight_capacity, 
+            $request->age_requirement, 
+            $request->awards
+        );
 
-        return back()->with('success','Update successful.');
+        return redirect('products/'.$product->id)->withMessage('Updated');
     }
 
     /**
@@ -318,12 +302,15 @@ class ProductController extends Controller
      */
     public function destroy(Request $request)
     {  
-        $product_id = $request['product_id'];
-        $product = $this->product->findOrFail($product_id);
-        $productName = $product->brand.' '.$product->model;
-        $this->product->destroy($product_id);
+        Log::info('Removing product id: '.$request->product_id);
 
-        return redirect('products')->with('message', 'Successfully deleted \''.$productName.'\'');
+        $productId   = $request->product_id;
+        $product     = $this->product->findOrFail($productId);
+        $productName = $product->brand.' '.$product->model;
+
+        $this->product->destroy($productId);
+
+        return redirect('products')->withMessage('Deleted \''.$productName.'\'');
     }
 
     /**
@@ -351,23 +338,24 @@ class ProductController extends Controller
      */
     protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $delivery_weight, $dimension, $weight_capacity, $age_requirement, $awards)
     {
-        $product->brand = $brand;
-        $product->model = $model;
-        $product->price = $price;
-        $product->description = $description;
-        $product->status = $status;
-        $product->category_id = $category_id;
-        $product->category = $category;
-        $product->image_links = $image_links;
-        $product->video_links = $video_links;
-        $product->color = $this->cleanColor($color);
-        $product->download_links = $download_links;
-        $product->weight = $weight;
+        $product->brand           = $brand;
+        $product->model           = $model;
+        $product->price           = $price;
+        $product->description     = $description;
+        $product->status          = $status;
+        $product->category_id     = $category_id;
+        $product->category        = $category;
+        $product->image_links     = $image_links;
+        $product->video_links     = $video_links;
+        $product->color           = $this->cleanColor($color);
+        $product->download_links  = $download_links;
+        $product->weight          = $weight;
         $product->delivery_weight = $delivery_weight;
-        $product->dimension = $dimension;
+        $product->dimension       = $dimension;
         $product->weight_capacity = $weight_capacity;
         $product->age_requirement = $age_requirement;
-        $product->awards = $awards;
+        $product->awards          = $awards;
+
         $product->save();
 
         return $product;
@@ -382,10 +370,9 @@ class ProductController extends Controller
      * @return [type]        [description]
      */
     private function cleanColor($color) {
-        $colorArr = explode(',', $color);
         $cleanColorArr = [];
 
-        foreach($colorArr as $c)
+        foreach(explode(',', $color) as $c)
         {
             $cleanColor = $c;
             $matches = [];
@@ -407,13 +394,14 @@ class ProductController extends Controller
      */
     private function getImageLinks(Request $request, Product $product)
     {   
-        $imagesArr = $this->getImageArr($product->image_links);  
+        $images       = $this->getImages($product->image_links);
         $image_prefix = $product->brand.'_'.$product->model;
-        $image_first_link = $this->imageUpload($request, 'image_first', $imagesArr[0], $image_prefix);
-        $image_second_link = $this->imageUpload($request, 'image_second', $imagesArr[1], $image_prefix);
-        $image_third_link = $this->imageUpload($request, 'image_third', $imagesArr[2], $image_prefix);
-        $image_fourth_link = $this->imageUpload($request, 'image_fourth', $imagesArr[3], $image_prefix);
-        $image_fifth_link = $this->imageUpload($request, 'image_fifth', $imagesArr[4], $image_prefix);
+
+        $image_first_link  = $this->imageUpload($request, 'image_first', $images[0], $image_prefix);
+        $image_second_link = $this->imageUpload($request, 'image_second', $images[1], $image_prefix);
+        $image_third_link  = $this->imageUpload($request, 'image_third', $images[2], $image_prefix);
+        $image_fourth_link = $this->imageUpload($request, 'image_fourth', $images[3], $image_prefix);
+        $image_fifth_link  = $this->imageUpload($request, 'image_fifth', $images[4], $image_prefix);
 
         return $image_first_link.','.$image_second_link.','.$image_third_link.','.$image_fourth_link.','.$image_fifth_link;
     }
@@ -424,24 +412,24 @@ class ProductController extends Controller
      * @param  String $image_links comma separated image links
      * @return array            an array of product image links
      */
-    private function getImageArr(String $image_links)
+    private function getImages(String $image_links)
     {
-        $imagesArr = explode(',', $image_links);
-        $arr[0] = sizeof($imagesArr) > 0 ? $imagesArr[0] : '';
-        $arr[1] = sizeof($imagesArr) > 1 ? $imagesArr[1] : '';
-        $arr[2] = sizeof($imagesArr) > 2 ? $imagesArr[2] : '';
-        $arr[3] = sizeof($imagesArr) > 3 ? $imagesArr[3] : '';
-        $arr[4] = sizeof($imagesArr) > 4 ? $imagesArr[4] : '';
+        $images = explode(',', $image_links);
+        $arr[0] = sizeof($images) > 0 ? $images[0] : '';
+        $arr[1] = sizeof($images) > 1 ? $images[1] : '';
+        $arr[2] = sizeof($images) > 2 ? $images[2] : '';
+        $arr[3] = sizeof($images) > 3 ? $images[3] : '';
+        $arr[4] = sizeof($images) > 4 ? $images[4] : '';
 
         return $arr;
     }
 
     /**
-     * Manage Image upload Request
+     * Manage Image upload Request. Create 3 images (big, small, tiny).
      *
-     * @return void
+     * @return uploaded image name
      */
-    protected function imageUpload(Request $request, $field_name, $old_value, $prefix)
+    private function imageUpload(Request $request, $field_name, $old_value, $prefix)
     {
         $imageName = $old_value;
 
@@ -451,13 +439,13 @@ class ProductController extends Controller
                 $field_name => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
             ]);
 
-            $imageFile = $request->file($field_name);
-            $imageName = $prefix.'_'.$field_name.'.'.$imageFile->getClientOriginalExtension();
+            $imageFile  = $request->file($field_name);
+            $imageName  = $prefix.'_'.$field_name.'.'.$imageFile->getClientOriginalExtension();
             $imageMoved = $imageFile->move(public_path('img'), $imageName);
 
-            $imgBig = Image::make($imageMoved->getRealPath())->heighten(2000)->save($this->getBigImagePath($imageName), 100);
+            $imgBig   = Image::make($imageMoved->getRealPath())->heighten(2000)->save($this->getBigImagePath($imageName), 100);
             $imgSmall = Image::make($imageMoved->getRealPath())->heighten(560)->save($this->getSmallImagePath($imageName), 100);
-            $imgTiny = Image::make($imageMoved->getRealPath())->heighten(60)->save($this->getTinyImagePath($imageName), 100);
+            $imgTiny  = Image::make($imageMoved->getRealPath())->heighten(60)->save($this->getTinyImagePath($imageName), 100);
         }
 
         return $imageName;

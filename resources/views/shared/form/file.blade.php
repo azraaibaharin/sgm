@@ -7,7 +7,7 @@
         @endif
 
         <input id="{{ $name }}" type="file" class="form-control" name="{{ $name }}">
-        <small>{{ $help }}</small>
+        <small>{{ $help or '' }}</small>
 
         @if ($errors->has($name))
         <span class="help-block">

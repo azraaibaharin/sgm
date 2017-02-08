@@ -10,6 +10,7 @@
 @endsection
 
 @section('content')
+@include('shared.message')
 <div id="product" class="container bottom-margin-sm">
 	<div class="row">
 		<div class="col-md-3">
@@ -70,10 +71,10 @@
 			<div id="product-spec" class="row">
 				<div class="col-md-6">
 					<div class="row">
-						<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set' : $weight }}</div>
+						<div class="col-md-12"><label>Weight:</label> {{ $weight == '' ? 'Not set' : $weight.'kg' }}</div>
 						<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set' : $dimension }}</div>
-						<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set' : $weight_capacity }}</div>
-						<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set' : $age_requirement }}</div>
+						<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set' : $weight_capacity.'kg' }}</div>
+						<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set' : $age_requirement.' years old' }}</div>
 						<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None' : $awards }}</div>
 						<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
 					</div>
@@ -107,6 +108,7 @@
 			<hr/>
 			<div class="row">	
 				<div class="col-md-12">
+					<a href="{{ url('products') }}"" class="btn btn-link">Back</a>
 					@if (!Auth::guest())
 						<a href="{{ url('products/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>		
 						<form class="form-inline" method="POST" action="{{ url('products/delete') }}">

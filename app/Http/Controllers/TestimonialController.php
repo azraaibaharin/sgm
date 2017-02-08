@@ -167,7 +167,7 @@ class TestimonialController extends Controller
         $testimonial->text = $request['text'];
         $testimonial->save();
 
-        return back()->with('success','Update successful.');
+        return redirect('testimonials/'.$testimonial->id)->withMessage('Updated');
     }
 
     /**

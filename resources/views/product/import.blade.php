@@ -2,13 +2,10 @@
 
 @section('content')
 <form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/import') }}" enctype="multipart/form-data">
-{{ csrf_field() }}
+    {{ csrf_field() }}
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success" role="alert">{{ $message }}</div>
-                @endif
                 <div class="panel panel-default">
                     <div class="panel-heading">Import</div>
                     <div class="panel-body">
