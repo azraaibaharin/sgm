@@ -5,27 +5,7 @@
 @endsection
 
 @section('content')
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-		</div>
-	</div>
-</div>
-@endif
-
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->forget('message') }}
-		</div>
-	</div>
-</div>
-@endif
-
+@include('shared.message')
 <div id="warranties" class="container">
 	<div class="row">
 	@if (sizeof($warranties) > 0)
@@ -62,7 +42,7 @@
 		</div>
 	@else
 		<div class="col-md-12 text-center">
-			<small>No warranties available. Click <a href="{{ url('warranties/create') }}">here</a> to add.</small>
+			<small>No warranties available. @if (!Auth::guest()) Click <a href="{{ url('warranties/create') }}">here</a> to add. @endif</small>
 		</div>
 	@endif		
 	</div>

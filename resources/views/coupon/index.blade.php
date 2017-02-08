@@ -5,27 +5,7 @@
 @endsection
 
 @section('content')
-@if (isset($message))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-		</div>
-	</div>
-</div>
-@endif
-
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->forget('message') }}
-		</div>
-	</div>
-</div>
-@endif
-
+@include('shared.message')
 <div id="coupons" class="container">
 	<div class="row">
 	@if (sizeof($coupons) > 0)

@@ -10,127 +10,28 @@
     <div class="container">
         <div class="row">
         	<div class="col-md-8 col-md-offset-2">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success" role="alert">{{ $message }}</div>
-                @endif
                 <div class="panel panel-default">
                     <div class="panel-heading">Register</div>
                     <div class="panel-body">
-
-                    	<div class="form-group{{ $errors->has('full_name') ? ' has-error' : '' }}">
-                            <label for="full_name" class="col-md-2 control-label">Full name</label>
-                            <div class="col-md-9">
-                                <input id="full_name" class="form-control" name="full_name" value="{{ old('full_name') }}" required />
-
-                                @if ($errors->has('full_name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('full_name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-2 control-label">Email</label>
-                            <div class="col-md-9">
-                                <input id="email" class="form-control" name="email" value="{{ old('email') }}" required />
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                            <label for="phone_number" class="col-md-2 control-label">Phone</label>
-                            <div class="col-md-9">
-                                <input id="phone_number" class="form-control" name="phone_number" value="{{ old('phone_number') }}" required />
-
-                                @if ($errors->has('phone_number'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('phone_number') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                            <label for="address" class="col-md-2 control-label">Address</label>
-                            <div class="col-md-9">
-                                <input id="address" class="form-control" name="address" value="{{ old('address') }}" required />
-
-                                @if ($errors->has('address'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('product_model_name') ? ' has-error' : '' }}">
-                            <label for="product_model_name" class="col-md-2 control-label">Model name</label>
-                            <div class="col-md-9">
-                                <input id="product_model_name" class="form-control" name="product_model_name" value="{{ old('product_model_name') }}" required />
-
-                                @if ($errors->has('product_model_name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('product_model_name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('product_serial_number') ? ' has-error' : '' }}">
-                            <label for="product_serial_number" class="col-md-2 control-label">Serial no.</label>
-                            <div class="col-md-9">
-                                <input id="product_serial_number" class="form-control" name="product_serial_number" value="{{ old('product_serial_number') }}" required />
-
-                                @if ($errors->has('product_serial_number'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('product_serial_number') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('date_of_manufacture') ? ' has-error' : '' }}">
-                            <label for="date_of_manufacture" class="col-md-2 control-label">Manufacture date</label>
-                            <div class="col-md-9">
-                                <input id="date_of_manufacture" class="form-control" name="date_of_manufacture" value="{{ old('date_of_manufacture') }}" placeholder="YYYY-MM-dd. E.g. 2016-06-02." required />
-
-                                @if ($errors->has('date_of_manufacture'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('date_of_manufacture') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('date_of_purchase') ? ' has-error' : '' }}">
-                            <label for="date_of_purchase" class="col-md-2 control-label">Purchase date</label>
-                            <div class="col-md-9">
-                                <input id="date_of_purchase" class="form-control" name="date_of_purchase" value="{{ old('date_of_purchase') }}" placeholder="YYYY-MM-dd. E.g. 2016-06-05." required />
-
-                                @if ($errors->has('date_of_purchase'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('date_of_purchase') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                        @include('shared.form.textfield', ['name' => 'full_name', 'text' => 'Full name', 'placeholder' => 'Full name'])
+                        @include('shared.form.textfield', ['name' => 'email', 'text' => 'Email', 'placeholder' => 'Email'])
+                        @include('shared.form.textfield', ['name' => 'phone_number', 'text' => 'Phone', 'placeholder' => 'Phone number'])
+                        @include('shared.form.textfield', ['name' => 'address', 'text' => 'Address', 'placeholder' => 'Address'])
+                        @include('shared.form.textfield', ['name' => 'product_model_name', 'text' => 'Model name', 'placeholder' => 'Model name'])
+                        @include('shared.form.textfield', ['name' => 'product_serial_number', 'text' => 'Serial no.', 'placeholder' => 'Serial number'])
+                        @include('shared.form.textfield', ['name' => 'date_of_manufacture', 'text' => 'Manufacture date', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-05.'])
+                        @include('shared.form.textfield', ['name' => 'date_of_purchase', 'text' => 'Purchase date', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-05.'])
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
                     @if (Auth::guest())
-                        <a href="{{ url('home') }}" class="btn btn-link pull-left">Back</a>
+                        @include('shared.form.back', ['link' => 'home'])
                     @else
-                        <a href="{{ url('warranties') }}" class="btn btn-link pull-left">Back</a>
+                        @include('shared.form.back', ['link' => 'warranties/'.session('id')])
                     @endif
-                    <button type="submit" class="btn btn-default pull-right">Submit</button>
+                    @include('shared.form.submit')
                 </div>
             </div>
         </div>

@@ -63,11 +63,12 @@ class ArticleController extends Controller
     {
         Log::info('Storing article');
 
-        $this->article->title = $request->title;
+        $this->article->title      = $request->title;
         $this->article->image_link = $this->imageUpload($request, '', $this->article->id);
-        $this->article->text = $request->text;
-        $this->article->link = $request->link;
-        $this->article->author = $request->author;
+        $this->article->text       = $request->text;
+        $this->article->link       = $request->link;
+        $this->article->author     = $request->author;
+        
         $this->article->save();
 
         return redirect('articles/'.$this->article->id);
@@ -95,6 +96,8 @@ class ArticleController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        Log::info('Editing article id: '.$id);
+
         $this->flashAttributesToSession($request, $this->article->findOrFail($id));
 
         return view('article.edit');
@@ -111,12 +114,13 @@ class ArticleController extends Controller
     {   
         Log::info('Updating article: '.$id);
 
-        $toUpdateArticle = $this->article->findOrFail($id);
-        $toUpdateArticle->title = $request->title;
+        $toUpdateArticle             = $this->article->findOrFail($id);
+        $toUpdateArticle->title      = $request->title;
         $toUpdateArticle->image_link = $this->imageUpload($request, $toUpdateArticle->image_link, $toUpdateArticle->id);
-        $toUpdateArticle->text = $request->text;
-        $toUpdateArticle->link = $request->link;
-        $toUpdateArticle->author = $request->author;
+        $toUpdateArticle->text       = $request->text;
+        $toUpdateArticle->link       = $request->link;
+        $toUpdateArticle->author     = $request->author;
+        
         $toUpdateArticle->save();
 
         return redirect('articles/'.$id)->withMessage('Updated');
@@ -130,10 +134,11 @@ class ArticleController extends Controller
      */
     public function destroy(Request $request)
     {
-        Log::info('Removing article: '.$request->article_id);
+        Log::info('Removing article id: '.$request->article_id);
 
-        $articleId = $request->article_id;
+        $articleId    = $request->article_id;
         $articleTitle = $this->article->findOrFail($articleId)->title;
+        
         $this->article->destroy($articleId);
 
         return redirect('articles')->withMessage('Deleted \''.$articleTitle.'\'');
@@ -146,10 +151,10 @@ class ArticleController extends Controller
      */
     public function imageUpload(Request $request, $old_value, $articleId)
     {
-        $imageFieldName = 'image_link';
-        $imagePrefix = 'article_';
+        $imageFieldName  = 'image_link';
+        $imagePrefix     = 'article_';
         $imageFolderName = 'img';
-        $imageName = $old_value;
+        $imageName       = $old_value;
 
         if ($request->hasFile($imageFieldName))
         {
@@ -157,8 +162,8 @@ class ArticleController extends Controller
                 $imageFieldName => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000'
             ]);
 
-            $imageFile = $request->file($imageFieldName);
-            $imageName = $imagePrefix.$articleId.'.'.$imageFile->getClientOriginalExtension();
+            $imageFile  = $request->file($imageFieldName);
+            $imageName  = $imagePrefix.$articleId.'.'.$imageFile->getClientOriginalExtension();
             $imageMoved = $imageFile->move(public_path($imageFolderName), $imageName);
         }
 

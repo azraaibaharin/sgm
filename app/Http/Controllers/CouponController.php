@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Log;
 
+use App\Traits\FlashModelAttributes;
 use App\Http\Requests;
 use App\Coupon;
 
 class CouponController extends Controller
 {
+    use FlashModelAttributes;
+
     /**
      * The Coupon instance.
      * @var App/Coupon
@@ -32,8 +36,7 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons = $this->coupon->all();
-        return view('coupon.index')->with('coupons', $coupons);
+        return view('coupon.index')->with('coupons', $this->coupon->all());
     }
 
     /**
@@ -54,15 +57,18 @@ class CouponController extends Controller
      */
     public function store(Request $request)
     {
-        $coupon = $this->coupon;
-        $coupon->code = $request['code'];
-        $coupon->discount = '0';
-        $coupon->value = $request['value'];
-        $coupon->date_of_issue = $this->toDate($request['date_of_issue']);
-        $coupon->date_of_expiration = $this->toDate($request['date_of_expiration']);
+        Log::info('Storing coupon');
+
+        $coupon                     = $this->coupon;
+        $coupon->code               = $request->code;
+        $coupon->discount           = '0'; // $request->discount;
+        $coupon->value              = $request->value;
+        $coupon->date_of_issue      = $this->toDate($request->date_of_issue);
+        $coupon->date_of_expiration = $this->toDate($request->date_of_expiration);
+
         $coupon->save();
 
-        return redirect('coupons')->with('message', 'Coupon created successfully!');
+        return redirect('coupons')->withMessage('Created');
     }
 
     /**
@@ -73,11 +79,10 @@ class CouponController extends Controller
      */
     public function show($id)
     {
-        $coupon = $this->coupon->find($id);
-        if (is_null($coupon))
-        {
-            return redirect('coupons')->with('message', 'Coupon not found.');
-        }
+        Log::info('Showing coupon id: '.$id);
+
+        $coupon = $this->coupon->findOrFail($id);
+        
         return view('coupon.show', $coupon->toArray());
     }
 
@@ -87,14 +92,13 @@ class CouponController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $coupon = $this->coupon->find($id);
-        if (is_null($coupon))
-        {
-            return redirect('coupons')->with('message', 'Coupon not found.');
-        }
-        return view('coupon.edit', $coupon->toArray());
+        Log::info('Editing coupon id: '.$id);
+
+        $this->flashAttributesToSession($request, $this->coupon->findOrFail($id));
+
+        return view('coupon.edit');
     }
 
     /**
@@ -106,20 +110,18 @@ class CouponController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $coupon = $this->coupon->find($id);
-        if (is_null($coupon))
-        {
-            return redirect('coupons')->with('message', 'Coupon not found.');
-        }
+        Log::info('Updating coupon id: '.$id);
 
-        $coupon->code = $request['code'];
-        $coupon->discount = $request['discount'];
-        $coupon->value = $request['value'];
-        $coupon->date_of_issue = $this->toDate($request['date_of_issue']);
-        $coupon->date_of_expiration = $this->toDate($request['date_of_expiration']);
+        $coupon                     = $this->coupon->findOrFail($id);
+        $coupon->code               = $request->code;
+        $coupon->discount           = '0'; // $request->discount;
+        $coupon->value              = $request->value;
+        $coupon->date_of_issue      = $this->toDate($request->date_of_issue);
+        $coupon->date_of_expiration = $this->toDate($request->date_of_expiration);
+
         $coupon->save();
 
-        return redirect('coupons')->with('message','Update successful.');
+        return redirect('coupons/'.$coupon->id)->withMessage('Updated');
     }
 
     /**
@@ -130,16 +132,14 @@ class CouponController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $coupon_id = $id;
-        $coupon = $this->coupon->find($coupon_id);
-        if (is_null($coupon))
-        {
-            return redirect('coupons')->with('message', 'Coupon not found.');
-        }
-        $couponCode = $coupon->code;
-        $this->coupon->destroy($coupon_id);
+        Log::info('Removing coupon id: '.$id);
 
-        return redirect('coupons')->with('message', 'Successfully deleted \''.$couponCode.'\'');
+        $coupon     = $this->coupon->findOrFail($id);
+        $couponCode = $coupon->code;
+
+        $this->coupon->destroy($id);
+
+        return redirect('coupons')->withMessage('Deleted \''.$couponCode.'\'');
     }
 
     /**

@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@include('shared.message')
 <div id="warranty" class="container">
 	<div class="row">
 		<div class="col-md-12">
