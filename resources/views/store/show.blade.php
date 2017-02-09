@@ -6,7 +6,7 @@
 
 @section('content')
 @include('shared.message')
-<div id="store" class="container bottom-margin-sm">
+<div id="store" class="container bottom-padding-sm">
 	<div class="row">
 		<div class="col-md-12">
 			<ol class="breadcrumb">
@@ -18,6 +18,7 @@
 	<div class="row">
 		<div class="col-md-10">
 			<div id="map"></div>
+			<br>
 		</div>
 		<div class="col-md-2">
 			<b>Name</b><br/>

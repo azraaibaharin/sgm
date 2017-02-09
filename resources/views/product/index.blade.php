@@ -62,36 +62,38 @@
 
 <div id="products" class="container">
 	<div class="row">
-	@if (sizeof($products) > 0)
-		<div class="col-md-12 bottom-margin-sm">
-			<small>{{ count($products) }} item(s)</small>
-		</div>
-		@foreach ($products as $p)
-		<div class="col-md-4 {{ $p->brand }} bottom-margin-sm">
-			<div class="row">
-				<div class="col-md-6 text-center">
-					@if (empty($p->getDisplay('image_links')))
-						<small class="top-margin-md">No image available</small>
-					@else
-						<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive img-rounded">
-					@endif
-				</div>
-				<div class="col-md-6">
-					<h2>{{ $p->model }}</h2>
-					<a href="{{ url('products/'.$p->id) }}">View item</a>
+		@if (sizeof($products) > 0)
+			<div class="col-md-12 bottom-padding-sm">
+				<small>{{ count($products) }} item(s)</small>
+			</div>
+			@foreach ($products as $p)
+			<div class="col-md-4 {{ $p->brand }} bottom-padding-sm">
+				<div class="row">
+					<div class="col-md-6 img-box text-center">
+						@if (empty($p->getDisplay('image_links')))
+							<p><small>No image available</small></p>
+						@else
+							<img src="{{ asset('img/'.$p->getDisplay('image_links')) }}" alt="{{ $p->brand }} {{ $p->brand }}" class="img-responsive">
+						@endif
+					</div>
+					<div class="col-md-6 desc-box">
+						<h2>{{ $p->model }}</h2>
+						<a href="{{ url('products/'.$p->id) }}">View item</a>
+					</div>
 				</div>
 			</div>
-		</div>
-		@endforeach
-		<div class="col-md-12 bottom-margin-sm">
-			<small>{{ count($products) }} item(s)</small>
-			<hr>
-		</div>
-	@else
-		<div class="col-md-12 text-center">
-			<small>No products available. Click <a href="{{ url('products/create') }}">here</a> to add.</small>
-		</div>
-	@endif
+			@endforeach
+			<div class="col-md-12 bottom-margin-sm">
+				<small>{{ count($products) }} item(s)</small>
+				<hr>
+			</div>
+		@else
+			<div class="col-md-12 text-center">
+				<small>No products available. Click <a href="{{ url('products/create') }}">here</a> to add.</small>
+			</div>
+		@endif
 	</div>
 </div>
+
+<a id="scrollTop" href="#top">Scroll to top</a>
 @endsection

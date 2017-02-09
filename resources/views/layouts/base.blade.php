@@ -59,6 +59,13 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <script>
+        // scroll to top
+        $("a[href='#top']").click(function() {
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+          return false;
+        });
+    </script>
     @yield('js')
 </body>
 </html>

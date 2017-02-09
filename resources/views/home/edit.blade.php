@@ -6,7 +6,7 @@
 
 @section('content')
 @include('shared.message')
-<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('/home/edit') }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-padding-sm" role="form" method="POST" action="{{ url('/home/edit') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="container">
         <div class="row">

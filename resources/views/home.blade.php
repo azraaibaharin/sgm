@@ -14,7 +14,7 @@
 </div>
 
 {{-- About --}}
-<div id="about" class="container top-bottom-margin-md">
+<div id="about" class="container top-bottom-padding-md">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <p>{!! $about_text !!}</p>
@@ -86,16 +86,16 @@
         <div class="col-md-12">
             <h1 class="text-center bottom-padding-sm">Testimonials</h1>
         </div>
-        <div class="col-md-6 text-center babyhood bottom-padding-sm">
-            <a href="{{ url('testimonials/b/babyhood') }}">
+        <div class="col-md-6 text-center babyhood padding-md">
+            <a href="{{ url('testimonials/'.$latestTestimonialBabyhood->id) }}">
                 <h3>{!! $latestTestimonialBabyhood->text !!}</h3>
-                <small>was recently said about {{ ucfirst($latestTestimonialBabyhood->brand) }} {{ $latestTestimonialBabyhood->model }}</small>
+                <small>was recently said about {{ ucfirst($latestTestimonialBabyhood->product->brand) }} {{ $latestTestimonialBabyhood->product->model }}</small>
             </a>
         </div>
-        <div class="col-md-6 text-center nuna bottom-padding-sm">
-            <a href="{{ url('testimonials/b/nuna') }}">
+        <div class="col-md-6 text-center nuna padding-md">
+            <a href="{{ url('testimonials/'.$latestTestimonialNuna->id) }}">
                 <h3>{!! $latestTestimonialNuna->text !!}</h3>
-                <small>was recently said about {{ ucfirst($latestTestimonialNuna->brand) }} {{ $latestTestimonialNuna->model }}</small>
+                <small>was recently said about {{ ucfirst($latestTestimonialNuna->product->brand) }} {{ $latestTestimonialNuna->product->model }}</small>
             </a>
         </div>
     </div>
@@ -115,7 +115,7 @@
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/contact') }}">
                     {{ csrf_field() }}
                     <div class="form-group{{ $errors->has('contact_name') || $errors->has('contact_email') ? ' has-error' : '' }}">
-                        <div class="col-md-6">
+                        <div class="col-md-6 bottom-padding-sm">
                             <input type="text" class="form-control" name="contact_name" required value="{{ old('contact_name') }}" placeholder="Name" />
                             @if ($errors->has('contact_name'))
                                 <span class="help-block">
@@ -123,7 +123,7 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 bottom-padding-sm">
                             <input type="text" class="form-control" name="contact_email" required value="{{ old('contact_email') }}" placeholder="Email" />
                             @if ($errors->has('contact_email'))
                                 <span class="help-block">
@@ -153,22 +153,22 @@
 {{-- Social Media --}}
 <div id="followus" class="container-fluid padding-md bg-grey">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-xs-3">
             <div class="text-center">
                 <a href="{{ $facebook_babyhood_url }}" target="_blank"><i class="icon-social-facebook icon-md icon-border-rd bg-blue"></i></a>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-xs-3">
             <div class="text-center">
                 <a href="{{ $instagram_babyhood_url }}" target="_blank"><i class="icon-social-instagram icon-md icon-border-rd bg-blue"></i></a>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-xs-3">
             <div class="text-center">
                 <a href="{{ $facebook_nuna_url }}" target="_blank"><i class="icon-social-facebook icon-md icon-border-rd bg-black"></i></a>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-xs-3">
             <div class="text-center">
                 <a href="{{ $instagram_nuna_url }}" target="_blank"><i class="icon-social-instagram icon-md icon-border-rd bg-black"></i></a>
             </div>

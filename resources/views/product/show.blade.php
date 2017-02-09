@@ -11,7 +11,7 @@
 
 @section('content')
 @include('shared.message')
-<div id="product" class="container bottom-margin-sm">
+<div id="product" class="container bottom-padding-sm">
 	<div class="row">
 		<div class="col-md-3">
 			<ul class="nav nav-pills nav-stacked">

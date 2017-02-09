@@ -29,68 +29,50 @@
 	</div>
 </div>
 
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->forget('message') }}
-		</div>
-	</div>
-</div>
-@endif
-
-@if ($error = session('error'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-danger" role="alert">{{ $error }}</div>		
-			{{ session()->forget('error') }}
-		</div>
-	</div>
-</div>
-@endif
+@include('shared.message')
+@include('shared.error')
 
 <div id="orders" class="container">
 	<div class="row">
-	@if (sizeof($orders) > 0)
-		<div class="col-md-12 bottom-margin-sm">
-			<small>{{ count($orders) }} result(s) for <b>{{ $email }}</b></small>
-		</div>
-		<div class="col-md-12 bottom-margin-sm">
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<th class="text-center">Status</th>
-						<th>Name</th>
-						<th>Phone</th>
-						<th>Address</th>
-						<th>Created</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				@foreach($orders as $o)
-					<tr>
-						<td class="text-center">
-							<span class="label label-default">{{ ucfirst($o->status) }}</span>
-							{{-- {{ ucfirst($o->status) }} --}}
-						</td>
-						<td>{{ $o->name }}</td>
-						<td>{{ $o->phone_number }}</td>
-						<td>{{ $o->address }}</td>
-						<td>{{ $o->since() }}</td>
-						<td><a href="{{ url('order/'.$o->id) }}">Show</a></td>
-					</tr>				
-				@endforeach
-				</tbody>
-			</table>
-		</div>
-	@else
-		<div class="col-md-12 text-center">
-			<small>Type your email to search for your orders</small>
-		</div>
-	@endif		
+		@if (sizeof($orders) > 0)
+			<div class="col-md-12 bottom-margin-sm">
+				<small>{{ count($orders) }} result(s) for <b>{{ $email }}</b></small>
+			</div>
+			<div class="col-md-12 bottom-margin-sm">
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th class="text-center">Status</th>
+							<th>Name</th>
+							<th>Phone</th>
+							<th>Address</th>
+							<th>Created</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach($orders as $o)
+						<tr>
+							<td class="text-center">
+								<span class="label label-default">{{ ucfirst($o->status) }}</span>
+								{{-- {{ ucfirst($o->status) }} --}}
+							</td>
+							<td>{{ $o->name }}</td>
+							<td>{{ $o->phone_number }}</td>
+							<td>{{ $o->address }}</td>
+							<td>{{ $o->since() }}</td>
+							<td><a href="{{ url('order/'.$o->id) }}">Show</a></td>
+						</tr>				
+					@endforeach
+					</tbody>
+				</table>
+			</div>
+		@else
+			<div class="col-md-12 text-center">
+				<small>Type your email to search for your orders</small>
+			</div>
+		@endif		
 	</div>
 </div>
+<a id="scrollTop" href="#top">Scroll to top</a>
 @endsection

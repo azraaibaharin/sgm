@@ -5,49 +5,11 @@
 @endsection
 
 @section('content')
-@if ($message = session('message'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-info" role="alert">{{ $message }}</div>		
-			{{ session()->forget('message') }}
-		</div>
-	</div>
-</div>
-@endif
-
-@if ($success = session('success'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-success" role="alert">{{ $success }}</div>		
-			{{ session()->forget('success') }}
-		</div>
-	</div>
-</div>
-@endif
-
-@if ($error = session('error'))
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="alert alert-danger" role="alert">{{ $error }}</div>		
-			{{ session()->forget('error') }}
-		</div>
-	</div>
-</div>
-@endif
-
+@include('shared.message')
+@include('shared.success')
+@include('shared.error')
 <div class="container">
 @if (Cart::count() > 0)
-	<div class="row">
-		<div class="col-md-12">
-			<a class="btn btn-link" href="{{ url('products') }}">Continue Shopping</a>
-			<a class="btn btn-link" href="{{ url('cart/empty') }}">Empty Cart</a>
-			<a class="btn btn-default pull-right" href="{{ url('order/create') }}">Checkout</a>
-		</div>
-	</div>
-	<hr>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="table-responsive">
@@ -120,9 +82,8 @@
 @else
 	<div class="row">
 		<div class="col-md-12">
-			<h2>Your cart is empty</h2> 
-			<a class="btn btn-link" href="{{ url('products') }}">Continue shopping</a>
-			<br><br><br><br><hr>
+			<h2>Your cart is empty</h2><br>
+			<a href="{{ url('products') }}">See products</a>
 		</div>
 	</div>
 @endif

@@ -1,4 +1,4 @@
-@extends('layouts.product')
+@extends('layouts.testimonial')
 
 @section('breadcrumb')
 | Testimonial Details
@@ -17,7 +17,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{ $testimonial->title }}</h1>
-			<small>about {{ ucfirst($testimonial->product->brand) }} {{ $testimonial->product->model }}</small>
+			<small>about <a href="{{ url('products/'.$testimonial->product->id) }}">{{ ucfirst($testimonial->product->brand) }} {{ $testimonial->product->model }}</a></small>
 			<p>{!! $testimonial->text !!}</p>
 		</div>
 	</div>
