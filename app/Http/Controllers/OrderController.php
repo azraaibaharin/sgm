@@ -301,14 +301,14 @@ class OrderController extends Controller
     		$shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
     		if ($signature == $shaStr)
     		{
-    			return view('cart.payment_response')->withMessage('Successful!');
+    			return view('order.payment_response')->withMessage('Successful!');
     		} else 
     		{
-    			return view('cart.payment_response')->withMessage('Failed!');
+    			return view('order.payment_response')->withMessage('Failed!');
     		}
     	} else 
     	{
-    		return view('cart.payment_response')->withMessage('Payment transaction failed!');
+    		return view('order.payment_response')->withMessage('Payment transaction failed!');
     	}
     }
 
@@ -335,11 +335,11 @@ class OrderController extends Controller
     			echo 'RECEIVEOK';
     		} else 
     		{
-    			return view('cart.payment_response')->withMessage('Failed!');
+    			return view('order.payment_response')->withMessage('Failed!');
     		}
     	} else 
     	{
-    		return view('cart.payment_response')->withMessage('Payment transaction failed!');
+    		return view('order.payment_response')->withMessage('Payment transaction failed!');
     	}
     }
 
