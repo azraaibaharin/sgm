@@ -124,7 +124,6 @@
 		<div class="col-md-12">
 			<a class="btn btn-link pull-left" href="{{ url('cart') }}">Cancel</a>
 			<form class="form-inline pull-right" action="https://www.mobile88.com/epayment/entry.asp" method="post">
-				{{ csrf_field() }}
 				<input type="hidden" name="MerchantCode" value="{{ $merchantCode }}" />
 				<input type="hidden" name="PaymentId" value="{{ $order->id }}" />
 				<input type="hidden" name="RefNo" value="{{ $refNo }}" />

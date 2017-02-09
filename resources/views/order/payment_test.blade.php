@@ -12,7 +12,6 @@
 			<p>Response URL: {{ url('payment/response') }}</p>
 			<p>Response Back End URL: {{ url('payment/responseBE') }}</p>
 			<form class="form-inline" action="https://www.mobile88.com/epayment/entry.asp" method="post">
-				{{ csrf_field() }}
 				<input type="hidden" name="MerchantCode" value="{{ $merchantCode }}" />
 				<input type="hidden" name="PaymentId" value="" />
 				<input type="hidden" name="RefNo" value="{{ $refNo }}" />
