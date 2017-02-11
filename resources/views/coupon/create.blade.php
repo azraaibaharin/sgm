@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form class="form-horizontal" role="form" method="POST" action="{{ url('coupons/create') }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-padding-sm" role="form" method="POST" action="{{ url('coupons/create') }}" enctype="multipart/form-data">
 	{{ csrf_field() }}
     <div class="container">
         <div class="row">
@@ -21,15 +21,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    @if (Auth::guest())
-                        @include('shared.form.back', ['link' => 'home'])
-                    @else
-                        @include('shared.form.back', ['link' => 'coupons'])
-                    @endif
-                    @include('shared.form.submit')
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @if (Auth::guest())
+                    @include('shared.form.back', ['link' => 'home'])
+                @else
+                    @include('shared.form.back', ['link' => 'coupons'])
+                @endif
+                @include('shared.form.submit')
             </div>
         </div>
     </div>

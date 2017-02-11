@@ -24,15 +24,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    @if (Auth::guest())
-                        @include('shared.form.back', ['link' => 'home'])
-                    @else
-                        @include('shared.form.back', ['link' => 'warranties/'.session('id')])
-                    @endif
-                    @include('shared.form.submit')
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @if (Auth::guest())
+                    @include('shared.form.back', ['link' => 'home'])
+                @else
+                    @include('shared.form.back', ['link' => 'warranties/'.session('id')])
+                @endif
+                @include('shared.form.submit')
             </div>
         </div>
     </div>

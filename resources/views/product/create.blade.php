@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('products/create') }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-padding-sm" role="form" method="POST" action="{{ url('products/create') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="container">
         <div class="row">
@@ -33,11 +33,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    @include('shared.form.back', ['link' => 'products'])
-                    @include('shared.form.submit')
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @include('shared.form.back', ['link' => 'products'])
+                @include('shared.form.submit')
             </div>
         </div>
     </div>

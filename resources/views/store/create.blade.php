@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form class="form-horizontal bottom-margin-sm" role="form" method="POST" action="{{ url('stores/create') }}" enctype="multipart/form-data">
+<form class="form-horizontal bottom-padding-sm" role="form" method="POST" action="{{ url('stores/create') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="container">
         <div class="row">
@@ -30,11 +30,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <a href="{{ url('stores') }}" class="btn btn-link pull-left">Back</a>
-                    <button type="submit" class="btn btn-default pull-right">Submit</button>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @include('shared.form.back', ['link' => 'stores'])
+                @include('shared.form.submit')
             </div>
         </div>
     </div>

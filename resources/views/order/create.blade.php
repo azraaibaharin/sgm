@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-<div id="checkout" class="container">
-	<form class="form-horizontal" role="form" method="POST" action="{{ url('order/store') }}">
-		{{ csrf_field() }}
+<form class="form-horizontal bottom-padding sm" role="form" method="POST" action="{{ url('order/store') }}">
+	{{ csrf_field() }}
+	<div id="checkout" class="container">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-6">
 				<h3>Personal Details</h3>
@@ -46,6 +46,6 @@
 				<input class="pull-right btn btn-default" type="submit" value="Proceed to Review Order">
 			</div>
 		</div>
-	</form>
-</div>
+	</div>
+</form>
 @endsection
