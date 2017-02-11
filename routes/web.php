@@ -18,47 +18,50 @@
 Auth::routes();
 
 // Home
-Route::get('/', 'HomeController@index');
-Route::post('/contact', 'HomeController@contact');
-Route::get('/home', 'HomeController@index');
-Route::get('/home/edit', 'HomeController@edit')->middleware('auth');
-Route::post('/home/edit', 'HomeController@update')->middleware('auth');
+Route::get('', 'HomeController@index');
+Route::post('contact', 'HomeController@contact');
+Route::get('home', 'HomeController@index');
+Route::get('home/edit', 'HomeController@edit')->middleware('auth');
+Route::post('home/edit', 'HomeController@update')->middleware('auth');
 
 // Product
-Route::get('/products', 'ProductController@index');
-Route::get('/products/b/{brand}', 'ProductController@index');
-Route::get('/products/b/{brand}/c/{category}', 'ProductController@index');
-Route::post('/products', 'ProductController@filter');
-Route::get('/products/create', 'ProductController@create')->middleware('auth');
-Route::post('/products/create', 'ProductController@store')->middleware('auth');
-Route::get('/products/import', 'ProductController@import')->middleware('auth');
-Route::post('/products/import', 'ProductController@store2')->middleware('auth');
-Route::get('/products/{id}', 'ProductController@show');
-Route::get('/products/{id}/edit', 'ProductController@edit')->middleware('auth');
-Route::post('/products/{id}/edit', 'ProductController@update')->middleware('auth');
-Route::post('/products/delete', 'ProductController@destroy')->middleware('auth');
+Route::get('products', 'ProductController@index');
+Route::get('products/b/{brand}', 'ProductController@index');
+Route::get('products/b/{brand}/c/{category}', 'ProductController@index');
+Route::post('products', 'ProductController@filter');
+Route::get('products/create', 'ProductController@create')->middleware('auth');
+Route::post('products/create', 'ProductController@store')->middleware('auth');
+Route::get('products/import', 'ProductController@import')->middleware('auth');
+Route::post('products/import', 'ProductController@store2')->middleware('auth');
+Route::get('products/{id}', 'ProductController@show');
+Route::get('products/{id}/edit', 'ProductController@edit')->middleware('auth');
+Route::post('products/{id}/edit', 'ProductController@update')->middleware('auth');
+Route::post('products/delete', 'ProductController@destroy')->middleware('auth');
 
 // Cart
-Route::resource('cart', 'CartController', ['only' => ['index', 'store', 'update', 'destroy']]);
+Route::get('cart', 'CartController@show');
+Route::post('cart', 'CartController@addProduct');
+Route::post('cart/coupon', 'CartController@applyCoupon');
+Route::get('cart/empty', 'CartController@empty');
 Route::get('cart/{id}/add', 'CartController@add');
 Route::get('cart/{id}/remove', 'CartController@remove');
-Route::get('cart/empty', 'CartController@empty');
-Route::post('cart/coupon', 'CartController@addCoupon');
 
 // Order
+Route::get('payment', 'OrderController@payment');
+Route::get('order', 'OrderController@index')->middleware('auth');
 Route::get('order/create', 'OrderController@create');
 Route::post('order/store', 'OrderController@store');
+Route::get('order/{id}', 'OrderController@show')->middleware('auth');
+Route::put('order/{id}', 'OrderController@update')->middleware('auth');
+Route::delete('order/{id}', 'OrderController@destroy')->middleware('auth');
+
+
 Route::get('order/complete', 'OrderController@complete');
+
 Route::post('payment/response', 'OrderController@paymentResponse');
 Route::post('payment/responseBE', 'CartController@paymentResponseBE');
 Route::get('payment/response', 'OrderController@paymentResponse');
 Route::get('payment/responseBE', 'CartController@paymentResponseBE');
-Route::get('payment', 'OrderController@payment');
-Route::get('order', 'OrderController@index');
-Route::post('order/search', 'OrderController@search');
-Route::get('order/{id}', 'OrderController@show');
-Route::put('order/{id}', 'OrderController@update');
-Route::delete('order/{id}', 'OrderController@destroy');
 
 // Article
 Route::get('articles', 'ArticleController@index');

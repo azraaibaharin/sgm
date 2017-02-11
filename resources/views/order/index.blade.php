@@ -5,38 +5,13 @@
 @endsection
 
 @section('content')
-<div class="container">
-	<div id="orders-search" class="row">
-		<form class="form-horizontal" role="form" method="POST" action="{{ url('order/search') }}" enctype="multipart/form-data">
-			{{ csrf_field() }}
-			<div class="col-md-4">
-				<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                    <label for="email" class="col-md-2 control-label">Email</label>
-                    <div class="col-md-10">
-                        <input class="form-control type="text" name="email">
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-			</div>
-			<div class="col-md-2">
-				<button type="submit" class="center-block btn btn-default">Search</button>
-			</div>
-		</form>
-	</div>
-</div>
-
 @include('shared.message')
 @include('shared.error')
-
 <div id="orders" class="container">
 	<div class="row">
 		@if (sizeof($orders) > 0)
 			<div class="col-md-12 bottom-margin-sm">
-				<small>{{ count($orders) }} result(s) for <b>{{ $email }}</b></small>
+				<small>{{ count($orders) }} result(s)</small>
 			</div>
 			<div class="col-md-12 bottom-margin-sm">
 				<table class="table table-striped table-bordered">
@@ -44,8 +19,7 @@
 						<tr>
 							<th class="text-center">Status</th>
 							<th>Name</th>
-							<th>Phone</th>
-							<th>Address</th>
+							<th>Reference No</th>
 							<th>Created</th>
 							<th></th>
 						</tr>
@@ -58,8 +32,7 @@
 								{{-- {{ ucfirst($o->status) }} --}}
 							</td>
 							<td>{{ $o->name }}</td>
-							<td>{{ $o->phone_number }}</td>
-							<td>{{ $o->address }}</td>
+							<td>{{ $o->reference_number }}</td>
 							<td>{{ $o->since() }}</td>
 							<td><a href="{{ url('order/'.$o->id) }}">Show</a></td>
 						</tr>				
@@ -69,7 +42,7 @@
 			</div>
 		@else
 			<div class="col-md-12 text-center">
-				<small>Type your email to search for your orders</small>
+				<small>No orders avaible</small>
 			</div>
 		@endif		
 	</div>

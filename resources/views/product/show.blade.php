@@ -75,8 +75,8 @@
 						<div class="col-md-12"><label>Dimension:</label> {{ $dimension == '' ? 'Not set' : $dimension }}</div>
 						<div class="col-md-12"><label>Weight Capacity:</label> {{ $weight_capacity == '' ? 'Not set' : $weight_capacity.'kg' }}</div>
 						<div class="col-md-12"><label>Age Requirement:</label> {{ $age_requirement == '' ? 'Not set' : $age_requirement.' years old' }}</div>
-						<div class="col-md-12"><label>Awards:</label> {{ $awards == '' ? 'None' : $awards }}</div>
-						<div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set @else <a href="{{ $download_links }}">Click here to download</a>@endif</div>
+						@if ($awards != '')  <div class="col-md-12"><label>Awards:</label> {{ $awards }}</div>@endif
+						{{-- <div class="col-md-12"><label>Manual:</label> @if ($download_links == '') Not set @else <a href="{{ $download_links }}">Click here to download</a>@endif</div> --}}
 					</div>
 				</div>
 				<div class="col-md-6">

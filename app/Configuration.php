@@ -24,4 +24,9 @@ class Configuration extends Model
     protected $fillable = [
     	'key', 'value'
     ];
+
+    public function scopeShippingRatePerKilo($query)
+    {
+        return $query->where('key', 'shipping_rate_per_kilo');
+    }
 }

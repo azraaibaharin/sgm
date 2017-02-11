@@ -29,4 +29,16 @@ class Coupon extends Model
 		'date_of_expiration',
 		'date_of_issue'
     ];
+
+    /**
+     * Scope a query to get the first coupon of the given code.
+     * 
+     * @param  \Illuminate\Database\Eloquent\Builder $query 
+     * @param  String $code
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfCode($query, $code)
+    {
+        return $query->where('code', $code);
+    }
 }

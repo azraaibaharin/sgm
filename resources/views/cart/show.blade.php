@@ -50,15 +50,15 @@
 				            <td class="text-center" style="vertical-align:middle;">RM{{ Cart::total(2, '.', '') }}</td>
 				        </tr>
 				        @if(session('coupon_total_value') > 0)
-							<tr>
+							<tr class="active">
 								<td>&nbsp</td>
-								<td class="text-center">Discounted</td>
+								<td class="text-center">Discount</td>
 								<td class="text-center">-RM{{ session('coupon_total_value') }}</td>
 							</tr>
 						@endif
-						<tr>
+						<tr class="active">
 							<td>&nbsp</td>
-							<td class="text-center">Delivery Cost</td>
+							<td class="text-center">Delivery</td>
 							<td class="text-center">RM{{ session('delivery_cost') }}</td>
 						</tr>
 						<tr class="active">
@@ -83,7 +83,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h2>Your cart is empty</h2><br>
-			<a href="{{ url('products') }}">See products</a>
+			<a href="{{ url('products') }}">Continue to products</a>
 		</div>
 	</div>
 @endif
