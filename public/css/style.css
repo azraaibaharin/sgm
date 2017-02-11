@@ -288,6 +288,9 @@ and (min-width: 991px){
 	#products .img-box {
 		height: 195px;
 	}
+	#products .img-box > img{
+		max-height: 195px;
+	}
 }
 
 @media only screen 
