@@ -30,11 +30,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    @include('shared.form.back', ['link' => 'stores/'.session('id')])
-                    @include('shared.form.submit')
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @include('shared.form.back', ['link' => 'stores/'.session('id')])
+                @include('shared.form.submit')
             </div>
         </div>
     </div>

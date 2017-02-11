@@ -119,8 +119,9 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-12 bottom-margin-sm">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 @include('shared.form.back', ['link' => 'home'])
                 @include('shared.form.submit')
             </div>
