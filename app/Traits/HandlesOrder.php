@@ -82,7 +82,7 @@ trait HandlesOrder {
     	$order->name               = $request->session()->get($this->orderNameKey);
     	$order->email              = $request->session()->get($this->orderEmailKey);
     	$order->phone_number       = $request->session()->get($this->orderPhoneNumberKey);
-    	$order->addresss           = $this->getAddress($request);
+    	$order->address            = $this->getAddress($request);
     	$order->delivery_cost      = $this->getDeliveryCost();
     	$order->coupon_total_value = $this->getCouponTotalValue($request);
     	$order->total_price		   = Cart::total(2, '.', '');
