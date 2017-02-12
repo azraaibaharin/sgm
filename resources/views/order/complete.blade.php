@@ -1,15 +1,16 @@
 @extends('layouts.order')
 
 @section('breadcrumb')
-| Order Completed
+| Complete
 @endsection
 
 @section('content')
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h2>Your order has been sent for processing</h2>
-			<a class="btn btn-link" href="{{ url('products') }}">Continue Shopping</a>
+			<h2>{{ $message }}</h2>
+			<h3>Your order reference number is: {{ $referenceNumber }}</h3>
+			<a class="btn btn-link" href="{{ url('products') }}">Return to Products</a>
 		</div>
 	</div>
 </div>

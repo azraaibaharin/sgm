@@ -75,59 +75,8 @@ class OrderController extends Controller
     public function store(StoreOrder $request)
     {
         $this->saveToSession($request);
-        // $shoppingCartId = $this->getShoppingCartId();
-        // $order = $this->order->where('shoppingcart_id', $shoppingCartId)->first();
-
-        // if ($order == null)
-        // {
-        //     $order = $this->order;
-        //     $order->name = $request->name;
-        //     $order->email = $request->email;
-        //     $order->phone_number = $request->phone_number;
-        //     $order->address = $this->getAddress($request);
-        //     $order->delivery_cost = $this->getDeliveryCost();
-        //     $order->coupon_total_value = $this->getCouponTotalValue();
-        //     $order->status = 'new';
-        //     $order->shoppingcart_id = $shoppingCartId;
-        //     $order->reference_number = 'OD'.$shoppingCartId;
-        //     $order->save();
-
-        //     $request->session()->put($this->orderIdKey, $order->id);
-        // }
 
         return redirect('payment');
-    }
-
-    /**
-     * Completes the order.
-     * 1. Clear cart.
-     * 2. Clear stored session data related to order: order_id, coupon_ids, coupon_total_value, delivery_cost, final_price.
-     * 
-     * @param  Request $request [description]
-     * @return [type]           [description]
-     */
-    public function complete(Request $request)
-    {
-        $orderId = $request->session()->get($this->orderIdKey);
-        $order = $this->order->find($orderId);
-
-        if ($order)
-        {
-            Cart::destroy();
-            session()->forget($this->orderIdKey);
-            session()->forget($this->orderEmailKey);
-            session()->forget($this->couponIdsKey);
-            session()->forget($this->couponTotalValueKey);
-            session()->forget($this->deliveryCostKey);
-            session()->forget($this->finalPriceKey);
-            $order->status = 'Paid';
-            $order->save();
-        } else 
-        {
-            return view('order.incomplete');
-        }
-
-        return view('order.complete')->with('orderId', $orderId);
     }
 
     /**
@@ -138,13 +87,15 @@ class OrderController extends Controller
      */
     public function payment(Request $request)
     {
-        $merchantKey  = config('payment.merchant_key');
-        $merchantCode = config('payment.merchant_code');
-        $refNo        = $this->getReferenceNumber();
-        $amount       = '1.00';
-        $amountStr    = str_replace(['.', ','], "", $amount);
-        $currency     = config('payment.currency');
-        $signature    = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+        $merchantKey      = config('payment.merchant_key');
+        $merchantCode     = config('payment.merchant_code');
+        $refNo            = $this->getReferenceNumber();
+        $amount           = '1.00';
+        $amountStr        = str_replace(['.', ','], "", $amount);
+        $currency         = config('payment.currency');
+        $signature        = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+        $deliveryCost     = $this->getDeliveryCost();
+        $couponTotalValue = $this->getCouponTotalValue($request);
 
         return view('order.payment')
                     ->with('merchantCode', $merchantCode)
@@ -152,9 +103,9 @@ class OrderController extends Controller
                     ->with('amount', $amount)
                     ->with('currency', $currency)
                     ->with('signature', $signature)
-                    ->with('couponTotalValue', $this->getCouponTotalValue($request))
-                    ->with('deliveryCost', $this->getDeliveryCost())
-                    ->with('finalPrice', $this->getFinalPrice($this->getCouponTotalValue($request), $this->getDeliveryCost()))
+                    ->with('couponTotalValue', $couponTotalValue)
+                    ->with('deliveryCost', $deliveryCost)
+                    ->with('finalPrice', $this->getFinalPrice($couponTotalValue, $deliveryCost))
                     ->with('name', $this->getName($request))
                     ->with('email', $this->getEmail($request))
                     ->with('phoneNumber', $this->getPhoneNumber($request))
@@ -164,66 +115,67 @@ class OrderController extends Controller
     /**
      * Process payment response's POST request.
      *
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * @param  Request $request 
+     * @return \Illuminate\Http\Response
      */
     public function paymentResponse(Request $request)
     {
-        $merchantKey = config('payment.merchant_key');
+        $merchantKey  = config('payment.merchant_key');
         $merchantCode = config('payment.merchant_code');
-    	$status = $request->Status;
-    	$signature = $request->Signature;
-    	$merchantCode = $request->MerchantCode;
-    	$refNo = $request->RefNo;
-    	$amountStr = $request->Amount;
-    	$currency = $request->Currency;
+        $status       = $request->Status;
+        $signature    = $request->Signature;
+        $merchantCode = $request->MerchantCode;
+        $refNo        = $request->RefNo;
+        $amountStr    = $request->Amount;
+        $currency     = $request->Currency;
+        $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
+        $orderStatus  = $isSuccess ? 'payment sent' : 'payment failed';
+        $message      = 'Payment transaction was incomplete. Please contact sales@babyhood.com providing with the order refernce number for assistance.';
 
-    	if ($status == 1)
+    	if ($isSuccess)
     	{
-    		$shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-    		if ($signature == $shaStr)
-    		{
-    			return view('order.payment_response')->withMessage('Successful!');
-    		} else 
-    		{
-    			return view('order.payment_response')->withMessage('Failed!');
-    		}
-    	} else 
-    	{
-    		return view('order.payment_response')->withMessage('Payment transaction failed!');
+            $message = 'Thank you for the payment!. Your order is currently being processed.';
     	}
+
+        $order = $this->storeFromSession($request, $orderStatus, $refNo);    
+        $this->sendEmail($request, $order);
+        $this->clearOrder($request);
+        $this->clearCart($request);
+        $this->cleraCoupons($request);
+
+        return view('order.complete')
+                    ->withReferenceNumber($refNo)
+                    ->withMessage($message)
+                    -withIsSuccess($isSuccess);
     }
 
     /**
      * Process Back End payment response's POST request.
      *
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
      */
     public function paymentResponseBE(Request $request)
     {
-        $merchantKey = config('payment.merchant_key');
+        $merchantKey  = config('payment.merchant_key');
         $merchantCode = config('payment.merchant_code');
-    	$status = $request->Status;
-    	$signature = $request->Signature;
-    	$merchantCode = $request->MerchantCode;
-    	$refNo = $request->RefNo;
-    	$amountStr = $request->Amount;
-    	$currency = $request->Currency;
+        $status       = $request->Status;
+        $signature    = $request->Signature;
+        $merchantCode = $request->MerchantCode;
+        $refNo        = $request->RefNo;
+        $amountStr    = $request->Amount;
+        $currency     = $request->Currency;
+        $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
+        $message      = 'Payment transaction was incomplete';
 
-    	if ($status == 1)
-    	{
-    		$shaStr = $this->iPay88_signature($merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-    		if ($signature == $shaStr)
-    		{
-    			echo 'RECEIVEOK';
-    		} else 
-    		{
-    			return view('order.payment_response')->withMessage('Failed!');
-    		}
-    	} else 
-    	{
-    		return view('order.payment_response')->withMessage('Payment transaction failed!');
-    	}
+        if ($isSuccess)
+        {
+            echo 'RECEIVEOK';
+        }
+
+    	return view('order.complete')
+                    ->withReferenceNumber($refNo)
+                    ->withMessage($message)
+                    -withIsSuccess($isSuccess);
     }
 }

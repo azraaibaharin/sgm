@@ -39,6 +39,10 @@ class Order extends Model
     	'shoppingcart_id'
     ];
 
+    /**
+     * Return a human readable string for the difference between created at date and current date.
+     * @return String a human readable string for the difference between created at date and current date
+     */
     public function since()
     {
         $created = $this->attributes['created_at'];

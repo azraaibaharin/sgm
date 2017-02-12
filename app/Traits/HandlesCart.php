@@ -42,9 +42,9 @@ trait HandlesCart {
      */
     public function clearCart(Request $request)
     {
-        $request->session()->put($this->couponTotalValueKey, '');
-        $request->session()->put($this->deliveryCostKey, '');
-        $request->session()->put($this->finalPriceKey, '');   
+        $request->session()->forget($this->couponTotalValueKey);
+        $request->session()->forget($this->deliveryCostKey);
+        $request->session()->forget($this->finalPriceKey);
     }
 
 	/**

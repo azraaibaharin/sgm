@@ -95,6 +95,6 @@ class CartController extends Controller
         Cart::destroy();
         $this->clearCoupons($request);
 
-     	return redirect('cart')->withMessage('Cart is emptied');   
+     	return redirect('cart')->withMessage('Cart is empty now');   
     }
 }

@@ -3,15 +3,16 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use App\Traits\HandlesCoupon;
 use App\Traits\HandlesCart;
+use App\Order;
 
 trait HandlesOrder {
 
 	use HandlesCart;
 
-	protected $orderIdKey = 'order_id';
 	protected $orderNameKey = 'order_name';
 	protected $orderEmailKey = 'order_email';
     protected $orderPhoneNumberKey = 'order_phone_number';
@@ -24,22 +25,20 @@ trait HandlesOrder {
     protected $orderReferenceNumberKey = 'order_reference_number';
 
     /**
-     * Return constructed address text.
+     * Send email of Order details to sales.
      *
-     * @param  Request $request
-     * @return constructed address text
+     * @param  Request $request 
+     * @return void
      */
-    public function getAddress(Request $request)
+    public function sendEmail(Request $request, $order)
     {
-    	$number   = $request->session()->get($this->orderHouseNumberKey);
-    	$street   = $request->session()->get($this->orderStreetKey);
-    	$city     = $request->session()->get($this->orderCityKey);
-    	$postcode = $request->session()->get($this->orderPostcodeKey);
-    	$country  = $request->session()->get($this->orderCountryKey);
-
-    	return $number.', '.$street.', '.$city.', '.$postcode.', '.$country;
+    	$salesEmail = 'dominoseffect@gmail.com';
+        
+        Mail::to($salesEmail)->send(new OrderSubmitted(
+        	$order,
+        	Cart::content()
+       	));
     }
-
     /**
      * Save order details to session.
      *
@@ -50,12 +49,62 @@ trait HandlesOrder {
     {
     	$request->session()->put($this->orderNameKey, $request->name);
     	$request->session()->put($this->orderEmailKey, $request->email);
-    	$request->session()->put($this->orderPhoneNumberKey, $request->name);
+    	$request->session()->put($this->orderPhoneNumberKey, $request->phone_number);
     	$request->session()->put($this->orderHouseNumberKey, $request->number);
     	$request->session()->put($this->orderStreetKey, $request->street);
     	$request->session()->put($this->orderCityKey, $request->city);
     	$request->session()->put($this->orderPostcodeKey, $request->postcode);
     	$request->session()->put($this->orderCountryKey, $request->country);
+    }
+
+    /**
+     * Store Order details to database from session.
+     *
+     * @param  Request $request
+     * @param  String $status 			the order status
+     * @param  String $referenceNumber 	the order reference number
+     * @return App/Order the Order instance
+     */
+    public function storeFromSession(Request $request, String $status, String $referenceNumber)
+    {
+    	$order = new Order;
+
+    	$order->status             = $status;
+    	$order->reference_number   = $referenceNumber;
+    	$order->name               = $request->session()->get($this->orderNameKey);
+    	$order->email              = $request->session()->get($this->orderEmailKey);
+    	$order->phone_number       = $request->session()->get($this->orderPhoneNumberKey);
+    	$order->addresss           = $this->getAddress($request);
+    	$order->delivery_cost      = $this->getDeliveryCost();
+    	$order->coupon_total_value = $this->getCouponTotalValue($request);
+    	$order->total_price		   = Cart::total(2, '.', '');
+    	$order->final_price 	   = $this->getFinalPrice($order->coupon_total_value, $order->delivery_cost);
+    	$order->shopping_cart_id   = $this->getShoppingCartId();
+    	
+    	$order->save();
+
+    	return $order;
+    }
+
+    /**
+     * Clear all Order related values stored in session.
+     *
+     * @param  Request $request
+     * @return void
+     */
+    public function clearOrder(Request $request)
+    {
+        Cart::destroy();
+        $request->session()->forget($this->orderNameKey);
+        $request->session()->forget($this->orderEmailKey);
+        $request->session()->forget($this->orderPhoneNumberKey);
+        $request->session()->forget($this->orderHouseNumberKey);
+        $request->session()->forget($this->orderStreetKey);
+        $request->session()->forget($this->orderCityKey);
+        $request->session()->forget($this->orderPostcodeKey);
+        $request->session()->forget($this->orderCountryKey);
+        $request->session()->forget($this->orderShoppingCartIdKey);
+        $request->session()->forget($this->orderReferenceNumberKey);
     }
 
     /**
@@ -92,13 +141,42 @@ trait HandlesOrder {
     }
 
     /**
+     * Return constructed address text.
+     *
+     * @param  Request $request
+     * @return constructed address text
+     */
+    public function getAddress(Request $request)
+    {
+    	$number   = $request->session()->get($this->orderHouseNumberKey);
+    	$street   = $request->session()->get($this->orderStreetKey);
+    	$city     = $request->session()->get($this->orderCityKey);
+    	$postcode = $request->session()->get($this->orderPostcodeKey);
+    	$country  = $request->session()->get($this->orderCountryKey);
+
+    	return $number.', '.$street.', '.$city.', '.$postcode.', '.$country;
+    }
+
+    /**
      * Returns the order reference number.
      * 
      * @return String order reference number
      */
     public function getReferenceNumber()
     {
-    	return 'OD'.$this->getShoppingCartId();
+    	return 'OD'.str_random(8).Carbon::now()->timestamp;
+    }
+
+    /**
+     * Checks whether the response signtaure is equivalent to the rawSignature.
+     *
+     * @param  String  $responseSignature 
+     * @param  String  $rawSignature      
+     * @return boolean whether the response signtaure is equivalent to the rawSignature
+     */
+    public function isValidSignature($responseSignature, $rawSignature)
+    {
+    	return $responseSignature == $this->getSignature($rawSignature);
     }
 
     /**

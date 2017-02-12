@@ -47,7 +47,6 @@ Route::get('cart/{id}/add', 'CartController@add');
 Route::get('cart/{id}/remove', 'CartController@remove');
 
 // Order
-Route::get('payment', 'OrderController@payment');
 Route::get('order', 'OrderController@index')->middleware('auth');
 Route::get('order/create', 'OrderController@create');
 Route::post('order/store', 'OrderController@store');
@@ -55,13 +54,10 @@ Route::get('order/{id}', 'OrderController@show')->middleware('auth');
 Route::put('order/{id}', 'OrderController@update')->middleware('auth');
 Route::delete('order/{id}', 'OrderController@destroy')->middleware('auth');
 
-
-Route::get('order/complete', 'OrderController@complete');
-
+// Payment
+Route::get('payment', 'OrderController@payment');
 Route::post('payment/response', 'OrderController@paymentResponse');
 Route::post('payment/responseBE', 'CartController@paymentResponseBE');
-Route::get('payment/response', 'OrderController@paymentResponse');
-Route::get('payment/responseBE', 'CartController@paymentResponseBE');
 
 // Article
 Route::get('articles', 'ArticleController@index');

@@ -51,7 +51,7 @@ trait HandlesCoupon {
      */
     public function clearCoupons(Request $request)
     {
-        $request->session()->put($this->couponIdsKey, '');
+        $request->session()->forget($this->couponIdsKey);
     }
 
 	/**
