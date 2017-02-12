@@ -63,18 +63,23 @@ class HomeController extends Controller
     protected $shippingRatePerKiloKey = 'shipping_rate_per_kilo';
 
     /**
+     * The configuration key for sales team email.
+     * @var string
+     */
+    protected $emailSalesKey = 'email_sales';
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
     public function __construct(Home $home, Article $article, Testimonial $testimonial, Product $product, Configuration $configuration)
     {
-        $this->home = $home;
-        $this->article = $article;
-        $this->testimonial = $testimonial;
-        $this->product = $product;
+        $this->home          = $home;
+        $this->article       = $article;
+        $this->testimonial   = $testimonial;
+        $this->product       = $product;
         $this->configuration = $configuration;
-
         $this->init();
     }
 
@@ -85,9 +90,12 @@ class HomeController extends Controller
      */
     private function init()
     {
-        $this->configuration->firstOrCreate(['key' => $this->shippingRatePerKiloKey, 'value' => '0.00']);
+        $shippingRatePerKiloConfig = $this->configuration->firstOrCreate(['key' => $this->shippingRatePerKiloKey]);
+        $emailSalesConfig = $this->configuration->firstOrCreate(['key' => $this->emailSalesKey]);
+
         $babyhoodIds = $this->product->where('brand', 'babyhood')->pluck('id');
-        $nunaIds = $this->product->where('brand', 'nuna')->pluck('id');
+        $nunaIds     = $this->product->where('brand', 'nuna')->pluck('id');
+
         $this->productBrandIds = collect(['babyhood' => $babyhoodIds,'nuna' => $nunaIds]);
     }
 
@@ -137,7 +145,8 @@ class HomeController extends Controller
     protected function edit(Request $request)
     {
         $this->flashAttributesToSession($request, $this->home->firstOrFail());
-        session()->flash('shipping_rate_per_kilo', $this->configuration->where('key', $this->shippingRatePerKiloKey)->first()->value);
+        session()->flash($this->shippingRatePerKiloKey, $this->configuration->shippingRatePerKilo()->first()->value);
+        session()->flash($this->emailSalesKey, $this->configuration->emailSales()->first()->value);
 
         return view('home.edit');
     }
@@ -152,30 +161,34 @@ class HomeController extends Controller
         Log::info('Updating home page.');
         $home = $this->home->first();
 
-        $home->nuna_text = $request['nuna_text'];
-        $home->nuna_img = $this->imageUpload($request, 'nuna_img', $home->nuna_img);
-        $home->babyhood_text = $request['babyhood_text'];
-        $home->about_text = $request['about_text'];
-        $home->babyhood_img = $this->imageUpload($request, 'babyhood_img', $home->babyhood_img);
-        $home->tagline_title = $request['tagline_title'];
-        $home->tagline_text = $request['tagline_text'];
-        $home->tagline_img = $this->imageUpload($request, 'tagline_img', $home->tagline_img);
-        $home->event_title = $request['event_title'];
-        $home->event_text = $request['event_text'];
-        $home->event_img = $this->imageUpload($request, 'event_img', $home->event_img);
-        $home->potm_title = $request['potm_title'];
-        $home->potm_text = $request['potm_text'];
-        $home->potm_img = $this->imageUpload($request, 'potm_img', $home->potm_img);
-        $home->facebook_babyhood_url = $request['facebook_babyhood_url'];
+        $home->nuna_text              = $request['nuna_text'];
+        $home->nuna_img               = $this->imageUpload($request, 'nuna_img', $home->nuna_img);
+        $home->babyhood_text          = $request['babyhood_text'];
+        $home->about_text             = $request['about_text'];
+        $home->babyhood_img           = $this->imageUpload($request, 'babyhood_img', $home->babyhood_img);
+        $home->tagline_title          = $request['tagline_title'];
+        $home->tagline_text           = $request['tagline_text'];
+        $home->tagline_img            = $this->imageUpload($request, 'tagline_img', $home->tagline_img);
+        $home->event_title            = $request['event_title'];
+        $home->event_text             = $request['event_text'];
+        $home->event_img              = $this->imageUpload($request, 'event_img', $home->event_img);
+        $home->potm_title             = $request['potm_title'];
+        $home->potm_text              = $request['potm_text'];
+        $home->potm_img               = $this->imageUpload($request, 'potm_img', $home->potm_img);
+        $home->facebook_babyhood_url  = $request['facebook_babyhood_url'];
         $home->instagram_babyhood_url = $request['instagram_babyhood_url'];
-        $home->facebook_nuna_url = $request['facebook_nuna_url'];
-        $home->instagram_nuna_url = $request['instagram_nuna_url'];
-        $home->contact_email = $request['contact_email'];
+        $home->facebook_nuna_url      = $request['facebook_nuna_url'];
+        $home->instagram_nuna_url     = $request['instagram_nuna_url'];
+        $home->contact_email          = $request['contact_email'];
         $home->save();
 
-        $configuration = $this->configuration->where('key', $this->shippingRatePerKiloKey)->first();
-        $configuration->value = $request->shipping_rate_per_kilo;
-        $configuration->save();
+        $configShippingPerKilo        = $this->configuration->shippingRatePerKilo()->first();
+        $configShippingPerKilo->value = $request->shipping_rate_per_kilo;
+        $configShippingPerKilo->save();
+
+        $configEmailSales        = $this->configuration->emailSales()->first();
+        $configEmailSales->value = $request->email_sales;
+        $configEmailSales->save();
 
         return back()->withMessage("Update successful!");
     }

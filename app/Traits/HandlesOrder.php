@@ -11,6 +11,7 @@ use App\Traits\HandlesCoupon;
 use App\Traits\HandlesCart;
 use App\Mail\OrderSubmitted;
 use App\Order;
+use App\Configuration;
 use Cart;
 
 trait HandlesOrder {
@@ -36,7 +37,7 @@ trait HandlesOrder {
      */
     public function sendEmail(Request $request, $order)
     {
-    	$salesEmail = 'dominoseffect@gmail.com';
+    	$salesEmail = is_null(Configuration::emailSales()->first()) ? 'dominoseffect@gmail.com' : Configuration::emailSales()->first();
         
         Log::info('Send email notification to sales team: '.$salesEmail);
 
