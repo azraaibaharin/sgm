@@ -36,6 +36,6 @@ class OrderSubmitted extends Mailable
      */
     public function build()
     {
-        return $this->subject('New Order From Supremeglobal.com.my: '.$this->order->reference_number)->view('emails.order.submitted');
+        return $this->subject('New Order From Supremeglobal.com.my: '.$this->order->reference_number)->view('emails.ordersubmitted');
     }
 }
