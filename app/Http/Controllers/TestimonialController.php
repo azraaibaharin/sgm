@@ -73,8 +73,8 @@ class TestimonialController extends Controller
      */
     public function filter(Request $request) 
     {
-        $brands = $this->product->getBrands();
-        $brand = $request->brand;
+        $brands       = $this->product->getBrands();
+        $brand        = $request->brand;
         $testimonials = [];
         
         if ($brand != $brands[0])
@@ -114,8 +114,8 @@ class TestimonialController extends Controller
         Log::info('Storing testimonial');
 
         $this->testimonial->product_id = $request->product_id;
-        $this->testimonial->title = $request->title;
-        $this->testimonial->text = $request->text;
+        $this->testimonial->title      = $request->title;
+        $this->testimonial->text       = $request->text;
         $this->testimonial->save();
 
         return redirect('testimonials/'.$this->testimonial->id);
@@ -132,22 +132,24 @@ class TestimonialController extends Controller
         Log::info('Showing testimonial id: '.$id);
 
         $testimonial = $this->testimonial->findOrFail($id);
+
         return view('testimonial.show')->with('testimonial', $testimonial);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $testimonial = $this->testimonial->findOrFail($id);
-        $products = $this->product->all();
+        Log::info('Editing testimonial id: '.$id);
 
-        return view('testimonial.edit', $testimonial->toArray())
-                ->with('products', $products);
+        $this->flashAttributesToSession($request, $this->testimonial->findOrFail($id));
+
+        return view('testimonial.edit')->with('products', $this->product->all());
     }
 
     /**
@@ -161,10 +163,11 @@ class TestimonialController extends Controller
     {
         Log::info('Updating testimonial id: '.$id);
 
-        $testimonial = $this->testimonial->findOrFail($id);
+        $testimonial             = $this->testimonial->findOrFail($id);
         $testimonial->product_id = $request['product_id'];
-        $testimonial->title = $request['title'];
-        $testimonial->text = $request['text'];
+        $testimonial->title      = $request['title'];
+        $testimonial->text       = $request['text'];
+
         $testimonial->save();
 
         return redirect('testimonials/'.$testimonial->id)->withMessage('Updated');
@@ -180,9 +183,10 @@ class TestimonialController extends Controller
     {
         Log::info('Removing testimonial id: '.$request->testimonial_id);
 
-        $testimonialId = $request->testimonial_id;
-        $testimonial = $this->testimonial->findOrFail($testimonialId);
+        $testimonialId    = $request->testimonial_id;
+        $testimonial      = $this->testimonial->findOrFail($testimonialId);
         $testimonialTitle = $testimonial->title;
+
         $this->testimonial->destroy($testimonialId);
 
         return redirect('testimonials')->with('message', 'Successfully deleted \''.$testimonialTitle.'\'');

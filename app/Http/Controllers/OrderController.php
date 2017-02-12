@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Log;
 
 use App\Http\Requests\StoreOrder;
 use App\Order;
 use App\Traits\HandlesOrder;
+use App\Traits\FlashModelAttributes;
 use Auth;
 use Cart;
-use CartAlreadyStoredException;
 
 class OrderController extends Controller
 {
-    use HandlesOrder;
+    use HandlesOrder, FlashModelAttributes;
 
     /**
      * The Order instance.
@@ -51,6 +52,8 @@ class OrderController extends Controller
      */
     public function show(Request $request, $orderId)
     {
+        Log::info('Showing order id: '.$orderId);
+
         $order = $this->order->findOrFail($orderId);
 
         return view('order.show')->with('order', $order);
@@ -79,6 +82,15 @@ class OrderController extends Controller
         return redirect('payment');
     }
 
+    public function edit(Request $request, $id)
+    {
+        Log::info('Editing order id: '.$id);
+
+        $this->flashAttributesToSession($request, $this->order->findOrFail($id));
+
+        return view('order.edit')->with('statuses', ['payment failed', 'payment sent', 'payment received', 'order processing', 'order shipped']);
+    }
+
     /**
      * Process order payment.
      *
@@ -87,6 +99,8 @@ class OrderController extends Controller
      */
     public function payment(Request $request)
     {
+        Log::info('Preparing review / payment page');
+
         $merchantKey      = config('payment.merchant_key');
         $merchantCode     = config('payment.merchant_code');
         $refNo            = $this->getReferenceNumber();
@@ -120,6 +134,8 @@ class OrderController extends Controller
      */
     public function paymentResponse(Request $request)
     {
+        Log::info('Processing payment response. Reference number: '.$request->RefNo);
+
         $merchantKey  = config('payment.merchant_key');
         $merchantCode = config('payment.merchant_code');
         $status       = $request->Status;
@@ -157,6 +173,8 @@ class OrderController extends Controller
      */
     public function paymentResponseBE(Request $request)
     {
+        Log::info('Processing payment back end response. Reference number: '.$request->RefNo);
+
         $merchantKey  = config('payment.merchant_key');
         $merchantCode = config('payment.merchant_code');
         $status       = $request->Status;

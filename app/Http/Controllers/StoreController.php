@@ -124,6 +124,8 @@ class StoreController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        Log::info('Editing store id: '.$id);
+        
         $this->flashAttributesToSession($request, $this->store->findOrFail($id));
     
         return view('store.edit');
