@@ -37,8 +37,8 @@ trait HandlesOrder {
      */
     public function sendEmail(Request $request, $order)
     {
-    	$salesEmail = is_null(Configuration::emailSales()->first()) ? 'dominoseffect@gmail.com' : Configuration::emailSales()->first();
-        
+    	$salesEmail = is_null(Configuration::emailSales()->first()) ? 'dominoseffect@gmail.com' : Configuration::emailSales()->first()->value;
+
         Log::info('Send email notification to sales team: '.$salesEmail);
 
         Mail::to($salesEmail)->send(new OrderSubmitted(
