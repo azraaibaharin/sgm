@@ -207,7 +207,7 @@ class OrderController extends Controller
         $this->sendEmail($request, $order);
         $this->clearOrder($request);
         $this->clearCart($request);
-        $this->cleraCoupons($request);
+        $this->clearCoupons($request);
 
         return view('order.complete')
                     ->withReferenceNumber($refNo)
