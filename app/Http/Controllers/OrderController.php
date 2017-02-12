@@ -138,7 +138,7 @@ class OrderController extends Controller
         
         $this->order->destroy($orderId);
 
-        return redirect('orders')->withMessage('Deleted \''.$orderRefno.'\'');
+        return redirect('order')->withMessage('Deleted \''.$orderRefno.'\'');
     }
 
     /**
