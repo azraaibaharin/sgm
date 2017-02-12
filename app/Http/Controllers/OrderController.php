@@ -88,7 +88,7 @@ class OrderController extends Controller
 
         $this->flashAttributesToSession($request, $this->order->findOrFail($id));
 
-        return view('order.edit')->with('statuses', ['payment failed', 'payment sent', 'payment received', 'order processing', 'order shipped']);
+        return view('order.edit')->with('statuses', ['payment unsuccessful', 'payment successful', 'payment received', 'order processed', 'order shipped']);
     }
 
     /**
@@ -145,7 +145,7 @@ class OrderController extends Controller
         $amountStr    = $request->Amount;
         $currency     = $request->Currency;
         $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-        $orderStatus  = $isSuccess ? 'payment sent' : 'payment failed';
+        $orderStatus  = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
         $message      = 'Payment transaction was incomplete. Please contact sales@babyhood.com providing with the order refernce number for assistance.';
 
     	if ($isSuccess)
