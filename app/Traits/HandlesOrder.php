@@ -87,7 +87,7 @@ trait HandlesOrder {
     	$order->coupon_total_value = $this->getCouponTotalValue($request);
     	$order->total_price		   = Cart::total(2, '.', '');
     	$order->final_price 	   = $this->getFinalPrice($order->coupon_total_value, $order->delivery_cost);
-    	$order->shopping_cart_id   = $this->getShoppingCartId();
+    	$order->shoppingcart_id    = $this->getShoppingCartId();
     	
     	$order->save();
 
