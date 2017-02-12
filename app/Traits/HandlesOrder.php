@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Traits\HandlesCoupon;
 use App\Traits\HandlesCart;
 use App\Order;
+use Cart;
 
 trait HandlesOrder {
 
