@@ -212,7 +212,7 @@ class OrderController extends Controller
         return view('order.complete')
                     ->withReferenceNumber($refNo)
                     ->withMessage($message)
-                    -withIsSuccess($isSuccess);
+                    ->withIsSuccess($isSuccess);
     }
 
     /**
