@@ -210,9 +210,9 @@ class OrderController extends Controller
         $this->clearCoupons($request);
 
         return view('order.complete')
-                    ->withReferenceNumber($refNo)
-                    ->withMessage($message)
-                    ->withIsSuccess($isSuccess);
+                    ->with('referenceNumber', $refNo)
+                    ->with('message', $message)
+                    ->with('isSuccess', $isSuccess);
     }
 
     /**
