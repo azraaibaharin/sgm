@@ -6,7 +6,7 @@
 
 @section('content')
 @include('shared.message')
-<div id="warranty" class="container">
+<div id="warranty" class="container bottom-padding-sm">
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{ $full_name }}</h1>
@@ -21,7 +21,7 @@
 	</div>
 	<hr/>
 	<div class="row">
-		<div class="col-md-12 top-bottom-margin-sm">
+		<div class="col-md-12">
 			@if (!Auth::guest())
 				<form method="POST" action="{{ url('warranties/delete') }}">
 					{{ csrf_field() }}
