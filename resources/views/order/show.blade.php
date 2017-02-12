@@ -23,8 +23,9 @@
 			<a class="btn btn-link" href="{{ url('order') }}">Back</a>
 			@if (!Auth::guest())
 				<a href="{{ url('order/'.$order->id.'/edit') }}"" class="btn btn-link">Edit</a>
-				<form class="form-inline" method="POST" action="{{ url('order/delete') }}">
+				<form class="form-inline" method="POST" action="{{ url('order/'.$order->id) }}">
 					{{ csrf_field() }}
+					{{ method_field('DELETE') }}
 					<input type="hidden" name="order_id" value="{{ $order->id }}">
 					<button type="submit" class="btn btn-link">Remove</button>		
 				</form>	
