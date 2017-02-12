@@ -9,6 +9,7 @@ use Log;
 
 use App\Traits\HandlesCoupon;
 use App\Traits\HandlesCart;
+use App\Mail\OrderSubmitted;
 use App\Order;
 use Cart;
 
