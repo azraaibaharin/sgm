@@ -196,7 +196,7 @@ class OrderController extends Controller
         $currency     = $request->Currency;
         $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
         $orderStatus  = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
-        $message      = 'Payment transaction was incomplete. Please contact sales@babyhood.com providing with the order refernce number for assistance.';
+        $message      = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
 
     	if ($isSuccess)
     	{

@@ -10,6 +10,7 @@
 		<div class="col-md-12">
 			<h4>{{ $message }}</h4>
 			<h5>Your order reference number is: {{ $referenceNumber }}</h5>
+			<br>
 			<a href="{{ url('products') }}">Return to Products</a>
 		</div>
 	</div>
