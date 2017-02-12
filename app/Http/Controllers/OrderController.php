@@ -120,7 +120,7 @@ class OrderController extends Controller
         
         $toUpdateOrder->save();
 
-        return redirect('orders/'.$id)->withMessage('Updated');
+        return redirect('order/'.$id)->withMessage('Updated');
     }
 
     /**
