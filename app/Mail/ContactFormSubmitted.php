@@ -47,11 +47,11 @@ class ContactFormSubmitted extends Mailable
     public function build()
     {
         return $this->subject('Contact Request From Supremeglobal.com.my')
-                    ->view('emails.contactformsubmitted')
-                    ->with([
-                        'name' => $this->name,
-                        'email' => $this->email,
-                        'message_text' => $this->message,
-                    ]);
+            ->view('emails.contactformsubmitted')
+            ->with([
+                'name' => $this->name,
+                'email' => $this->email,
+                'message_text' => $this->message,
+            ]);
     }
 }

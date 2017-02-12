@@ -33,6 +33,6 @@ class OrderSubmitted extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order.submitted');
+        return $this->subject('New Order From Supremeglobal.com.my')->view('emails.order.submitted');
     }
 }

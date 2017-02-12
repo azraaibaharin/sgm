@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Log;
 
 use App\Traits\HandlesCoupon;
 use App\Traits\HandlesCart;
@@ -35,6 +36,8 @@ trait HandlesOrder {
     {
     	$salesEmail = 'dominoseffect@gmail.com';
         
+        Log::info('Send email notification to sales team: '.$salesEmail);
+
         Mail::to($salesEmail)->send(new OrderSubmitted(
         	$order,
         	Cart::content()
@@ -48,6 +51,8 @@ trait HandlesOrder {
      */
     public function saveToSession(Request $request)
     {
+    	Log::info('Saving order values to session');
+
     	$request->session()->put($this->orderNameKey, $request->name);
     	$request->session()->put($this->orderEmailKey, $request->email);
     	$request->session()->put($this->orderPhoneNumberKey, $request->phone_number);
@@ -68,6 +73,8 @@ trait HandlesOrder {
      */
     public function storeFromSession(Request $request, String $status, String $referenceNumber)
     {
+    	Log::info('Storing order with reference number: '.$referenceNumber.' to database with values from session.');
+
     	$order = new Order;
 
     	$order->status             = $status;
@@ -95,6 +102,8 @@ trait HandlesOrder {
      */
     public function clearOrder(Request $request)
     {
+    	Log::info('Clearing stored Order values in session');
+
         Cart::destroy();
         $request->session()->forget($this->orderNameKey);
         $request->session()->forget($this->orderEmailKey);

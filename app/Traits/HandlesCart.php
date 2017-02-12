@@ -25,6 +25,8 @@ trait HandlesCart {
      */
 	public function prepareForShow(Request $request)
 	{        
+        Log::info('Preparing cart show page');
+
 		$couponTotalValue = $this->getCouponTotalValue($request);
         $deliveryCost     = $this->getDeliveryCost();
         $finalPrice 	  = $this->getFinalPrice($couponTotalValue, $deliveryCost);
@@ -42,6 +44,8 @@ trait HandlesCart {
      */
     public function clearCart(Request $request)
     {
+        Log::info('Clearing stored Cart values in session');
+        
         $request->session()->forget($this->couponTotalValueKey);
         $request->session()->forget($this->deliveryCostKey);
         $request->session()->forget($this->finalPriceKey);
