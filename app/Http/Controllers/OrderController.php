@@ -7,9 +7,10 @@ use Log;
 
 use App\Http\Requests\StoreOrder;
 use App\Http\Requests\UpdateOrder;
-use App\Order;
 use App\Traits\HandlesOrder;
 use App\Traits\FlashModelAttributes;
+use App\Order;
+use App\Configuration;
 use Auth;
 use Cart;
 
