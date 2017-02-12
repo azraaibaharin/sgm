@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Log;
 
 use App\Http\Requests\StoreOrder;
+use App\Http\Requests\UpdateOrder;
 use App\Order;
 use App\Traits\HandlesOrder;
 use App\Traits\FlashModelAttributes;
@@ -82,13 +83,62 @@ class OrderController extends Controller
         return redirect('payment');
     }
 
+    /**
+     * Edit Order.
+     * 
+     * @param  Request $request
+     * @param  String  $id      
+     * @return \Illuminate\Http\Response
+     */
     public function edit(Request $request, $id)
     {
         Log::info('Editing order id: '.$id);
 
         $this->flashAttributesToSession($request, $this->order->findOrFail($id));
 
-        return view('order.edit')->with('statuses', ['payment unsuccessful', 'payment successful', 'payment received', 'order processed', 'order shipped']);
+        return view('order.edit')->with('statuses', 
+            ['payment unsuccessful', 'payment successful', 'payment received', 'order processed', 'order shipped']);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdateOrder  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateOrder $request, $id)
+    {   
+        Log::info('Updating order: '.$id);
+
+        $toUpdateOrder               = $this->order->findOrFail($id);
+        $toUpdateOrder->name         = $request->title;
+        $toUpdateOrder->email        = $request->title;
+        $toUpdateOrder->phone_number = $request->title;
+        $toUpdateOrder->address      = $request->title;
+        $toUpdateOrder->status       = $request->title;
+        
+        $toUpdateOrder->save();
+
+        return redirect('orders/'.$id)->withMessage('Updated');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        Log::info('Removing order id: '.$request->order_id);
+
+        $orderId    = $request->order_id;
+        $orderRefno = $this->order->findOrFail($orderId)->reference_number;
+        
+        $this->order->destroy($orderId);
+
+        return redirect('orders')->withMessage('Deleted \''.$orderRefno.'\'');
     }
 
     /**

@@ -21,6 +21,14 @@
 	<div class="row">
 		<div class="col-md-12">
 			<a class="btn btn-link" href="{{ url('order') }}">Back</a>
+			@if (!Auth::guest())
+				<a href="{{ url('order/'.$id.'/edit') }}"" class="btn btn-link">Edit</a>
+				<form class="form-inline" method="POST" action="{{ url('order/delete') }}">
+					{{ csrf_field() }}
+					<input type="hidden" name="order_id" value="{{ $order->id }}">
+					<button type="submit" class="btn btn-link">Remove</button>		
+				</form>	
+			@endif
 		</div>
 	</div>
 </div>
