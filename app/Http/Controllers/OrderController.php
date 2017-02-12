@@ -112,11 +112,11 @@ class OrderController extends Controller
         Log::info('Updating order: '.$id);
 
         $toUpdateOrder               = $this->order->findOrFail($id);
-        $toUpdateOrder->name         = $request->title;
-        $toUpdateOrder->email        = $request->title;
-        $toUpdateOrder->phone_number = $request->title;
-        $toUpdateOrder->address      = $request->title;
-        $toUpdateOrder->status       = $request->title;
+        $toUpdateOrder->name         = $request->name;
+        $toUpdateOrder->email        = $request->email;
+        $toUpdateOrder->phone_number = $request->phone_number;
+        $toUpdateOrder->address      = $request->address;
+        $toUpdateOrder->status       = $request->status;
         
         $toUpdateOrder->save();
 
