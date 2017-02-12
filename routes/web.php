@@ -51,6 +51,7 @@ Route::get('order', 'OrderController@index')->middleware('auth');
 Route::get('order/create', 'OrderController@create');
 Route::post('order/store', 'OrderController@store');
 Route::get('order/{id}', 'OrderController@show')->middleware('auth');
+Route::get('order/{id}/edit', 'OrderController@edit')->middleware('auth');
 Route::put('order/{id}', 'OrderController@update')->middleware('auth');
 Route::delete('order/{id}', 'OrderController@destroy')->middleware('auth');
 
