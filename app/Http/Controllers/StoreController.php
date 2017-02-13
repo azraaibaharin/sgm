@@ -42,10 +42,11 @@ class StoreController extends Controller
         $state = is_null($state) && empty($state) ? $states[0] : $state;
         $stores = $this->getStoresByState($state, 100);
 
+        $request->session()->flash('state', $state);
+
         return view('store.index')
                 ->with('stores', $stores)
-                ->with('states', $states)
-                ->with('state', $state);
+                ->with('states', $states);
     }
 
     /**
@@ -60,10 +61,11 @@ class StoreController extends Controller
         $state = $request->state;
         $stores = $this->getStoresByState($state, 100);
 
+        $request->session()->flash('state', $state);
+
         return view('store.index')
                 ->with('stores', $stores)
-                ->with('states', $states)
-                ->with('state', $state);
+                ->with('states', $states);
     }
 
     /**
