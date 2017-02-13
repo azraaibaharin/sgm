@@ -1,8 +1,8 @@
-<h1>New order received!</h1>
+<h1>Order details:</h1>
 <p>
 	<label>Order id:</label> {{ $order->id }}<br>
 	<label>Reference no:</label> {{ $order->reference_number }}<br>
-	<label>Status:</label> {{ $order->reference_number }}<br>
+	<label>Status:</label> {{ $order->status }}<br>
 	<label>Name:</label> {{ $order->name }}<br>
 	<label>Email:</label> {{ $order->email }}<br>
 	<label>Phone number:</label> {{ $order->phone_number }}<br>
