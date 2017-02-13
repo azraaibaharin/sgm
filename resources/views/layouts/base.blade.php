@@ -38,15 +38,10 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a><span class="navbar-brand">@yield('breadcrumb')</span>
+                <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a><span class="navbar-brand">@yield('breadcrumb')</span></span>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    &nbsp;
-                </ul>
-
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     @yield('navbar-right')

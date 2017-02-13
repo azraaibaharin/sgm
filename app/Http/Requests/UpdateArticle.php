@@ -27,7 +27,8 @@ class UpdateArticle extends FormRequest
         return [
             'title' => 'required|max:255',
             'text' => 'required',
-            'author' => 'required|max:255'
+            'author' => 'required|max:255',
+            'link' => 'url'
         ];
     }
 }

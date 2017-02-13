@@ -5,7 +5,6 @@
 <li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">More <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ url('order') }}">Track Order</a></li>
         <li><a href="{{ url('articles') }}">Articles</a></li>
         <li><a href="{{ url('testimonials') }}">Testimonials</a></li>
         <li><a href="{{ url('stores') }}">Stores</a></li>

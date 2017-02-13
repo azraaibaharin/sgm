@@ -22,7 +22,7 @@
 				<img src="{{ asset('img/'.$image_link) }}" alt="">
 			@endif
 			<p>{!! $text !!}</p>
-			@if (!empty($link))<small>From <a href="{{ $link }}">{{ $link }}</a></small>@endif
+			@if (!empty($link))<small>From <a href="{{ $link }}" target="_blank">{{ $link }}</a></small>@endif
 			<br>
 			<small>By {{ $author }}</small>
 		</div>

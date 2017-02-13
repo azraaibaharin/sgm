@@ -73,9 +73,13 @@
 	</div>
 	<hr/>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-3">
 			<a class="btn btn-link" href="{{ url('products') }}">Continue Shopping</a>
+		</div>
+		<div class="col-md-3">
 			<a class="btn btn-link" href="{{ url('cart/empty') }}">Empty Cart</a>
+		</div>
+		<div class="col-md-3">
 			<a class="btn btn-default pull-right" href="{{ url('order/create') }}">Checkout</a>
 		</div>
 	</div>
