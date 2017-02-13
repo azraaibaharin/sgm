@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('navbar-right')
+<li><a href="{{ url('/cart') }}">Cart @if (Cart::count() > 0) ({{ Cart::count() }}) @endif</a></li>
 <li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">More <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
@@ -11,7 +12,6 @@
         <li><a href="{{ url('warranties/create') }}">Register Warranty</a></li>
     </ul>
 </li>
-<li><a href="{{ url('/cart') }}">Cart</a></li>
 @if (!Auth::guest())
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
