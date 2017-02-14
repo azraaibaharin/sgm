@@ -196,7 +196,7 @@ class OrderController extends Controller
         $amount          = $request->Amount;
         $amountStr       = str_replace(['.', ','], "", $amount);
         $currency        = $request->Currency;
-        $ownSignatureRaw = $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
+        $ownSignatureRaw = $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status;
         $isSuccess       = $status == 1 && $this->isValidSignature($signature, $ownSignatureRaw);
         $orderStatus     = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
         $message         = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
