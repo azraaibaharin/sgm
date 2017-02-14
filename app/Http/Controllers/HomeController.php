@@ -57,10 +57,20 @@ class HomeController extends Controller
     protected $configuration;
 
     /**
-     * The configuration key for shipping rate per kilo.
+     * The configuration keys for east Malaysia shipping rates.
      * @var string
      */
-    protected $shippingRatePerKiloKey = 'shipping_rate_per_kilo';
+    protected $shippingRateEastPerKiloKey = 'shipping_rate_east_per_kilo';
+    protected $shippingRateEastMinChargeKey = 'shipping_rate_east_min_charge';
+    protected $shippingRateEastMinWeightKey = 'shipping_rate_east_min_weight';
+
+    /**
+     * The configuration keys for west Malaysia shipping rates.
+     * @var string
+     */
+    protected $shippingRateWestPerKiloKey = 'shipping_rate_west_per_kilo';
+    protected $shippingRateWestMinChargeKey = 'shipping_rate_west_min_charge';
+    protected $shippingRateWestMinWeightKey = 'shipping_rate_west_min_weight';
 
     /**
      * The configuration key for sales team email.
@@ -90,8 +100,13 @@ class HomeController extends Controller
      */
     private function init()
     {
-        $shippingRatePerKiloConfig = $this->configuration->firstOrCreate(['key' => $this->shippingRatePerKiloKey]);
-        $emailSalesConfig = $this->configuration->firstOrCreate(['key' => $this->emailSalesKey]);
+        $this->configuration->firstOrCreate(['key' => $this->shippingRateEastPerKiloKey]);
+        $this->configuration->firstOrCreate(['key' => $this->shippingRateEastMinChargeKey]);
+        $this->configuration->firstOrCreate(['key' => $this->shippingRateEastMinWeightKey]);
+        $this->configuration->firstOrCreate(['key' => $this->shippingRateWestPerKiloKey]);
+        $this->configuration->firstOrCreate(['key' => $this->shippingRateWestMinChargeKey]);
+        $this->configuration->firstOrCreate(['key' => $this->shippingRateWestMinWeightKey]);
+        $this->configuration->firstOrCreate(['key' => $this->emailSalesKey]);
 
         $babyhoodIds = $this->product->where('brand', 'babyhood')->pluck('id');
         $nunaIds     = $this->product->where('brand', 'nuna')->pluck('id');
@@ -145,7 +160,12 @@ class HomeController extends Controller
     protected function edit(Request $request)
     {
         $this->flashAttributesToSession($request, $this->home->firstOrFail());
-        session()->flash($this->shippingRatePerKiloKey, $this->configuration->shippingRatePerKilo()->first()->value);
+        session()->flash($this->shippingRateEastPerKiloKey, $this->configuration->shippingRateEastPerKilo()->first()->value);
+        session()->flash($this->shippingRateEastMinChargeKey, $this->configuration->shippingRateEastMinCharge()->first()->value);
+        session()->flash($this->shippingRateEastMinWeightKey, $this->configuration->shippingRateEastMinWeight()->first()->value);
+        session()->flash($this->shippingRateWestPerKiloKey, $this->configuration->shippingRateWestPerKilo()->first()->value);
+        session()->flash($this->shippingRateWestMinChargeKey, $this->configuration->shippingRateWestMinCharge()->first()->value);
+        session()->flash($this->shippingRateWestMinWeightKey, $this->configuration->shippingRateWestMinWeight()->first()->value);
         session()->flash($this->emailSalesKey, $this->configuration->emailSales()->first()->value);
 
         return view('home.edit');
@@ -182,9 +202,29 @@ class HomeController extends Controller
         $home->contact_email          = $request['contact_email'];
         $home->save();
 
-        $configShippingPerKilo        = $this->configuration->shippingRatePerKilo()->first();
-        $configShippingPerKilo->value = $request->shipping_rate_per_kilo;
-        $configShippingPerKilo->save();
+        $configShippingEastPerKilo        = $this->configuration->shippingRateEastPerKilo()->first();
+        $configShippingEastPerKilo->value = $request->shipping_rate_east_per_kilo;
+        $configShippingEastPerKilo->save();
+
+        $configShippingEastMinCharge        = $this->configuration->shippingRateEastMinCharge()->first();
+        $configShippingEastMinCharge->value = $request->shipping_rate_east_min_charge;
+        $configShippingEastMinCharge->save();
+
+        $configShippingEastMinWeight        = $this->configuration->shippingRateEastMinWeight()->first();
+        $configShippingEastMinWeight->value = $request->shipping_rate_east_weight;
+        $configShippingEastMinWeight->save();
+
+        $configShippingWestPerKilo        = $this->configuration->shippingRateWestPerKilo()->first();
+        $configShippingWestPerKilo->value = $request->shipping_rate_west_per_kilo;
+        $configShippingWestPerKilo->save();
+
+        $configShippingWestMinCharge        = $this->configuration->shippingRateWestMinCharge()->first();
+        $configShippingWestMinCharge->value = $request->shipping_rate_west_min_charge;
+        $configShippingWestMinCharge->save();
+
+        $configShippingWestMinWeight        = $this->configuration->shippingRateWestMinWeight()->first();
+        $configShippingWestMinWeight->value = $request->shipping_rate_west_min_weight;
+        $configShippingWestMinWeight->save();
 
         $configEmailSales        = $this->configuration->emailSales()->first();
         $configEmailSales->value = $request->email_sales;

@@ -26,14 +26,69 @@ class Configuration extends Model
     ];
 
     /**
-     * Return result of shipping rate per kilo configuration.
+     * Return result of shipping rate east per kilo configuration.
      * 
      * @param  $query
      * @return 
      */
-    public function scopeShippingRatePerKilo($query)
+    public function scopeShippingRateEastPerKilo($query)
     {
-        return $query->where('key', 'shipping_rate_per_kilo');
+        return $query->where('key', 'shipping_rate_east_per_kilo');
+    }
+
+    /**
+     * Return result of shipping rate east min charge configuration.
+     * 
+     * @param  $query
+     * @return 
+     */
+    public function scopeShippingRateEastMinCharge($query)
+    {
+        return $query->where('key', 'shipping_rate_east_min_charge');
+    }
+
+    /**
+     * Return result of shipping rate east min weight configuration.
+     * 
+     * @param  $query
+     * @return 
+     */
+    public function scopeShippingRateEastMinWeight($query)
+    {
+        return $query->where('key', 'shipping_rate_east_min_weight');
+    }
+
+    /**
+     * Return result of shipping rate west per kilo configuration.
+     * 
+     * @param  $query
+     * @return 
+     */
+    public function scopeShippingRateWestPerKilo($query)
+    {
+        return $query->where('key', 'shipping_rate_west_per_kilo');
+    }
+
+    /**
+     * Return result of shipping rate west min charge configuration.
+     * 
+     * @param  $query
+     * @return 
+     */
+    public function scopeShippingRateWestMinCharge($query)
+    {
+        return $query->where('key', 'shipping_rate_west_min_charge');
+    }
+
+    /**
+     * Return result of shipping rate west min weight configuration.
+     * 
+     * @param  $query
+     * @return 
+     */
+    public function scopeShippingRateWestMinWeight($query)
+    {
+        return $query->where('key', 'shipping_rate_west_min_weight');
     }
 
     /**

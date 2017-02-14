@@ -110,12 +110,26 @@
                 </div>
             </div>
 
-            {{-- Shipping rate --}}
+            {{-- Shipping rate (West Malaysia) --}}
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Shipping rate</div>
+                    <div class="panel-heading">Shipping rate (West Malaysia)</div>
                     <div class="panel-body">
-                        @include('shared.form.textfield', ['name' => 'shipping_rate_per_kilo', 'text' => 'Per kilo'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_west_per_kilo', 'text' => 'Per kilo'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_west_min_charge', 'text' => 'Min Charge', 'placeholder' => '10.00'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_west_min_weight', 'text' => 'Min Weight', 'placeholder' => '20.00', 'help' => '* in kgs'])
+                    </div>
+                </div>
+            </div>
+                
+            {{-- Shipping rate (East Malaysia) --}}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Shipping rate (East Malaysia)</div>
+                    <div class="panel-body">
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_east_per_kilo', 'text' => 'Per kilo'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_east_min_charge', 'text' => 'Min Charge', 'placeholder' => '5.00'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_east_min_weight', 'text' => 'Min Weight', 'placeholder' => '60.00', 'help' => '* in kgs'])
                     </div>
                 </div>
             </div>

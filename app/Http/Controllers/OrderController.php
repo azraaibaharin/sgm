@@ -205,7 +205,7 @@ class OrderController extends Controller
         Log::info('Payment response signature: '.$signature);
         Log::info('Payment response ref number: '.$refNo);
         Log::info('Payment response amount: '.$amount);
-        Log::info('Payment signature: '.$this->getSignature($ownSignatureRaw);
+        Log::info('Payment signature: '.$this->getSignature($ownSignatureRaw));
 
     	if ($isSuccess)
     	{
