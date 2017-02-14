@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@include('shared.form.error')
 @include('shared.message')
 <form class="form-horizontal bottom-padding-sm" role="form" method="POST" action="{{ url('/home/edit') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
@@ -115,7 +116,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Shipping rate (West Malaysia)</div>
                     <div class="panel-body">
-                        @include('shared.form.textfield', ['name' => 'shipping_rate_west_per_kilo', 'text' => 'Per kilo'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_west_per_kilo', 'text' => 'Per kilo', 'placeholder' => '1.50', 'help' => '* in MYR'])
                         @include('shared.form.textfield', ['name' => 'shipping_rate_west_min_charge', 'text' => 'Min Charge', 'placeholder' => '10.00'])
                         @include('shared.form.textfield', ['name' => 'shipping_rate_west_min_weight', 'text' => 'Min Weight', 'placeholder' => '20.00', 'help' => '* in kgs'])
                     </div>
@@ -127,7 +128,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Shipping rate (East Malaysia)</div>
                     <div class="panel-body">
-                        @include('shared.form.textfield', ['name' => 'shipping_rate_east_per_kilo', 'text' => 'Per kilo'])
+                        @include('shared.form.textfield', ['name' => 'shipping_rate_east_per_kilo', 'text' => 'Per kilo', 'placeholder' => '11.00', 'help' => '* in MYR'])
                         @include('shared.form.textfield', ['name' => 'shipping_rate_east_min_charge', 'text' => 'Min Charge', 'placeholder' => '5.00'])
                         @include('shared.form.textfield', ['name' => 'shipping_rate_east_min_weight', 'text' => 'Min Weight', 'placeholder' => '60.00', 'help' => '* in kgs'])
                     </div>

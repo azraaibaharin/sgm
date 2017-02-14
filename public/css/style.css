@@ -258,10 +258,13 @@ and (min-width : 1224px) {
 	border-radius: 4px;	
 }
 
+#articles,
 #products,
 #testimonials,
 #stores,
-#orders {
+#orders,
+#coupons,
+#warranties {
 	padding-top: 15px;
 	border-top: 1px solid #eee;
 }

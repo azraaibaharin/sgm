@@ -211,7 +211,7 @@ class HomeController extends Controller
         $configShippingEastMinCharge->save();
 
         $configShippingEastMinWeight        = $this->configuration->shippingRateEastMinWeight()->first();
-        $configShippingEastMinWeight->value = $request->shipping_rate_east_weight;
+        $configShippingEastMinWeight->value = $request->shipping_rate_east_min_weight;
         $configShippingEastMinWeight->save();
 
         $configShippingWestPerKilo        = $this->configuration->shippingRateWestPerKilo()->first();

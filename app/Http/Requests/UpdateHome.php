@@ -44,7 +44,12 @@ class UpdateHome extends FormRequest
             'instagram_babyhood_url' => 'required|max:255',
             'instagram_nuna_url' => 'required|max:255',
             'contact_email' => 'required|max:255',
-            'shipping_rate_per_kilo' => 'required|max:255'
+            'shipping_rate_east_per_kilo' => 'required|max:255',
+            'shipping_rate_east_min_charge' => 'required|max:255',
+            'shipping_rate_east_min_weight' => 'required|max:255',
+            'shipping_rate_west_per_kilo' => 'required|max:255',
+            'shipping_rate_west_min_charge' => 'required|max:255',
+            'shipping_rate_west_min_weight' => 'required|max:255'
         ];
     }
 }
