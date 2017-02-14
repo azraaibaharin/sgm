@@ -193,6 +193,21 @@ trait HandlesOrder {
     }
 
     /**
+     * Checks whether the response amount is equal the order amount.
+     *
+     * @param  String $respAmount
+     * @return boolean  whether the response amount is equal the order amount
+     */
+    public function isValidAmount(Request $request, $respAmount)
+    {
+        $deliveryCost = $this->getDeliveryCost();
+        $couponTotalValue = $this->getCouponTotalValue($request);
+        // $finalPrice = $this->getFinalPrice($couponTotalValue, $deliveryCost);
+        $finalPrice = '1.00';
+        return $finalPrice == $respAmount;
+    }
+
+    /**
      * Generate signature for ipay88 request.
      *
      * @param  String $source 

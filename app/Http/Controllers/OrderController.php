@@ -187,17 +187,25 @@ class OrderController extends Controller
     {
         Log::info('Processing payment response. Reference number: '.$request->RefNo);
 
-        $merchantKey  = config('payment.merchant_key');
-        $merchantCode = config('payment.merchant_code');
-        $status       = $request->Status;
-        $signature    = $request->Signature;
-        $merchantCode = $request->MerchantCode;
-        $refNo        = $request->RefNo;
-        $amountStr    = $request->Amount;
-        $currency     = $request->Currency;
-        $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-        $orderStatus  = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
-        $message      = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
+        $merchantKey     = config('payment.merchant_key');
+        $merchantCode    = config('payment.merchant_code');
+        $status          = $request->Status;
+        $signature       = $request->Signature;
+        $merchantCode    = $request->MerchantCode;
+        $refNo           = $request->RefNo;
+        $amount          = $request->Amount;
+        $amountStr       = str_replace(['.', ','], "", $amount);
+        $currency        = $request->Currency;
+        $ownSignatureRaw = $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
+        $isSuccess       = $status == 1 && $this->isValidSignature($signature, $ownSignatureRaw);
+        $orderStatus     = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
+        $message         = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
+
+        Log::info('Payment response status: '.$status);
+        Log::info('Payment response signature: '.$signature);
+        Log::info('Payment response ref number: '.$refNo);
+        Log::info('Payment response amount: '.$amount);
+        Log::info('Payment signature: '.$this->getSignature($ownSignatureRaw);
 
     	if ($isSuccess)
     	{
