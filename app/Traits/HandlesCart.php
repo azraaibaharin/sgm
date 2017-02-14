@@ -14,8 +14,6 @@ trait HandlesCart {
 	use HandlesCoupon;
 
     protected $couponTotalValueKey = 'coupon_total_value';
-    protected $deliveryCostKey = 'delivery_cost';
-    protected $finalPriceKey = 'final_price';
 
     /**
      * Prepares the session for Cart show page.
@@ -28,12 +26,8 @@ trait HandlesCart {
         Log::info('Preparing cart show page');
 
 		$couponTotalValue = $this->getCouponTotalValue($request);
-        $deliveryCost     = $this->getDeliveryCost();
-        $finalPrice 	  = $this->getFinalPrice($couponTotalValue, $deliveryCost);
 
         $request->session()->put($this->couponTotalValueKey, $couponTotalValue);
-        $request->session()->put($this->deliveryCostKey, $deliveryCost);
-        $request->session()->put($this->finalPriceKey, $finalPrice);
 	}
 
     /**
@@ -47,44 +41,6 @@ trait HandlesCart {
         Log::info('Clearing stored Cart values in session');
         
         $request->session()->forget($this->couponTotalValueKey);
-        $request->session()->forget($this->deliveryCostKey);
-        $request->session()->forget($this->finalPriceKey);
-    }
-
-	/**
-	 * Return calculated final price from the coupon total value and delivery cost.
-	 *
-	 * @param  $couponTotalValue 
-	 * @param  $deliveryCost     
-	 * @return float 	calculated final price
-	 */
-	public function getFinalPrice($couponTotalValue, $deliveryCost)
-	{
-        $finalPrice = floatval(Cart::total(2, '.', '')) + floatval($deliveryCost) - floatval($couponTotalValue);
-        return $finalPrice < 0 ? 0.00 : number_format((float)$finalPrice, 2, '.', '');
-	}
-
-    /**
-     * Returns the calculated delivery cost based on delivery weight and rate per kilo.
-     *
-     * @return float 	calculated delivery cost
-     */
-    public function getDeliveryCost() 
-    {
-        $ratePerKilo        = floatval(Configuration::shippingRatePerKilo()->first()->value);
-        $ratePerKilo        = is_null($ratePerKilo) ? 1.00 : $ratePerKilo;
-        $totalWeightInKilos = 0.00;
-        
-        foreach (Cart::content() as $row) {
-            try {
-                $itemWeight = floatval($row->options['delivery_weight'])*floatval($row->qty);
-                $totalWeightInKilos += $itemWeight;
-            } catch (\Exception $e) {
-                $totalWeightInKilos += 0.00;
-            }
-        }
-
-        return number_format((float)($totalWeightInKilos*$ratePerKilo), 2, '.', '');
     }
 
     /**

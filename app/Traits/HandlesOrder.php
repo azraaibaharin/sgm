@@ -21,13 +21,42 @@ trait HandlesOrder {
 	protected $orderNameKey = 'order_name';
 	protected $orderEmailKey = 'order_email';
     protected $orderPhoneNumberKey = 'order_phone_number';
-    protected $orderHouseNumberKey = 'order_number';
-    protected $orderStreetKey = 'order_street';
-    protected $orderCityKey = 'order_city';
-    protected $orderPostcodeKey = 'order_postcode';
-    protected $orderCountryKey = 'order_country';
+    protected $orderAddressKey = 'order_address';
     protected $orderShoppingCartIdKey = 'order_shopping_cart_id';
     protected $orderReferenceNumberKey = 'order_reference_number';
+    protected $orderDeliveryCostKey = 'order_delivery_cost';
+    protected $orderTotalPriceKey = 'order_total_price';
+    protected $orderFinalPriceKey = 'order_final_price';
+
+    /**
+     * States of east Malaysia.
+     * @var array
+     */
+    protected $eastStates = [
+        'Sabah',
+        'Sarawak',
+        'Labuan'
+    ];
+
+    /**
+     * States of west Malaysia.
+     * @var array
+     */
+    protected $westStates = [
+        'Johor',
+        'Kedah',
+        'Kelantan',
+        'Malacca',
+        'Negeri Sembilan',
+        'Pahang',
+        'Penang',
+        'Perak',
+        'Perlis',
+        'Selangor',
+        'Terengganu',
+        'Kuala Lumpur',
+        'Putrajaya'
+    ];
 
     /**
      * Send email of Order details to sales.
@@ -59,11 +88,12 @@ trait HandlesOrder {
     	$request->session()->put($this->orderNameKey, $request->name);
     	$request->session()->put($this->orderEmailKey, $request->email);
     	$request->session()->put($this->orderPhoneNumberKey, $request->phone_number);
-    	$request->session()->put($this->orderHouseNumberKey, $request->number);
-    	$request->session()->put($this->orderStreetKey, $request->street);
-    	$request->session()->put($this->orderCityKey, $request->city);
-    	$request->session()->put($this->orderPostcodeKey, $request->postcode);
-    	$request->session()->put($this->orderCountryKey, $request->country);
+    	$request->session()->put($this->orderAddressKey, $this->constructAddress($request));
+        $request->session()->put($this->orderDeliveryCostKey, $this->calculateDeliveryCost($request));
+        $request->session()->put($this->orderShoppingCartIdKey, $this->getShoppingCartId());
+        $request->session()->put($this->orderTotalPriceKey, Cart::total(2, '.', ''));
+        $request->session()->put($this->orderFinalPriceKey, $this->calculateFinalPrice($request));
+        $request->session()->put($this->orderReferenceNumberKey, $this->constructReferenceNumber());
     }
 
     /**
@@ -85,12 +115,12 @@ trait HandlesOrder {
     	$order->name               = $request->session()->get($this->orderNameKey);
     	$order->email              = $request->session()->get($this->orderEmailKey);
     	$order->phone_number       = $request->session()->get($this->orderPhoneNumberKey);
-    	$order->address            = $this->getAddress($request);
-    	$order->delivery_cost      = $this->getDeliveryCost();
-    	$order->coupon_total_value = $this->getCouponTotalValue($request);
-    	$order->total_price		   = Cart::total(2, '.', '');
-    	$order->final_price 	   = $this->getFinalPrice($order->coupon_total_value, $order->delivery_cost);
-    	$order->shoppingcart_id    = $this->getShoppingCartId();
+    	$order->address            = $request->session()->get($this->orderAddressKey);
+    	$order->delivery_cost      = $request->session()->get($this->orderDeliveryCostKey);
+        $order->shoppingcart_id    = $request->session()->get($this->orderShoppingCartIdKey);
+    	$order->coupon_total_value = $request->session()->get($this->couponTotalValueKey);
+    	$order->total_price		   = $request->session()->get($this->orderTotalPriceKey);
+    	$order->final_price 	   = $request->session()->get($this->orderFinalPriceKey);
     	
     	$order->save();
 
@@ -111,46 +141,24 @@ trait HandlesOrder {
         $request->session()->forget($this->orderNameKey);
         $request->session()->forget($this->orderEmailKey);
         $request->session()->forget($this->orderPhoneNumberKey);
-        $request->session()->forget($this->orderHouseNumberKey);
-        $request->session()->forget($this->orderStreetKey);
-        $request->session()->forget($this->orderCityKey);
-        $request->session()->forget($this->orderPostcodeKey);
-        $request->session()->forget($this->orderCountryKey);
+        $request->session()->forget($this->orderAddressKey);
+        $request->session()->forget($this->orderDeliveryCostKey);
         $request->session()->forget($this->orderShoppingCartIdKey);
         $request->session()->forget($this->orderReferenceNumberKey);
+        $request->session()->forget($this->orderTotalPriceKey);
+        $request->session()->forget($this->orderFinalPriceKey);
     }
 
     /**
-     * Return order name stored in session.
+     * Returns the dropdown options for State.
      *
-     * @param  Request $request
-     * @return order name
+     * @return array dropdown options for State
      */
-    public function getName(Request $request)
-    {	
-    	return $request->session()->get($this->orderNameKey);
-    }
-
-    /**
-     * Return order email stored in session.
-     *
-     * @param  Request $request
-     * @return order email
-     */
-    public function getEmail(Request $request)
-    {	
-    	return $request->session()->get($this->orderEmailKey);
-    }
-
-    /**
-     * Return order phone number stored in session.
-     *
-     * @param  Request $request
-     * @return order phone number
-     */
-    public function getPhoneNumber(Request $request)
-    {	
-    	return $request->session()->get($this->orderPhoneNumberKey);
+    public function getStates()
+    {
+        $states = array_merge($this->westStates, $this->eastStates);
+        sort($states);
+        return $states;
     }
 
     /**
@@ -159,15 +167,16 @@ trait HandlesOrder {
      * @param  Request $request
      * @return constructed address text
      */
-    public function getAddress(Request $request)
+    public function constructAddress(Request $request)
     {
-    	$number   = $request->session()->get($this->orderHouseNumberKey);
-    	$street   = $request->session()->get($this->orderStreetKey);
-    	$city     = $request->session()->get($this->orderCityKey);
-    	$postcode = $request->session()->get($this->orderPostcodeKey);
-    	$country  = $request->session()->get($this->orderCountryKey);
+        $number   = $request->number;
+        $street   = $request->street;
+        $city     = $request->city;
+        $postcode = $request->postcode;
+        $state    = $request->state;
+        $country  = $request->country;
 
-    	return $number.', '.$street.', '.$city.', '.$postcode.', '.$country;
+    	return $number.', '.$street.', '.$city.', '.$postcode.', '.$state.', '.$country;
     }
 
     /**
@@ -175,7 +184,7 @@ trait HandlesOrder {
      * 
      * @return String order reference number
      */
-    public function getReferenceNumber()
+    public function constructReferenceNumber()
     {
     	return 'OD'.str_random(8).Carbon::now()->timestamp;
     }
@@ -200,11 +209,129 @@ trait HandlesOrder {
      */
     public function isValidAmount(Request $request, $respAmount)
     {
-        $deliveryCost = $this->getDeliveryCost();
+        $deliveryCost     = $this->getDeliveryCost();
         $couponTotalValue = $this->getCouponTotalValue($request);
-        // $finalPrice = $this->getFinalPrice($couponTotalValue, $deliveryCost);
-        $finalPrice = '1.00';
+        // $finalPrice    = $this->getFinalPrice($couponTotalValue, $deliveryCost);
+        $finalPrice       = '1.00';
+
         return $finalPrice == $respAmount;
+    }
+
+    /**
+     * Returns the calculated delivery cost based on delivery weight and rate per kilo.
+     *
+     * @param Request $request
+     * @return float calculated delivery cost
+     */
+    public function calculateDeliveryCost(Request $request) 
+    {
+        $totalWeight = $this->calculateTotalDeliveryWeight();
+        $state = $request->state;
+        $cost = 0.00;
+
+        if (in_array($state, $this->eastStates))
+        {
+            $cost = $this->calculateEastDeliveryCost($totalWeight);
+        } else if (in_array($state, $this->westStates))
+        {
+            $cost = $this->calculateWestDeliveryCost($totalWeight);
+        }
+
+        return number_format((float) $cost, 2, '.', '');
+    }
+
+    /**
+     * Returns calculate total delivery weight of all items in cart.
+     *
+     * @return decimal calculate total delivery weight of all items in cart
+     */
+    public function calculateTotalDeliveryWeight()
+    {
+        $totalWeight = 0.00;
+        foreach (Cart::content() as $row) {
+            try {
+                $weight = floatval($row->options['delivery_weight'])*floatval($row->qty);
+                $totalWeight += $weight;
+            } catch (\Exception $e) {
+                $totalWeight += 0.00;
+            }
+        }
+
+        Log::info('Total delivery weight: '.$totalWeight);
+
+        return $totalWeight;
+    }
+
+    /**
+     * Calculate the total delivery cost for east Malaysia based on weight.
+     *
+     * @param  Decimal $weight
+     * @return Decimal total delivery cost for east Malaysia based on weight
+     */
+    public function calculateEastDeliveryCost($weight)
+    {
+        $rate = Configuration::shippingRateEastPerKilo()->first()->value;
+        $minCharge = Configuration::shippingRateEastMinCharge()->first()->value;
+        $minWeight = floatval(Configuration::shippingRateEastMinWeight()->first()->value);
+        $totalWeight = floatval($weight);
+        $cost = 0.00;
+
+        Log::info('Calulating delivery cost for East Malaysia for weight: '.$totalWeight);
+        Log::info('East Malaysia minimum charge: '.$minCharge);
+        Log::info('East Malaysia minimum weight: '.$minWeight);
+
+        if ($totalWeight < $minWeight)
+        {
+            $cost = $minCharge;
+        } else
+        {
+            $cost = (((($totalWeight-$minWeight)*11)+55)*1.06)+10;            
+        }
+
+        return $cost;
+    }
+
+    /**
+     * Calculate the total delivery cost for west Malaysia based on weight.
+     *
+     * @param  Decimal $weight
+     * @return Decimal total delivery cost for west Malaysia based on weight
+     */
+    public function calculateWestDeliveryCost($weight)
+    {
+        $rate = Configuration::shippingRateWestPerKilo()->first()->value;
+        $minCharge = Configuration::shippingRateWestMinCharge()->first()->value;
+        $minWeight = floatval(Configuration::shippingRateWestMinWeight()->first()->value);
+        $totalWeight = floatval($weight);
+        $cost = 0.00;
+
+        Log::info('Calulating delivery cost for West Malaysia for weight: '.$totalWeight);
+        Log::info('West Malaysia minimum charge: '.$minCharge);
+        Log::info('West Malaysia minimum weight: '.$minWeight);
+
+        if ($totalWeight < $minWeight)
+        {
+            $cost = $minCharge;
+        } else
+        {
+            $cost = ((((($totalWeight-$minWeight)*1.5)+10)*1.35)*1.06)+10;            
+        }
+
+        return $cost;
+    }
+
+    /**
+     * Return calculated final price from the coupon total value and delivery cost.
+     *
+     * @param  Request $request
+     * @return float    calculated final price
+     */
+    public function calculateFinalPrice(Request $request)
+    {
+        $couponTotalValue = $request->session()->get($this->couponTotalValueKey);
+        $deliveryCost = $request->session()->get($this->orderDeliveryCostKey);
+        $finalPrice = floatval(Cart::total(2, '.', '')) + floatval($deliveryCost) - floatval($couponTotalValue);
+        return $finalPrice < 0 ? 0.00 : number_format((float)$finalPrice, 2, '.', '');
     }
 
     /**

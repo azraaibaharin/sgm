@@ -68,7 +68,7 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-    	return view('order.create');
+    	return view('order.create')->with('states', $this->getStates());
     }
 
     /**
@@ -154,27 +154,18 @@ class OrderController extends Controller
 
         $merchantKey      = config('payment.merchant_key');
         $merchantCode     = config('payment.merchant_code');
-        $refNo            = $this->getReferenceNumber();
+        $refNo            = $request->session()->get($this->orderReferenceNumberKey);
         $amount           = '1.00';
         $amountStr        = str_replace(['.', ','], "", $amount);
         $currency         = config('payment.currency');
         $signature        = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
-        $deliveryCost     = $this->getDeliveryCost();
-        $couponTotalValue = $this->getCouponTotalValue($request);
 
         return view('order.payment')
                     ->with('merchantCode', $merchantCode)
                     ->with('refNo', $refNo)
                     ->with('amount', $amount)
                     ->with('currency', $currency)
-                    ->with('signature', $signature)
-                    ->with('couponTotalValue', $couponTotalValue)
-                    ->with('deliveryCost', $deliveryCost)
-                    ->with('finalPrice', $this->getFinalPrice($couponTotalValue, $deliveryCost))
-                    ->with('name', $this->getName($request))
-                    ->with('email', $this->getEmail($request))
-                    ->with('phoneNumber', $this->getPhoneNumber($request))
-                    ->with('address', $this->getAddress($request));
+                    ->with('signature', $signature);
     }
 
     /**
@@ -244,6 +235,12 @@ class OrderController extends Controller
         $currency     = $request->Currency;
         $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
         $message      = 'Payment transaction was incomplete';
+
+        Log::info('Payment BE response status: '.$status);
+        Log::info('Payment BE response signature: '.$signature);
+        Log::info('Payment BE response ref number: '.$refNo);
+        Log::info('Payment BE response amount: '.$amount);
+        Log::info('Payment BE signature: '.$this->getSignature($ownSignatureRaw));
 
         if ($isSuccess)
         {

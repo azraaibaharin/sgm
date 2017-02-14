@@ -23,7 +23,8 @@
 				@include('shared.form.textfield', ['name' => 'street', 'text' => 'Street', 'placeholder' => 'Jalan 2/1J, Seksyen 8'])
 				@include('shared.form.textfield', ['name' => 'city', 'text' => 'City', 'placeholder' => 'Shah Alam'])
 				@include('shared.form.textfield', ['name' => 'postcode', 'text' => 'Postcode', 'placeholder' => '40000'])
-				@include('shared.form.textfield', ['name' => 'country', 'text' => 'Country', 'placeholder' => 'Country'])
+				@include('shared.form.select', ['name' => 'state', 'text' => 'State', 'options' => $states])
+				@include('shared.form.textfield', ['name' => 'country', 'text' => 'Country', 'placeholder' => 'Malaysia'])
 			</div>
 		</div>
 		<hr>

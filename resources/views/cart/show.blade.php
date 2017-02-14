@@ -56,16 +56,16 @@
 								<td class="text-center">-RM{{ session('coupon_total_value') }}</td>
 							</tr>
 						@endif
-						<tr class="active">
+						{{-- <tr class="active">
 							<td>&nbsp</td>
 							<td class="text-center">Delivery</td>
 							<td class="text-center">RM{{ session('delivery_cost') }}</td>
-						</tr>
-						<tr class="active">
+						</tr> --}}
+						{{-- <tr class="active">
 				            <td>&nbsp</td>
 				            <td class="text-center" style="vertical-align:middle;">Final Price</td>
 				            <td class="text-center" style="vertical-align:middle;">RM{{ session('final_price') }}</td>
-				        </tr>
+				        </tr> --}}
 					</tfoot>
 				</table>
 			</div>
@@ -73,13 +73,13 @@
 	</div>
 	<hr/>
 	<div class="row">
-		<div class="col-md-3">
-			<a class="btn btn-link" href="{{ url('products') }}">Continue Shopping</a>
+		<div class="col-md-2">
+			<a class="btn btn-link pull-left" href="{{ url('products') }}">Continue Shopping</a>
 		</div>
-		<div class="col-md-3">
-			<a class="btn btn-link" href="{{ url('cart/empty') }}">Empty Cart</a>
+		<div class="col-md-2">
+			<a class="btn btn-link pull-left" href="{{ url('cart/empty') }}">Empty Cart</a>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-8">
 			<a class="btn btn-default pull-right" href="{{ url('order/create') }}">Checkout</a>
 		</div>
 	</div>

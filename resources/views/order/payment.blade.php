@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="table-responsive">
-					<table class="table table-hover table-bordered">
+					<table class="table table-bordered">
 						<thead>
 							<tr class="active">
 								<td>Product</td>
@@ -24,9 +24,7 @@
 						<tbody>
 							@foreach(Cart::content() as $row) 
 								<tr>
-									<td>
-										<a href="{{ url('products/'.$row->id) }}">{{ $row->name }} - <small>{{ $row->options['color'] }}</small></a>
-									</td>
+									<td>{{ $row->name }} - <small>{{ $row->options['color'] }}</small></td>
 									<td class="text-center">{{ $row->qty }}</td>
 									<td class="text-center">RM{{ $row->total }}</td>
 								</tr>
@@ -36,24 +34,24 @@
 					        <tr class="active">
 					            <td>&nbsp</td>
 					            <td class="text-center" style="vertical-align:middle;">Total</td>
-					            <td class="text-center" style="vertical-align:middle;">RM{{ Cart::total() }}</td>
+					            <td class="text-center" style="vertical-align:middle;">RM{{ session('order_total_price') }}</td>
 					        </tr>
-					        @if($couponTotalValue > 0)
+					        @if(session('coupon_total_value') > 0)
 								<tr class="active">
 									<td>&nbsp</td>
 									<td class="text-center">Discount</td>
-									<td class="text-center">-RM{{ $couponTotalValue }}</td>
+									<td class="text-center">-RM{{ session('coupon_total_value') }}</td>
 								</tr>
 							@endif
 							<tr class="active">
 					            <td>&nbsp</td>
 					            <td class="text-center" style="vertical-align:middle;">Delivery</td>
-					            <td class="text-center" style="vertical-align:middle;">RM{{ $deliveryCost }}</td>
+					            <td class="text-center" style="vertical-align:middle;">RM{{ session('order_delivery_cost') }}</td>
 					        </tr>
 							<tr class="active">
 					            <td>&nbsp</td>
 					            <td class="text-center" style="vertical-align:middle;">Final Price</td>
-					            <td class="text-center" style="vertical-align:middle;">RM{{ $finalPrice }}</td>
+					            <td class="text-center" style="vertical-align:middle;">RM{{ session('order_final_price') }}</td>
 					        </tr>
 						</tfoot>
 					</table>
@@ -67,19 +65,19 @@
 					<table class="table table-bordered">
 						<tr>
 							<td class="active">Name</td>
-							<td class="text-center">{{ $name }}</td>
+							<td class="text-center">{{ session('order_name') }}</td>
 						</tr>
 						<tr>
 							<td class="active">Email</td>
-							<td class="text-center">{{ $email }}</td>
+							<td class="text-center">{{ session('order_email') }}</td>
 						</tr>
 						<tr>
 							<td class="active">Phone Number</td>
-							<td class="text-center">{{ $phoneNumber }}</td>
+							<td class="text-center">{{ session('order_phone_number') }}</td>
 						</tr>
 						<tr>
 							<td class="active">Address</td>
-							<td class="text-center">{{ $address}}</td>
+							<td class="text-center">{{ session('order_address') }}</td>
 						</tr>
 					</table>
 				</div>
@@ -105,9 +103,9 @@
 				<input type="hidden" name="Amount" value="{{ $amount }}" />
 				<input type="hidden" name="Currency" value="{{ $currency }}" />
 				<input type="hidden" name="ProdDesc" value="Baby product" />
-				<input type="hidden" name="UserName" value="{{ $name }}" />
-				<input type="hidden" name="UserEmail" value="{{ $email }}" />
-				<input type="hidden" name="UserContact" value="{{ $phoneNumber }}" />
+				<input type="hidden" name="UserName" value="{{ session('order_name') }}" />
+				<input type="hidden" name="UserEmail" value="{{ session('order_email') }}" />
+				<input type="hidden" name="UserContact" value="{{ session('order_phone_number') }}" />
 				<input type="hidden" name="Remark" value="" />
 				<input type="hidden" name="Lang" value="UTF-8" />
 				<input type="hidden" name="Signature" value="{{ $signature }}" />
