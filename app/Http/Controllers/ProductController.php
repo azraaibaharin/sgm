@@ -395,7 +395,7 @@ class ProductController extends Controller
     private function getImageLinks(Request $request, Product $product)
     {   
         $images       = $this->getImages($product->image_links);
-        $image_prefix = $product->brand.'_'.$product->model;
+        $image_prefix = $this->getImagePrefix($product);
 
         $image_first_link  = $this->imageUpload($request, 'image_first', $images[0], $image_prefix);
         $image_second_link = $this->imageUpload($request, 'image_second', $images[1], $image_prefix);
@@ -404,6 +404,33 @@ class ProductController extends Controller
         $image_fifth_link  = $this->imageUpload($request, 'image_fifth', $images[4], $image_prefix);
 
         return $image_first_link.','.$image_second_link.','.$image_third_link.','.$image_fourth_link.','.$image_fifth_link;
+    }
+
+    /**
+     * Return constructed image prefix based on product brand and model.
+     *
+     * @param  Product $product 
+     * @return String constructed image prefix
+     */
+    private function getImagePrefix(Product $product)
+    {
+        return $this->cleanString($product->brand.'_'.$product->model);
+    }
+
+    /**
+     * Return cleaned string. 
+     * Replace whitespace with underscore '_'. 
+     * Convert to lowercase.
+     *
+     * @param  String $string the string to clean
+     * @return String the cleaned string
+     */
+    private function cleanString(String $string)
+    {
+        $cleanedString = str_replace(' ', '_', $string);
+        $cleanedString = str_replace('/', '_', $cleanedString);
+        $cleanedString = strtolower($cleanedString);
+        return $cleanedString;
     }
 
     /**
@@ -454,7 +481,7 @@ class ProductController extends Controller
     /**
      * Return full file path for product tiny image.
      *
-     * @param  String $imageName name of the image
+     * @param  String $imageName    name of the image
      * @return String            full file path of the image
      */
     private function getTinyImagePath($imageName) 
@@ -465,7 +492,7 @@ class ProductController extends Controller
     /**
      * Return full file path for product small image.
      *
-     * @param  String $imageName name of the image
+     * @param  String $imageName    name of the image
      * @return String            full file path of the image
      */
     private function getSmallImagePath($imageName) 
@@ -476,7 +503,7 @@ class ProductController extends Controller
     /**
      * Return full file path for product big image.
      *
-     * @param  String $imageName name of the image
+     * @param  String $imageName    name of the image
      * @return String            full file path of the image
      */
     private function getBigImagePath($imageName) 
