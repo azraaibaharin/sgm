@@ -69,6 +69,10 @@
 					</tfoot>
 				</table>
 			</div>
+			<small>
+				* All products are non refundable.<br>
+				** Delivery to Peninsular Malaysia will take 2-5 working days and to East Malaysia will take at least 7-10 working days depending on location.
+			</small>
 		</div>
 	</div>
 	<hr/>

@@ -150,6 +150,22 @@
     </div>
 </div>
 
+<div id="getintouch2" class="container bottom-margin-md">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 text-center">
+            <address>
+                <strong>Supreme Global Marketing Sdn Bhd (862993-T)</strong><br>
+                21-2<br>
+                Jalan USJ 21/1<br>
+                Subang Jaya<br>
+                47630 Selangor<br>
+                Malaysia<br>
+                <abbr title="Phone">P:</abbr> +603 8023 3277
+            </address>
+        </div>
+    </div>
+</div>
+
 {{-- Social Media --}}
 <div id="followus" class="container-fluid padding-md bg-grey">
     <div class="row">
