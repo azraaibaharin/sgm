@@ -160,7 +160,8 @@
                 Subang Jaya<br>
                 47630 Selangor<br>
                 Malaysia<br>
-                <abbr title="Phone">P:</abbr> +603 8023 3277
+                <abbr title="Phone">Call us at:</abbr> +603 8023 3277<br>
+                <abbr title="Email">Email:</abbr> admin[at]babyhood.com.my
             </address>
         </div>
     </div>

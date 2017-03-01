@@ -17,8 +17,8 @@
                         @include('shared.form.textfield', ['name' => 'code', 'text' => 'Code', 'placeholder' => 'supremeglobal25'])
                         {{-- @include('shared.form/textfield', ['name' => 'discount', 'text' => 'Discount', 'placeholder' => '10', 'help' => '* % of reduction']) --}}
                         @include('shared.form.textfield', ['name' => 'value', 'text' => 'Value', 'placeholder' => '100.00', 'help' => '* value of deduction'])
-                        @include('shared.form.textfield', ['name' => 'date_of_issue', 'text' => 'Issue date', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-02'])
-                        @include('shared.form.textfield', ['name' => 'date_of_expiration', 'text' => 'Expiry date', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-02'])
+                        @include('shared.form.datepicker', ['name' => 'date_of_issue', 'text' => 'Issue date', 'help' => '* the following date format YYYY-MM-dd is used', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-05.'])
+                        @include('shared.form.datepicker', ['name' => 'date_of_expiration', 'text' => 'Expiry date', 'help' => '* the following date format YYYY-MM-dd is used', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-05.'])
                     </div>
                 </div>
             </div>

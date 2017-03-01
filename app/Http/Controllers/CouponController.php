@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Log;
 
+use App\Http\Requests\StoreCoupon;
 use App\Traits\FlashModelAttributes;
 use App\Http\Requests;
 use App\Coupon;
@@ -52,10 +53,10 @@ class CouponController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreCoupon  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCoupon $request)
     {
         Log::info('Storing coupon');
 
@@ -104,11 +105,11 @@ class CouponController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http|Requests\StoreCoupon  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreCoupon $request, $id)
     {
         Log::info('Updating coupon id: '.$id);
 

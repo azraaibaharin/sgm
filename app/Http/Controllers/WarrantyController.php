@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Log;
 
+use App\Http\Requests\StoreWarranty;
 use App\Traits\FlashModelAttributes;
 use App\Http\Requests;
 use App\Warranty;
@@ -53,10 +54,10 @@ class WarrantyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreWarranty  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWarranty $request)
     {
         Log::info('Storing warranty.');
 
@@ -107,11 +108,11 @@ class WarrantyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreWarranty  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreWarranty $request, $id)
     {
         Log::info('Updating warranty id: '.$id);
 
