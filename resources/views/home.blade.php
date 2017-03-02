@@ -161,7 +161,7 @@
                 47630 Selangor<br>
                 Malaysia<br>
                 <abbr title="Phone">Call us at:</abbr> +603 8023 3277<br>
-                <abbr title="Email">Email:</abbr> admin[at]babyhood.com.my
+                <abbr title="Email">Email:</abbr> admin@babyhood.com.my
             </address>
         </div>
     </div>

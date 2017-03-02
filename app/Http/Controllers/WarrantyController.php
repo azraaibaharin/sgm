@@ -67,6 +67,7 @@ class WarrantyController extends Controller
         $warranty->phone_number          = $request->phone_number;
         $warranty->address               = $request->address;
         $warranty->product_model_name    = $request->product_model_name;
+        $warranty->product_model_number  = $request->product_model_number;
         $warranty->product_serial_number = $request->product_serial_number;
         $warranty->date_of_manufacture   = $this->toDate($request->date_of_manufacture);
         $warranty->date_of_purchase      = $this->toDate($request->date_of_purchase);
@@ -122,6 +123,7 @@ class WarrantyController extends Controller
         $warranty->phone_number          = $request->phone_number;
         $warranty->address               = $request->address;
         $warranty->product_model_name    = $request->product_model_name;
+        $warranty->product_model_number  = $request->product_model_number;
         $warranty->product_serial_number = $request->product_serial_number;
         $warranty->date_of_manufacture   = $this->toDate($request->date_of_manufacture);
         $warranty->date_of_purchase      = $this->toDate($request->date_of_purchase);

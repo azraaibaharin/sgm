@@ -14,6 +14,7 @@
 			<p><label>Phone:</label> {{ $phone_number }}</p>
 			<p><label>Address:</label> {{ $address }}</p>
 			<p><label>Model name:</label> {{ $product_model_name }}</p>
+			<p><label>Model number:</label> {{ $product_model_number }}</p>
 			<p><label>Serial no.:</label> {{ $product_serial_number }}</p>
 			<p><label>Manufacture date:</label> {{ $date_of_manufacture }}</p>
 			<p><label>Purchase date:</label> {{ $date_of_purchase }}</p>
