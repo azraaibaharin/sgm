@@ -1,7 +1,7 @@
 /*
 
 
-   Magic Zoom Plus v5.1.16 
+   Magic Zoom Plus v5.2.1 
    Copyright 2016 Magic Toolbox
    Buy a license: https://www.magictoolbox.com/magiczoomplus/
    License agreement: https://www.magictoolbox.com/license/
@@ -136,8 +136,8 @@ figure.mz-figure {
     top: -1000%;
     bottom: -1000%;
     margin: auto !important;
-    -webkit-transition: none;
-            transition: none;
+    -webkit-transition: none !important;
+            transition: none !important;
     -webkit-transform-origin: 50% 50% !important;
         -ms-transform-origin: 50% 50% !important;
             transform-origin: 50% 50% !important;
@@ -378,8 +378,8 @@ figure.mz-figure {
 }
 .mz-zoom-window.mz-p-inner.mz-deactivating > img,
 .mz-zoom-window.mz-p-inner.mz-activating > img {
-    -webkit-transition: -webkit-transform .22s cubic-bezier(0.25, 0.5, 0.5, 0.9);
-            transition: transform .22s cubic-bezier(0.25, 0.5, 0.5, 0.9);
+    -webkit-transition: -webkit-transform .22s cubic-bezier(0.25, 0.5, 0.5, 0.9) !important;
+            transition: transform .22s cubic-bezier(0.25, 0.5, 0.5, 0.9) !important;
 }
 /* Magnifier mode animation */
 .mz-zoom-window.mz-p-magnifier {
@@ -548,6 +548,7 @@ figure.mz-figure {
 }
 
 .lt-ie10-magic .mz-loading {
+    border-radius: 2em;
     font-size: 12px;
     padding: .7em 1.1em;
     width: auto;
@@ -971,7 +972,8 @@ a[data-zoom-id] img,
     -webkit-filter: brightness(60%);
             filter: brightness(60%);
 }
-.no-cssfilters-magic .mz-thumb {
+.no-cssfilters-magic .mz-thumb:hover,
+.no-cssfilters-magic .mz-thumb.mz-thumb-selected {
     background: #000;
 }
 .no-cssfilters-magic .mz-thumb:hover:not(.mz-thumb-selected) img {
