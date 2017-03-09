@@ -17,6 +17,7 @@ a:hover {
 }
 .navbar-brand > img {
 	height: 50px;
+	border: none;
 }
 
 button, input, select, textarea {
