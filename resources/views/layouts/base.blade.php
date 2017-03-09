@@ -38,7 +38,7 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset('img/logo.jpg') }}" class="img-responsive" alt="{{ config('app.name', 'Laravel') }}"></a><span class="navbar-breadcrumb">@yield('breadcrumb')</span>
+                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset('img/logo2.jpg') }}" class="img-responsive" alt="{{ config('app.name', 'Laravel') }}"></a><span class="navbar-breadcrumb">@yield('breadcrumb')</span>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
