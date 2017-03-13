@@ -23,12 +23,11 @@
 				<input type="hidden" name="UserContact" value="0123456789" />
 				<input type="hidden" name="Remark" value="None" />
 				<input type="hidden" name="Lang" value="UTF-8" />
-				<input type="hidden" name="Signature" value="{{ $sha }}" />
+				<input type="hidden" name="Signature" value="{{ $signature }}" />
 				<input type="hidden" name="ResponseURL" value="{{ url('payment/response') }}" />
 				<input type="hidden" name="BackendURL" value="{{ url('payment/responseBE') }}" />
 				<input class="btn btn-default" type="submit" value="Test Payment">
 			</form>
-			{{-- <a class="btn btn-link" href="{{ url('cart') }}">Cancel</a> --}}
 		</div>
 	</div>
 </div>

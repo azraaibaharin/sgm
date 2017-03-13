@@ -155,12 +155,38 @@ class OrderController extends Controller
         $merchantKey      = config('payment.merchant_key');
         $merchantCode     = config('payment.merchant_code');
         $refNo            = $request->session()->get($this->orderReferenceNumberKey);
-        $amount           = '1.00';
+        $amount           = $request->session()->get($this->orderFinalPriceKey);
         $amountStr        = str_replace(['.', ','], "", $amount);
         $currency         = config('payment.currency');
         $signature        = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
 
         return view('order.payment')
+                    ->with('merchantCode', $merchantCode)
+                    ->with('refNo', $refNo)
+                    ->with('amount', $amount)
+                    ->with('currency', $currency)
+                    ->with('signature', $signature);
+    }
+
+    /**
+     * Process order payment test.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentTest(Request $request)
+    {
+        Log::info('Preparing payment test page');
+
+        $merchantKey      = config('payment.merchant_key');
+        $merchantCode     = config('payment.merchant_code');
+        $refNo            = $this->constructReferenceNumber();
+        $amount           = '1.00';
+        $amountStr        = str_replace(['.', ','], "", $amount);
+        $currency         = config('payment.currency');
+        $signature        = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+
+        return view('order.payment_test')
                     ->with('merchantCode', $merchantCode)
                     ->with('refNo', $refNo)
                     ->with('amount', $amount)
