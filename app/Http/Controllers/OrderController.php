@@ -179,10 +179,10 @@ class OrderController extends Controller
         Log::info('Preparing payment test page');
 
         $request->session()->put($this->orderNameKey, 'orderNameTest');
-        $request->session()->put($this->orderEmailKey, 'orderEmailTest');
-        $request->session()->put($this->orderPhoneNumberKey, 'orderPhoneNumberTest');
+        $request->session()->put($this->orderEmailKey, 'orderEmail@Test.com');
+        $request->session()->put($this->orderPhoneNumberKey, '011-orderPhoneNumberTest');
         $request->session()->put($this->orderAddressKey, 'orderAddressTest');
-        $request->session()->put($this->orderDeliveryCostKey, 'orderDeliveryCostTest');
+        $request->session()->put($this->orderDeliveryCostKey, 1.00);
         $request->session()->put($this->orderShoppingCartIdKey, 'orderShoppingCartIdTest');
         $request->session()->put($this->couponTotalValueKey, 0.00);
         $request->session()->put($this->orderTotalPriceKey, 1.00);
