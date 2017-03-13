@@ -178,6 +178,16 @@ class OrderController extends Controller
     {
         Log::info('Preparing payment test page');
 
+        $request->session()->put($this->orderNameKey, 'orderNameTest');
+        $request->session()->put($this->orderEmailKey, 'orderEmailTest');
+        $request->session()->put($this->orderPhoneNumberKey, 'orderPhoneNumberTest');
+        $request->session()->put($this->orderAddressKey, 'orderAddressTest');
+        $request->session()->put($this->orderDeliveryCostKey, 'orderDeliveryCostTest');
+        $request->session()->put($this->orderShoppingCartIdKey, 'orderShoppingCartIdTest');
+        $request->session()->put($this->couponTotalValueKey, 0.00);
+        $request->session()->put($this->orderTotalPriceKey, 1.00);
+        $request->session()->put($this->orderFinalPriceKey, 1.00);
+
         $merchantKey      = config('payment.merchant_key');
         $merchantCode     = config('payment.merchant_code');
         $refNo            = $this->constructReferenceNumber();
@@ -204,25 +214,29 @@ class OrderController extends Controller
     {
         Log::info('Processing payment response. Reference number: '.$request->RefNo);
 
-        $merchantKey     = config('payment.merchant_key');
-        $merchantCode    = config('payment.merchant_code');
-        $status          = $request->Status;
-        $signature       = $request->Signature;
-        $merchantCode    = $request->MerchantCode;
-        $refNo           = $request->RefNo;
-        $amount          = $request->Amount;
-        $amountStr       = str_replace(['.', ','], "", $amount);
-        $currency        = $request->Currency;
-        $ownSignatureRaw = $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status;
-        $isSuccess       = $status == 1 && $this->isValidSignature($signature, $ownSignatureRaw);
-        $orderStatus     = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
-        $message         = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
+        $merchantKey      = config('payment.merchant_key');
+        $merchantCode     = config('payment.merchant_code');
+        $status           = $request->Status;
+        $signature        = $request->Signature;
+        $respMerchantCode = $request->MerchantCode;
+        $paymentId        = $request->PaymentId;
+        $refNo            = $request->RefNo;
+        $amount           = $request->Amount;
+        $currency         = $request->Currency;
+        $amountStr        = str_replace(['.', ','], "", $amount);
+        $ownSignatureRaw  = $merchantKey.$respMerchantCode.$paymentId.$refNo.$amountStr.$currency.$status;
+        $isSuccess        = $status == 1 && $this->isValidSignature($signature, $ownSignatureRaw);
+        $orderStatus      = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
+        $message          = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
 
         Log::info('Payment response status: '.$status);
         Log::info('Payment response signature: '.$signature);
+        Log::info('Payment response payment id: '.$paymentId);
         Log::info('Payment response ref number: '.$refNo);
         Log::info('Payment response amount: '.$amount);
-        Log::info('Payment signature: '.$this->getSignature($ownSignatureRaw));
+        Log::info('Payment response currency: '.$currency);
+        Log::info('Payment response merchant code: '.$respMerchantCode);
+        Log::info('Payment own signature: '.$this->getSignature($ownSignatureRaw));
 
     	if ($isSuccess)
     	{
@@ -251,22 +265,28 @@ class OrderController extends Controller
     {
         Log::info('Processing payment back end response. Reference number: '.$request->RefNo);
 
-        $merchantKey  = config('payment.merchant_key');
-        $merchantCode = config('payment.merchant_code');
-        $status       = $request->Status;
-        $signature    = $request->Signature;
-        $merchantCode = $request->MerchantCode;
-        $refNo        = $request->RefNo;
-        $amountStr    = $request->Amount;
-        $currency     = $request->Currency;
-        $isSuccess    = $status == 1 && $this->isValidSignature($signature, $merchantKey.$merchantCode.$refNo.$amountStr.$currency.$status);
-        $message      = 'Payment transaction was incomplete';
+        $merchantKey      = config('payment.merchant_key');
+        $merchantCode     = config('payment.merchant_code');
+        $status           = $request->Status;
+        $signature        = $request->Signature;
+        $respMerchantCode = $request->MerchantCode;
+        $paymentId        = $request->PaymentId;
+        $refNo            = $request->RefNo;
+        $amount           = $request->Amount;
+        $currency         = $request->Currency;
+        $amountStr        = str_replace(['.', ','], "", $amount);
+        $ownSignatureRaw  = $merchantKey.$respMerchantCode.$paymentId.$refNo.$amountStr.$currency.$status;
+        $isSuccess        = $status == 1 && $this->isValidSignature($signature, $ownSignatureRaw);
+        $message          = 'Payment transaction was incomplete';
 
         Log::info('Payment BE response status: '.$status);
         Log::info('Payment BE response signature: '.$signature);
+        Log::info('Payment BE response payment id: '.$paymentId);
         Log::info('Payment BE response ref number: '.$refNo);
         Log::info('Payment BE response amount: '.$amount);
-        Log::info('Payment BE signature: '.$this->getSignature($ownSignatureRaw));
+        Log::info('Payment BE response currency: '.$currency);
+        Log::info('Payment BE response merchant code: '.$respMerchantCode);
+        Log::info('Payment BE own signature: '.$this->getSignature($ownSignatureRaw));
 
         if ($isSuccess)
         {
