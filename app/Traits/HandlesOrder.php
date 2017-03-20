@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Log;
+use Storage;
 
 use App\Traits\HandlesCoupon;
 use App\Traits\HandlesCart;
 use App\Mail\OrderSubmitted;
+use App\Mail\OrderSupportSubmitted;
 use App\Order;
 use App\Configuration;
 use Cart;
@@ -75,6 +77,67 @@ trait HandlesOrder {
         	Cart::content()
        	));
     }
+
+    /**
+     * Send email of Order details to support.
+     *
+     * @param  Request $request 
+     * @return void
+     */
+    public function sendSupportEmail(Request $request, $order)
+    {
+        $supportEmail = 'dominoseffect@gmail.com';
+
+        Log::info('Send debugging information to support team: '.$supportEmail);
+
+        Mail::to($supportEmail)->send(new OrderSupportSubmitted(
+            $order,
+            Cart::content()
+        ));
+    }
+
+    /**
+     * Stores order details to a file.
+     *
+     * @param  [type] $order [description]
+     * @return [type]        [description]
+     */
+    public function storeToFile($order)
+    {
+        // $contents = file_get_contents(storage_path('app/orders/').'order-template.txt');
+        $template = Storage::disk('local')->get('orders/order-template.txt');
+        $template = str_replace('{{ id }}', $order->id, $template);
+        $template = str_replace('{{ reference_number }}', $order->reference_number, $template);
+        $template = str_replace('{{ status }}', $order->status, $template);
+        $template = str_replace('{{ name }}', $order->name, $template);
+        $template = str_replace('{{ email }}', $order->email, $template);
+        $template = str_replace('{{ phone_number }}', $order->phone_number, $template);
+        $template = str_replace('{{ address }}', $order->address, $template);
+        $template = str_replace('{{ contents }}', $this->getCartContentString(), $template);
+        $template = str_replace('{{ total_price }}', $order->address, $template);
+        $template = str_replace('{{ coupon_total_value }}', $order->coupon_total_value, $template);
+        $template = str_replace('{{ delivery_cost }}', $order->delivery_cost, $template);
+        $template = str_replace('{{ final_price }}', $order->final_price, $template);
+
+        Log::info('Storing order details for support team at '.storage_path('app/orders/').$order->reference_number.'.txt');
+
+        Storage::disk('local')->put('orders/'.$order->reference_number.'.txt', $template);
+    }
+
+    /**
+     * Get converted cart content rows to string.
+     * @return String cart contents
+     */
+    private function getCartContentString()
+    {
+        $contentString = '';
+        foreach (Cart::content() as $row) {
+            $contentString = $contentString.$row->name.' - '.$row->options['color'].' | '.$row->qty.' | RM'.$row->total;
+            $contentString = $contentString."\r";
+        }
+        return $contentString;
+    }
+
     /**
      * Save order details to session.
      *

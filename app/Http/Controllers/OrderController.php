@@ -196,6 +196,7 @@ class OrderController extends Controller
         $currency         = config('payment.currency');
         $signature        = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
 
+        $this->sendSupportEmail($request, $this->storeFromSession($request, 1, $refNo));
         return view('order.payment_test')
                     ->with('merchantCode', $merchantCode)
                     ->with('refNo', $refNo)
@@ -245,6 +246,8 @@ class OrderController extends Controller
 
         $order = $this->storeFromSession($request, $orderStatus, $refNo);    
         $this->sendEmail($request, $order);
+        $this->sendSupportEmail($request, $order);
+        $this->storeToFile($order);
         $this->clearOrder($request);
         $this->clearCart($request);
         $this->clearCoupons($request);
