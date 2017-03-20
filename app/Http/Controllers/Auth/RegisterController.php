@@ -68,4 +68,22 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    /**
+     * Disable registration by redirecting to login form.
+     * @return response
+     */
+    protected function register()
+    {
+        return redirect()->to('login')->with('warning', 'Registration is disabled.');   
+    }
+
+    /**
+     * Disable registration by redirecting to login form.
+     * @return response
+     */
+    protected function showRegistrationForm()
+    {
+        return redirect()->to('login')->with('warning', 'Registration is disabled.');
+    }
 }
