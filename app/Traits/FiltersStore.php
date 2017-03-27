@@ -37,7 +37,7 @@ trait FiltersStore {
         return $this->store->when($state != $states[0], function ($query) use ($state) {
             return $query->where('state', $state);
         }, function ($query) {
-            return $query->orderBy('updated_at');
+            return $query->orderBy('name');
         })->orderBy('name', 'asc')->get();
     }
 }

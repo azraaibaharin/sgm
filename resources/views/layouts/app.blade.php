@@ -10,7 +10,7 @@
         <ul class="dropdown-menu" role="menu">
             <li><a href="{{ url('articles') }}">Articles</a></li>
             <li><a href="{{ url('testimonials') }}">Testimonials</a></li>
-            <li><a href="{{ url('stores') }}">Stores</a></li>
+            <li><a href="{{ url('stores') }}">Store Locator</a></li>
             <li><a href="{{ url('warranties/create') }}">Register Warranty</a></li>
         </ul>
     </li>
