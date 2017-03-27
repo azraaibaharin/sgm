@@ -88,6 +88,10 @@ button, input, select, textarea {
 	padding-bottom: 50px;
 }
 
+.top-padding-sm {
+	padding-top: 25px;
+}
+
 .bottom-padding-sm {
 	padding-bottom: 25px;
 }
@@ -170,6 +174,10 @@ and (min-width : 1224px) {
 	height: 100%;
 	color: #fefefe;
 	background-color: #000;
+}
+
+.bg-black a {
+	color: #fefefe;
 }
 
 .bg-dark-grey {

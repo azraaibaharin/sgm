@@ -50,6 +50,8 @@
                     <div class="panel-body">
                         @include('shared.form.textfield', ['name' => 'tagline_title', 'text' => 'Title'])
                         @include('shared.form.textarea', ['name' => 'tagline_text', 'text' => 'Text'])
+                        @include('shared.form.textfield', ['name' => 'tagline_link', 'text' => 'Link'])
+                        @include('shared.form.textfield', ['name' => 'tagline_link_text', 'text' => 'Link text'])
                         @include('shared.form.file', ['name' => 'tagline_img', 'text' => 'Image', 'help' => '* maximum image height is 300px'])
                     </div>
                 </div>
@@ -62,6 +64,8 @@
                     <div class="panel-body">
                         @include('shared.form.textfield', ['name' => 'event_title', 'text' => 'Title'])
                         @include('shared.form.textarea', ['name' => 'event_text', 'text' => 'Text'])
+                        @include('shared.form.textfield', ['name' => 'event_link', 'text' => 'Link'])
+                        @include('shared.form.textfield', ['name' => 'event_link_text', 'text' => 'Link text'])
                         @include('shared.form.file', ['name' => 'event_img', 'text' => 'Image', 'help' => '* maximum image height is 300px'])
                     </div>
                 </div>
@@ -74,6 +78,8 @@
                     <div class="panel-body">
                         @include('shared.form.textfield', ['name' => 'potm_title', 'text' => 'Title'])
                         @include('shared.form.textarea', ['name' => 'potm_text', 'text' => 'Text'])
+                        @include('shared.form.textfield', ['name' => 'potm_link', 'text' => 'Link'])
+                        @include('shared.form.textfield', ['name' => 'potm_link_text', 'text' => 'Link text'])
                         @include('shared.form.file', ['name' => 'potm_img', 'text' => 'Image', 'help' => '* maximum image height is 300px'])
                     </div>
                 </div>

@@ -28,6 +28,9 @@
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
             <p class="text-center">{!! $tagline_text !!}</p>
+            @if ($tagline_link != '' && $tagline_link_text != '')
+                <p class="top-padding-sm text-center"><a href="{{ $tagline_link }}">{{ $tagline_link_text }}</a></p>
+            @endif
         </div>
         <div class="col-md-6 no-left-right-padding">
             <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
@@ -44,6 +47,25 @@
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $event_title }}</h1>
             <p class="text-center">{!! $event_text !!}</p>
+            @if ($event_link != '' && $event_link_text != '')
+                <p class="top-padding-sm text-center"><a href="{{ $event_link }}">{{ $event_link_text }}</a></p>
+            @endif
+        </div>
+    </div>
+</div>
+
+{{-- Product of the month --}}
+<div id="potm" class="container-fluid bottom-margin-md">
+    <div class="row bg-black">
+        <div class="col-md-6 padding-md">
+            <h1 class="text-center">{{ $potm_title }}</h1>
+            <p class="text-center">{!! $potm_text !!}</p>
+            @if ($potm_link != '' && $potm_link_text != '')
+                <p class="top-padding-sm text-center"><a href="{{ $potm_link }}">{{ $potm_link_text }}</a></p>
+            @endif
+        </div>
+        <div class="col-md-6 no-left-right-padding">
+            <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
         </div>
     </div>
 </div>
@@ -65,19 +87,6 @@
             <a href="{{ url('articles') }}" >More Articles</a>
         </div>
 </div> --}}
-
-{{-- Product of the month --}}
-<div id="potm" class="container-fluid bottom-margin-md">
-    <div class="row bg-black">
-        <div class="col-md-6 padding-md">
-            <h1 class="text-center">{{ $potm_title }}</h1>
-            <p class="text-center">{!! $potm_text !!}</p>
-        </div>
-        <div class="col-md-6 no-left-right-padding">
-            <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
-        </div>
-    </div>
-</div>
 
 {{-- Testimonial --}}
 @if (!is_null($latestTestimonialBabyhood) && !is_null($latestTestimonialNuna))
