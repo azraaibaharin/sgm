@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('meta-fb')
+<meta property="og:url"                content="http://www.supremeglobal.com.my" />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="Supreme Global Marketing" />
+<meta property="og:description"        content="{!! $about_text !!}" />
+<meta property="og:image"              content="{{ $tagline_img }}" />
+@endsection
+
 @section('content')
 {{-- Product --}}
 <div id="banner" class="container-fluid">
