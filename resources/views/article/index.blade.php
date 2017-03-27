@@ -15,9 +15,10 @@
 			@foreach($articles as $a)
 			<div class="col-md-6 article">
 				<h2>{{ $a->title }}</h2>
-				<small>By {{ $a->author }}</small>
-				<p>{!! $a->text !!}</p>
-				<br>
+				<small>By <i>{{ $a->author }}</i></small><br>
+				<small>Published on <i>{{ date('F d, Y', strtotime($a->created_at)) }}</i></small>
+				{{-- <p>{!! $a->text !!}</p> --}}
+				<br><br>
 				<a href="{{ url('articles/'.$a->id) }}">Read</a>
 			</div>
 			@endforeach
