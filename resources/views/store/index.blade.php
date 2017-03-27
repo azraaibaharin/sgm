@@ -17,7 +17,7 @@
 			<div class="col-md-12 bottom-padding-sm">
 				<small>{{ count($stores) }} result(s)</small>
 			</div>
-			<div class="col-md-12 bottom-padding-sm">
+			<div class="col-md-12 bottom-padding-md">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered">
 						<thead>
