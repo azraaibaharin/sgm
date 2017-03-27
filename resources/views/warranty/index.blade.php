@@ -23,6 +23,7 @@
 								<th>Address</th>
 								<th>Model</th>
 								<th>Serial No.</th>
+								<th>Submitted On</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -35,6 +36,7 @@
 								<td>{{ $w->address }}</td>
 								<td>{{ $w->product_model_name }}</td>
 								<td>{{ $w->product_serial_number }}</td>
+								<td>{{ date('Y-m-d', strtotime($w->created_at)) }}</td>
 								<td><a href="{{ url('warranties/'.$w->id) }}">Show</a></td>
 							</tr>				
 						@endforeach

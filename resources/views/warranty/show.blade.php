@@ -18,6 +18,7 @@
 			<p><label>Serial no.:</label> {{ $product_serial_number }}</p>
 			<p><label>Manufacture date:</label> {{ $date_of_manufacture }}</p>
 			<p><label>Purchase date:</label> {{ $date_of_purchase }}</p>
+			<p><label>Submitted date:</label> {{ date('Y-m-d', strtotime($created_at)) }}</p>
 		</div>
 	</div>
 	<hr/>
