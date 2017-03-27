@@ -4,10 +4,10 @@
 {{-- Product --}}
 <div id="banner" class="container-fluid">
     <div class="row">
-        <div class="col-md-6 bg-black no-padding">
+        <div class="col-md-6 bg-black no-padding img-overlay">
             <a href="{{ url('products/b/babyhood') }}"><img src="{{ asset('img/'.$babyhood_img) }}" class="img-responsive" alt="{{ $babyhood_text }}"></a>
         </div>
-        <div class="col-md-6 bg-blue no-padding">
+        <div class="col-md-6 bg-blue no-padding img-overlay">
             <a href="{{ url('products/b/nuna') }}"><img src="{{ asset('img/'.$nuna_img) }}" class="img-responsive" alt="{{ $nuna_text }}"></a>
         </div>
     </div>
