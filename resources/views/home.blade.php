@@ -51,7 +51,7 @@
 {{-- Event --}}
 <div id="event" class="container-fluid bottom-margin-md">
     <div class="row">
-        <div class="col-md-6 no-left-right-padding">
+        <div class="col-md-6 no-left-right-padding hidden-xs hidden-sm">
             @if ($event_link != '' && $event_link_text != '')<a href="{{ $event_link }}">@endif
                 <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
             @if ($event_link != '' && $event_link_text != '')</a>@endif
@@ -62,6 +62,11 @@
             @if ($event_link != '' && $event_link_text != '')
                 <p class="top-padding-sm text-center"><a href="{{ $event_link }}">{{ $event_link_text }}</a></p>
             @endif
+        </div>
+        <div class="col-md-6 no-left-right-padding hidden-md hidden-lg">
+            @if ($event_link != '' && $event_link_text != '')<a href="{{ $event_link }}">@endif
+                <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
+            @if ($event_link != '' && $event_link_text != '')</a>@endif
         </div>
     </div>
 </div>
