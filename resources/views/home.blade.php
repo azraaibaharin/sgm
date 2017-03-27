@@ -33,7 +33,9 @@
             @endif
         </div>
         <div class="col-md-6 no-left-right-padding">
-            <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
+            @if ($tagline_link != '' && $tagline_link_text != '')<a href="{{ $tagline_link }}">@endif
+                <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
+            @if ($tagline_link != '' && $tagline_link_text != '')</a>@endif
         </div>
     </div>
 </div>
@@ -42,7 +44,9 @@
 <div id="event" class="container-fluid bottom-margin-md">
     <div class="row">
         <div class="col-md-6 no-left-right-padding">
-            <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
+            @if ($event_link != '' && $event_link_text != '')<a href="{{ $event_link }}">@endif
+                <img src="{{ asset('img/'.$event_img) }}" class="img-responsive center-block">
+            @if ($event_link != '' && $event_link_text != '')</a>@endif
         </div>
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $event_title }}</h1>
@@ -65,7 +69,9 @@
             @endif
         </div>
         <div class="col-md-6 no-left-right-padding">
-            <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
+            @if ($potm_link != '' && $potm_link_text != '')<a href="{{ $potm_link }}">@endif
+                <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
+            @if ($potm_link != '' && $potm_link_text != '')</a>@endif
         </div>
     </div>
 </div>
