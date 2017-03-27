@@ -61,7 +61,7 @@ class Product extends Model
     	'amani bebe', 'bassinettes', 'bed and bath', 'change mat', 'feeding', 'furniture',
     	'bedguard', 'change table', 'glider feeding chair', 'kaylula',
     	'bedding', 'baby cots', 'cradle', 'chest drawers', 'mattresses', 'portable cot', 
-    	'stroller', 'travel time', 'walker, rockers, bouncinette',
+    	'stroller', 'travel time', 'walker, rockers, bouncinette', 'package'
     ];
 
     /**
