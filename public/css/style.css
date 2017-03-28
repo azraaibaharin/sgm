@@ -224,6 +224,7 @@ and (min-width : 1224px) {
 }
 
 .img-overlay {
+	display: inline-block;
 	position: relative;
 }
 
