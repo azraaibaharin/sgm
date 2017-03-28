@@ -13,7 +13,7 @@
 
 @include('shared.message')
 
-<div id="testimonials" class="container">
+<div id="testimonials" class="container bottom-padding-md">
 	<div class="row">
 		@if (sizeof($testimonials) > 0)
 			<div class="col-md-12 bottom-margin-sm">
@@ -22,8 +22,7 @@
 			@foreach($testimonials as $t)
 			<div class="col-md-4 {{ $t->brand }}">
 				<h2>{{ $t->title }}</h2>
-				<small>about {{ ucfirst($t->brand) }} {{ $t->model }}</small>
-				<p>{!! $t->text !!}</p>
+				<small>about <i>{{ $t->model }}</i></small><br><br>
 				<a href="{{ url('testimonials/'.$t->id) }}">Read</a>
 			</div>
 			@endforeach

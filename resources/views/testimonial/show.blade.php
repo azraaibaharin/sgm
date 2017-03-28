@@ -16,6 +16,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
+			@if (!empty($testimonial->image_links))<img class="img-responsive" src="{{ asset('img/'.$testimonial->image_links) }}" alt="{{ $testimonial->title }}">@endif
 			<h1>{{ $testimonial->title }}</h1>
 			<small>about <a href="{{ url('products/'.$testimonial->product->id) }}">{{ ucfirst($testimonial->product->brand) }} {{ $testimonial->product->model }}</a></small>
 			<p>{!! $testimonial->text !!}</p>

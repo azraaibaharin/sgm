@@ -34,6 +34,7 @@
                         </div>
                         @include('shared.form.textfield', ['name' => 'title', 'text' => 'Title', 'placeholder' => ''])
                         @include('shared.form.textarea', ['name' => 'text', 'text' => 'Text', 'placeholder' => ''])
+                        @include('shared.form.file', ['name' => 'image_links', 'text' => 'Photo'])
                     </div>
                 </div>
             </div>

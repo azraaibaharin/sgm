@@ -64,6 +64,10 @@ button, input, select, textarea {
 }
 
 /*Overrides End*/
+.error-page a {
+ text-decoration: underline;
+}
+
 .navbar-breadcrumb {
 	display: inline-block;
 	font-size: 18px;

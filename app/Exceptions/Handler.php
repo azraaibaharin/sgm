@@ -44,10 +44,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof Exception)
-        {
-            return response()->view('errors.modelnotfound');
-        }
+        // if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException
+        //     || $exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
+        // {
+        //     return response()->view('errors.notfound');
+        // }
+        // else if ($exception instanceof Symfony\Component\Debug\Exception\FatalThrowableError)
+        // {
+        //     return response()->view('errors.generic');   
+        // }
         return parent::render($request, $exception);
     }
 

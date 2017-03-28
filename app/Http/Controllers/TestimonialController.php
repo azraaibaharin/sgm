@@ -113,9 +113,12 @@ class TestimonialController extends Controller
     {
         Log::info('Storing testimonial');
 
-        $this->testimonial->product_id = $request->product_id;
-        $this->testimonial->title      = $request->title;
-        $this->testimonial->text       = $request->text;
+        $this->testimonial->product_id  = $request->product_id;
+        $this->testimonial->title       = $request->title;
+        $this->testimonial->text        = $request->text;
+        $this->testimonial->save();
+
+        $this->testimonial->image_links = $this->imageUpload($request, 'image_links', '', 'testimonial-'.$this->testimonial->id);
         $this->testimonial->save();
 
         return redirect('testimonials/'.$this->testimonial->id);
@@ -147,7 +150,9 @@ class TestimonialController extends Controller
     {
         Log::info('Editing testimonial id: '.$id);
 
-        $this->flashAttributesToSession($request, $this->testimonial->findOrFail($id));
+        $testimonial = $this->testimonial->findOrFail($id);
+        // dd($testimonial->toArray());
+        $this->flashAttributesToSession($request, $testimonial);
 
         return view('testimonial.edit')->with('products', $this->product->all());
     }
@@ -163,10 +168,11 @@ class TestimonialController extends Controller
     {
         Log::info('Updating testimonial id: '.$id);
 
-        $testimonial             = $this->testimonial->findOrFail($id);
-        $testimonial->product_id = $request['product_id'];
-        $testimonial->title      = $request['title'];
-        $testimonial->text       = $request['text'];
+        $testimonial              = $this->testimonial->findOrFail($id);
+        $testimonial->product_id  = $request['product_id'];
+        $testimonial->title       = $request['title'];
+        $testimonial->image_links = $this->imageUpload($request, 'image_links', $testimonial->image_links, 'testimonial-'.$id);
+        $testimonial->text        = $request['text'];
 
         $testimonial->save();
 
@@ -190,5 +196,28 @@ class TestimonialController extends Controller
         $this->testimonial->destroy($testimonialId);
 
         return redirect('testimonials')->with('message', 'Successfully deleted \''.$testimonialTitle.'\'');
+    }
+
+    /**
+     * Manage Image upload Request. Create 3 images (big, small, tiny).
+     *
+     * @return uploaded image name
+     */
+    private function imageUpload(Request $request, $field_name, $old_value, $image_id)
+    {
+        $imageName = $old_value;
+
+        if ($request->hasFile($field_name))
+        {
+            $this->validate($request, [
+                $field_name => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
+            ]);
+
+            $imageFile  = $request->file($field_name);
+            $imageName  = $image_id.'.'.$imageFile->getClientOriginalExtension();
+            $imageMoved = $imageFile->move(public_path('img'), $imageName);
+        }
+
+        return $imageName;
     }
 }

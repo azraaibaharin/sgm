@@ -14,6 +14,7 @@ class Testimonial extends Model
     protected $attributes = [
     	'title' => '',
     	'text' => '',
+        'image_links' => '',
     	'product_id' => '',
     ];
 
@@ -23,7 +24,7 @@ class Testimonial extends Model
      * @var array
      */
     protected $fillable = [
-    	'title', 'text', 'product_id'
+    	'title', 'text', 'image_links', 'product_id'
     ];
 
     public function productBabyhood() 
