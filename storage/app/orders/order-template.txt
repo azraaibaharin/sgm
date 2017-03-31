@@ -1,0 +1,16 @@
+Order details
+-------------
+Order id: {{ id }}
+Reference no: {{ reference_number }}
+Status: {{ status }}
+Name: {{ name }}
+Email: {{ email }}
+Phone number: {{ phone_number }}
+Address: {{ address }}
+Contents:
+{{ contents }}
+Total price: {{ total_price }}
+Coupon total value: {{ coupon_total_value }}
+Delivery cost: {{ delivery_cost }}
+Final price: {{ final_price }}
+
