@@ -57,7 +57,8 @@ Route::delete('order/{id}', 'OrderController@destroy')->middleware('auth');
 
 // Payment
 Route::get('payment', 'OrderController@payment');
-Route::get('payment/test', 'OrderController@paymentTest');
+// Route::get('payment/test', 'OrderController@paymentTest');
+// Route::get('payment/test/response', 'OrderController@paymentTestResponse');
 Route::post('payment/response', 'OrderController@paymentResponse');
 Route::post('payment/responseBE', 'CartController@paymentResponseBE');
 

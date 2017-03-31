@@ -206,6 +206,45 @@ class OrderController extends Controller
     }
 
     /**
+     * Prepare payment response test page.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentTestResponse(Request $request)
+    {
+        Log::info('Preparing payment response test page');
+
+        $request->session()->put($this->orderNameKey, 'orderNameTest');
+        $request->session()->put($this->orderEmailKey, 'orderEmail@Test.com');
+        $request->session()->put($this->orderPhoneNumberKey, '011-orderPhoneNumberTest');
+        $request->session()->put($this->orderAddressKey, 'orderAddressTest');
+        $request->session()->put($this->orderDeliveryCostKey, 1.00);
+        $request->session()->put($this->orderShoppingCartIdKey, 'orderShoppingCartIdTest');
+        $request->session()->put($this->couponTotalValueKey, 0.00);
+        $request->session()->put($this->orderTotalPriceKey, 1.00);
+        $request->session()->put($this->orderFinalPriceKey, 1.00);
+
+        $merchantKey      = config('payment.merchant_key');
+        $merchantCode     = config('payment.merchant_code');
+        $refNo            = 'ODdJmnT5cM1490970558';
+        $status           = '1';
+        $amount           = '1.00';
+        $currency         = 'MYR';
+        $amountStr        = str_replace(['.', ','], "", $amount);
+        $paymentId        = '6';
+        $signature        = $this->getSignature($merchantKey.$merchantCode.$paymentId.$refNo.$amountStr.$currency.$status);
+        
+        return view('order.payment_response_test')
+                    ->with('merchantCode', $merchantCode)
+                    ->with('refNo', $refNo)
+                    ->with('status', $status)
+                    ->with('amount', $amount)
+                    ->with('currency', $currency)
+                    ->with('signature', $signature)
+                    ->with('paymentId', $paymentId);
+    }
+
+    /**
      * Process payment response's POST request.
      *
      * @param  Request $request 
@@ -228,7 +267,8 @@ class OrderController extends Controller
         $ownSignatureRaw  = $merchantKey.$respMerchantCode.$paymentId.$refNo.$amountStr.$currency.$status;
         $isSuccess        = $status == 1 && $this->isValidSignature($signature, $ownSignatureRaw);
         $orderStatus      = $isSuccess ? 'payment succesful' : 'payment unsuccessful';
-        $message          = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
+        $defaultMessage   = 'Payment transaction was incomplete. Please contact '.Configuration::emailSales()->first()->value.' for assistance.';
+        $message          = $defaultMessage;
 
         Log::info('Payment response status: '.$status);
         Log::info('Payment response signature: '.$signature);
@@ -244,13 +284,23 @@ class OrderController extends Controller
             $message = 'Thank you for the payment!. Your order is currently being processed.';
     	}
 
-        $order = $this->storeFromSession($request, $orderStatus, $refNo);    
-        $this->sendEmail($request, $order);
-        $this->sendSupportEmail($request, $order);
-        $this->storeToFile($order);
-        $this->clearOrder($request);
-        $this->clearCart($request);
-        $this->clearCoupons($request);
+        try 
+        {
+            $order = $this->storeFromSession($request, $orderStatus, $refNo);    
+            $this->sendEmail($request, $order);
+            $this->sendSupportEmail($request, $order);
+            $this->storeToFile($order);
+        } 
+        catch (\Exception $ex) 
+        {
+            Log::error('Error in post payment processes: '.$ex);
+        } 
+        finally 
+        {
+            $this->clearOrder($request);
+            $this->clearCart($request);
+            $this->clearCoupons($request);
+        }
 
         return view('order.complete')
                     ->with('referenceNumber', $refNo)
