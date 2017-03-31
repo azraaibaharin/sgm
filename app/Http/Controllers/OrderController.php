@@ -42,7 +42,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return view('order.index')->with('orders', $this->order->all());
+        return view('order.index')->with('orders', $this->order->orderBy('created_at', 'desc')->get());
     }
 
     /**

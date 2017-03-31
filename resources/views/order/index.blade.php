@@ -28,8 +28,11 @@
 					@foreach($orders as $o)
 						<tr>
 							<td class="text-center">
-								<span class="label label-default">{{ ucfirst($o->status) }}</span>
-								{{-- {{ ucfirst($o->status) }} --}}
+							@if (strpos(strtolower($o->status), 'unsuccessful') !== false)
+								<span class="label label-danger">{{ ucfirst($o->status) }}</span>
+							@else
+								<span class="label label-success">{{ ucfirst($o->status) }}</span>
+							@endif
 							</td>
 							<td>{{ $o->name }}</td>
 							<td>{{ $o->reference_number }}</td>
