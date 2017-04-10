@@ -91,14 +91,15 @@
 								  	<input type="hidden" name="name" value="{{ ucfirst($brand) }} {{ ucfirst($model) }}">
 								  	<input type="hidden" name="price" value="{{ $price }}">
 								  	<input type="hidden" name="delivery_weight" value="{{ $delivery_weight }}">
-								  	<select name="color">
+								  	<select id="color_select" name="color" onchange="">
 								  		{{-- <option value="nocolor">Select preferred color</option> --}}
 								  		@foreach($colorsWithSku as $c)
 											<option value="{{ trim($c) }}">{{ trim(preg_replace("#\(.*\)#", "", $c)) }}</option>
 								  		@endforeach
 								  	</select>
 								  	<br><br>
-								  	<input type="submit" class="btn btn-default" value="Add to Cart">
+								  	<input id="add_to_cart_button" type="submit" class="btn btn-default" value="Add to Cart">
+								  	<small id="color_oos_label">* This color is out of stock</small>
 								</form>
 							@endif
 						</div>
@@ -128,4 +129,29 @@
 @section('js')
     @parent
     <script type="text/javascript" src="/magiczoomplus/magiczoomplus.js"></script>
+    <script type="text/javascript">
+    	window.onload = function() {
+    		var colorSelect = document.getElementById('color_select');
+    		var colorOosLabel = document.getElementById('color_oos_label');
+    		var cartBtn = document.getElementById('add_to_cart_button');
+
+    		var colorSelected = colorSelect.value;
+			// console.log('Initial selected color: ' + colorSelected);
+    		var isColorOutOfStock = colorSelected.toLowerCase().includes('out of stock');
+			colorOosLabel.style.display = isColorOutOfStock ? 'block' : 'none';
+    		cartBtn.disabled = isColorOutOfStock;
+
+    		colorSelect.onchange = function() {
+    			colorSelected = colorSelect.value;
+    			// console.log('Selected color: ' + colorSelected);
+    			isColorOutOfStock = colorSelected.toLowerCase().includes('out of stock');
+    			cartBtn.disabled = isColorOutOfStock;
+    			colorOosLabel.style.display = isColorOutOfStock ? 'block' : 'none';
+    		}
+
+    		var checkColorStock = function() {
+
+    		}
+    	}
+    </script>
 @endsection
