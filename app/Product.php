@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -28,7 +29,8 @@ class Product extends Model
     	'weight_capacity' => '', 
     	'age_requirement' => '',
     	'awards' => '',
-        'delivery_weight' => 0.00
+        'delivery_weight' => 0.00,
+        'visible' => true
 	];
 
 	/**
@@ -39,7 +41,7 @@ class Product extends Model
     protected $fillable = [
     	'brand', 'model', 'price', 'description', 'category_id', 'category', 'image_links', 'video_links',
     	'status', 'color', 'download_links', 'weight', 'dimension', 'weight_capacity', 'age_requirement',
-    	'awards', 'delivery_weight'
+    	'awards', 'delivery_weight', 'visible'
     ];
 
     /**
@@ -82,13 +84,19 @@ class Product extends Model
      */
     public function scopeOfBrand($query, $brand)
     {
+        $q = $query;
+
         if ($brand != $this->getBrands()[0])
         {
-            return $query->where('brand', $brand)->orderBy('updated_at');
-        } else
-        {
-            return $query->orderBy('updated_at');
+            $q = $q->where('brand', $brand);
         }
+
+        if (Auth::guest())
+        {
+            $q = $q->where('visible', true);
+        }
+
+        return $q->orderBy('updated_at', 'asc');
     }
 
     /**
@@ -111,6 +119,11 @@ class Product extends Model
         if (!is_null($category) && $category != $this->getCategories()[0])
         {
             $q = $q->where('category', $category);
+        }
+
+        if (Auth::guest())
+        {
+            $q = $q->where('visible', true);
         }
 
         return $q->orderBy('model', 'asc');

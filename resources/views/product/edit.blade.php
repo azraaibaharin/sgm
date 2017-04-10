@@ -19,7 +19,7 @@
                         @include('shared.form.select', ['name' => 'category', 'text' => 'Category', 'options' => session('categories')])
                         @include('shared.form.textarea', ['name' => 'description', 'text' => 'Description', 'placeholder' => 'Describe this product..'])
                         @include('shared.form.select', ['name' => 'status', 'text' => 'Status', 'options' => session('statuses')])
-
+                        @include('shared.form.select', ['name' => 'visible', 'text' => 'Visible', 'options' => session('visibility')])
                         @include('shared.form.textfield', ['name' => 'color', 'text' => 'Color', 'placeholder' => 'blue (222), green (333)', 'help' => '* Comma separated values with SKU in brackets, e.g. blue(222),green(333),yellow(555)'])
 						@include('shared.form.textfield', ['name' => 'weight', 'text' => 'Weight', 'placeholder' => '112.0', 'help' => '* In kg, without word \'kg\'. E.g. 2.0.'])
                         @include('shared.form.textfield', ['name' => 'delivery_weight', 'text' => 'Delivery Weight', 'placeholder' => '121.0', 'help' => '* In kg, without word \'kg\'. E.g. 2.0.'])
