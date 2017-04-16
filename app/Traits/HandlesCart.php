@@ -13,8 +13,6 @@ trait HandlesCart {
 
 	use HandlesCoupon;
 
-    protected $couponTotalValueKey = 'coupon_total_value';
-
     /**
      * Prepares the session for Cart show page.
      *
@@ -25,9 +23,7 @@ trait HandlesCart {
 	{        
         Log::info('Preparing cart show page');
 
-		$couponTotalValue = $this->getCouponTotalValue($request);
-
-        $request->session()->put($this->couponTotalValueKey, $couponTotalValue);
+		$this->prepareCouponTotalValue($request);
 	}
 
     /**
@@ -40,7 +36,7 @@ trait HandlesCart {
     {
         Log::info('Clearing stored Cart values in session');
         
-        $request->session()->forget($this->couponTotalValueKey);
+        $this->clearCouponTotalValue($request);
     }
 
     /**

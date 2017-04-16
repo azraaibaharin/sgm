@@ -51,7 +51,13 @@
 				        </tr>
 				        @if(session('coupon_total_value') > 0)
 							<tr class="active">
-								<td>&nbsp</td>
+								<td>
+									<small>Applied coupons: 
+									@foreach (explode(",", session('coupon_codes')) as $couponCode)
+										<i>{{ $couponCode }} </i>
+									@endforeach
+									</small>
+								</td>
 								<td class="text-center">Discount</td>
 								<td class="text-center">-RM{{ session('coupon_total_value') }}</td>
 							</tr>

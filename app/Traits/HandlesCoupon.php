@@ -5,12 +5,15 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Log;
+use Cart;
 
 use App\Coupon;
 
 trait HandlesCoupon {
 
 	protected $couponIdsKey = 'coupon_ids';
+    protected $couponCodesKey = 'coupon_codes';
+    protected $couponTotalValueKey = 'coupon_total_value';
 
     /**
      * Stores applied coupon code's id to the session.
@@ -25,7 +28,11 @@ trait HandlesCoupon {
         $couponCode = $request->coupon_code;
         $coupon     = Coupon::ofCode($couponCode)->first();
 
-        if (is_null($coupon) || !$this->isValidCoupon($coupon))
+        if (is_null($coupon))
+        {
+            return redirect('cart')->withError('Coupon not found.');   
+        }
+        if (!$this->isValidCoupon($coupon))
         {
             return redirect('cart')->withError('Invalid coupon code used!');
         }
@@ -35,8 +42,16 @@ trait HandlesCoupon {
             return redirect('cart')->withError('Coupon code has been used!');   
         }
 
+        if ($this->getApplicableValue(explode(",", $coupon->selected_product_ids)) < 1)
+        {
+            return redirect('cart')->withError('Coupon code is not applicable to any of the products!');   
+        }
+
         $couponIds = $coupon->id.','.$request->session()->get($this->couponIdsKey);
         $request->session()->put($this->couponIdsKey, $couponIds);
+
+        $couponCodes = $couponCode.', '.$request->session()->get($this->couponCodesKey);
+        $request->session()->put($this->couponCodesKey, $couponCodes);
 
         Log::info('Applied coupon ids: '.$couponIds);
 
@@ -52,6 +67,31 @@ trait HandlesCoupon {
     public function clearCoupons(Request $request)
     {
         $request->session()->forget($this->couponIdsKey);
+        $request->session()->forget($this->couponCodesKey);
+        $request->session()->forget($this->couponTotalValueKey);
+    }
+
+    /**
+     * Clears all entries of coupon total value from the session.
+     *
+     * @param  Request $request
+     * @return void
+     */
+    public function clearCouponTotalValue(Request $request)
+    {
+        $request->session()->forget($this->couponTotalValueKey);
+    }
+
+    /**
+     * Get the total coupon value and store the value in session.
+     *
+     * @param  Request $request
+     * @return void
+     */
+    public function prepareCouponTotalValue(Request $request)
+    {
+        $couponTotalValue = $this->getCouponTotalValue($request);
+        $request->session()->put($this->couponTotalValueKey, $couponTotalValue);   
     }
 
 	/**
@@ -62,19 +102,67 @@ trait HandlesCoupon {
      */
     public function getCouponTotalValue(Request $request)
     {
+        Log::debug('Getting total coupon value to apply.');
+
     	$couponIds  = explode(',', $request->session()->get($this->couponIdsKey, ''));
     	$totalValue = 0;
         
         foreach($couponIds as $couponId)
         {
             $coupon = Coupon::find($couponId);
+            $applicableValue = 0;
             if ($coupon != null && $this->isValidCoupon($coupon))
             {
-                $totalValue += $coupon->value;
+                $applicableValue += $this->getApplicableValue(explode(",", $coupon->selected_product_ids));   
+                if ($applicableValue > 0) {
+                    $totalValue += $this->getAppliedCouponValue($coupon, $applicableValue);
+                }
             }
         }
 
+        Log::debug('Total coupon value: '.number_format((float)$totalValue, 2, '.', ''));
+
         return number_format((float)$totalValue, 2, '.', '');
+    }
+
+    /**
+     * Returns calculated value of discounts based on the percentage.
+     *
+     * @param  [type] $coupon         [description]
+     * @param  [type] $applicableValue [description]
+     * @return [type]                 [description]
+     */
+    protected function getAppliedCouponValue($coupon, $applicableValue)
+    {
+        $percentage = $coupon->percentage;
+        return ($percentage > 0 ? ($applicableValue*$percentage)/100 : $coupon->value);
+    }
+
+    /**
+     * Returns the product item value that is applicable for coupon.
+     *
+     * @param  [type] $couponProductIdsArr [description]
+     * @return [type]                      [description]
+     */
+    protected function getApplicableValue($couponProductIdsArr)
+    {
+        Log::debug('Getting coupon total value for following product ids: '.implode($couponProductIdsArr));
+
+        $applicableValue = 0;
+        foreach (Cart::content() as $cartItem) {
+            Log::debug('Cart item id: '.$cartItem->id);
+
+            if (in_array($cartItem->id, $couponProductIdsArr))
+            {
+                Log::debug('Applicable cart item value: '.$cartItem->total);
+
+                $applicableValue += $cartItem->total;
+            }
+        }
+
+        Log::debug('Total applicable value: '.$applicableValue);
+
+        return $applicableValue;
     }
 
 	/**
