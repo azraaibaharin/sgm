@@ -128,7 +128,7 @@
 
 @section('js')
     @parent
-    <script type="text/javascript" src="/magiczoomplus/magiczoomplus.js"></script>
+    <script type="text/javascript" src="{{ asset('/magiczoomplus/magiczoomplus.js') }}"></script>
     <script type="text/javascript">
     	window.onload = function() {
     		var colorSelect = document.getElementById('color_select');

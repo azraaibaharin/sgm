@@ -8,6 +8,7 @@ use Log;
 use App\Http\Requests\StoreCoupon;
 use App\Traits\FlashModelAttributes;
 use App\Http\Requests;
+use App\Product;
 use App\Coupon;
 
 class CouponController extends Controller
@@ -21,13 +22,20 @@ class CouponController extends Controller
     protected $coupon;
 
     /**
+     * The Product instance.
+     * @var App/Product
+     */
+    protected $product;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Coupon $coupon)
+    public function __construct(Coupon $coupon, Product $product)
     {
         $this->coupon = $coupon;
+        $this->product = $product;
     }
 
     /**
@@ -45,8 +53,12 @@ class CouponController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        Log::info('Show create coupon page');
+
+        $request->session()->flash('products', $this->product->all());
+
         return view('coupon.create');
     }
 
@@ -60,12 +72,13 @@ class CouponController extends Controller
     {
         Log::info('Storing coupon');
 
-        $coupon                     = $this->coupon;
-        $coupon->code               = $request->code;
-        $coupon->discount           = '0'; // $request->discount;
-        $coupon->value              = $request->value;
-        $coupon->date_of_issue      = $this->toDate($request->date_of_issue);
-        $coupon->date_of_expiration = $this->toDate($request->date_of_expiration);
+        $coupon                       = $this->coupon;
+        $coupon->code                 = $request->code;
+        $coupon->percentage           = $request->percentage;
+        $coupon->value                = $request->value;
+        $coupon->selected_product_ids = $request->selected_product_ids;
+        $coupon->date_of_issue        = $this->toDate($request->date_of_issue);
+        $coupon->date_of_expiration   = $this->toDate($request->date_of_expiration);
 
         $coupon->save();
 
@@ -83,8 +96,9 @@ class CouponController extends Controller
         Log::info('Showing coupon id: '.$id);
 
         $coupon = $this->coupon->findOrFail($id);
+        $products = $this->product->whereIn('id', explode(",", $coupon->selected_product_ids))->get(['brand', 'model']);
         
-        return view('coupon.show', $coupon->toArray());
+        return view('coupon.show', $coupon->toArray())->with('products', $products);
     }
 
     /**
@@ -97,7 +111,10 @@ class CouponController extends Controller
     {
         Log::info('Editing coupon id: '.$id);
 
-        $this->flashAttributesToSession($request, $this->coupon->findOrFail($id));
+        $coupon = $this->coupon->findOrFail($id);
+
+        $this->flashAttributesToSession($request, $coupon);
+        $request->session()->flash('products', $this->product->all());
 
         return view('coupon.edit');
     }
@@ -113,12 +130,13 @@ class CouponController extends Controller
     {
         Log::info('Updating coupon id: '.$id);
 
-        $coupon                     = $this->coupon->findOrFail($id);
-        $coupon->code               = $request->code;
-        $coupon->discount           = '0'; // $request->discount;
-        $coupon->value              = $request->value;
-        $coupon->date_of_issue      = $this->toDate($request->date_of_issue);
-        $coupon->date_of_expiration = $this->toDate($request->date_of_expiration);
+        $coupon                       = $this->coupon->findOrFail($id);
+        $coupon->code                 = $request->code;
+        $coupon->percentage           = $request->percentage;
+        $coupon->value                = $request->value;
+        $coupon->selected_product_ids = $request->selected_product_ids;
+        $coupon->date_of_issue        = $this->toDate($request->date_of_issue);
+        $coupon->date_of_expiration   = $this->toDate($request->date_of_expiration);
 
         $coupon->save();
 

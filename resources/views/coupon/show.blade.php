@@ -9,9 +9,18 @@
 <div id="warranty" class="container bottom-padding-sm">
 	<div class="row">
 		<div class="col-md-12">
-			<h1>{{ $code }}</h1>
-			{{-- <p><label>Discount:</label> {{ $discount }}</p> --}}
-			<p><label>Value:</label> {{ $value }}</p>
+			<p><label>Code:</label> {{ $code }}</p>
+			<p><label>Percentage:</label> {{ $percentage == '' ? 0 : $percentage }}%</p>
+			<p><label>Value:</label> MYR {{ $value == '' ? 0 : $value }}</p>
+			<p>
+				<label>Products applied ({{ count($products) }}):</label>
+				@if (count($products) < 1)
+					None
+				@endif
+				@foreach ($products as $product)
+					<br>{{ ucfirst($product->brand) }} {{ $product->model }}
+				@endforeach
+			 </p>
 			<p><label>Date of Issue:</label> {{ $date_of_issue }}</p>
 			<p><label>Date of Expiry:</label> {{ $date_of_expiration }}</p>
 		</div>

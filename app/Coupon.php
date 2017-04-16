@@ -12,7 +12,7 @@ class Coupon extends Model
 	 * @var array
 	 */
     protected $attributes = [
-    	'discount' => '',
+    	'percentage' => '',
     	'value' => '',
         'date_of_expiration' => '',
     	'date_of_issue' => '',
@@ -24,7 +24,7 @@ class Coupon extends Model
      * @var array
      */
     protected $fillable = [
-    	'discount',
+    	'percentage',
 		'value',
 		'date_of_expiration',
 		'date_of_issue'

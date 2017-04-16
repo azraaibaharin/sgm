@@ -24,10 +24,12 @@ class StoreCoupon extends FormRequest
     public function rules()
     {
         return [
-            'code'               => 'required|max:255',
-            'value'              => 'required|max:255',
-            'date_of_issue'      => 'required|date',
-            'date_of_expiration' => 'required|date',
+            'code'                 => 'required|max:255',
+            'percentage'           => 'required_if:value,|max:255',
+            'value'                => 'required_if:percentage,|max:255',
+            'selected_product_ids' => 'required|max:255',
+            'date_of_issue'        => 'required|date',
+            'date_of_expiration'   => 'required|date',
         ];
     }
 }

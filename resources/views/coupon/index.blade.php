@@ -18,8 +18,9 @@
 						<thead>
 							<tr>
 								<th>Code</th>
-								{{-- <th>Discount</th> --}}
-								<th>Value</th>
+								<th>Percentage (%)</th>
+								<th>Value (MYR)</th>
+								<th>Applied Products</th>
 								<th>Issue Date</th>
 								<th>Expiry Date</th>
 								<th></th>
@@ -29,8 +30,13 @@
 						@foreach($coupons as $c)
 							<tr>
 								<td>{{ $c->code }}</td>
-								{{-- <td>{{ $c->discount }}</td> --}}
-								<td>{{ $c->value }}</td>
+								<td>{{ $c->percentage == '' ? 0 : $c->percentage }}</td>
+								<td>{{ $c->value == '' ? 0 : $c->value }}</td>
+								@if ($c->selected_product_ids != '')
+									<td>{{ count(explode(",", $c->selected_product_ids)) }}</td>
+								@else 
+									<td>0</td>
+								@endif
 								<td>{{ $c->date_of_issue }}</td>
 								<td>{{ $c->date_of_expiration }}</td>
 								<td><a href="{{ url('coupons/'.$c->id) }}">Show</a></td>

@@ -384,6 +384,38 @@ and (max-device-width : 480px) {
 	background-color: #000;
 }
 
+.multiselect-header {
+	color: #111;
+	background-color: #fff;
+	border-bottom: 2px solid #ccc;
+	padding: 6px 12px;
+}
+
+#coupon .ms-container {
+	width: 100%;
+}
+
+#coupon .ms-container .ms-list {
+	border: 0;
+	border-radius: 0;
+}
+
+#coupon .ms-container .ms-selectable,
+#coupon .ms-container .ms-selection {
+	width: 100%;
+	border: 1px solid #ccc;
+	border-radius: 0;
+}
+
+#coupon .ms-container .ms-selectable {
+	margin-bottom: 15px;
+} 
+
+#coupon .ms-container .ms-selectable li.ms-elem-selectable, 
+#coupon .ms-container .ms-selection li.ms-elem-selection {
+	padding: 6px 12px;
+}
+
 #articles a,
 #products a,
 #testimonials a,
