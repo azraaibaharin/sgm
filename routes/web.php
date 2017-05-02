@@ -100,6 +100,7 @@ Route::get('warranties/{id}', 'WarrantyController@show');
 Route::get('warranties/{id}/edit', 'WarrantyController@edit')->middleware('auth');
 Route::post('warranties/{id}/edit', 'WarrantyController@update')->middleware('auth');
 Route::post('warranties/delete', 'WarrantyController@destroy')->middleware('auth');
+Route::post('warranties/export', 'WarrantyController@export')->middleware('auth');
 
 // Coupon
 Route::get('coupons', 'CouponController@index')->middleware('auth');

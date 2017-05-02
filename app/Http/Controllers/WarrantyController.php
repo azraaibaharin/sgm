@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Excel;
+use Carbon\Carbon;
 use Log;
 
 use App\Http\Requests\StoreWarranty;
@@ -150,6 +152,28 @@ class WarrantyController extends Controller
         $this->warranty->destroy($warrantyId);
 
         return redirect('warranties')->withMessage('Successfully deleted \''.$warrantyDetails.'\'');
+    }
+
+    /**
+     * Exports the list of warranties as a file.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function export(Request $request)
+    {
+        $warranties = $this->warranty->all();
+        $exportFilename = 'warranties_export_'.Carbon::now()->toDateString().'.csv';
+
+        Log::info('Exporting '.count($warranties).' warranties to '.$exportFilename);
+
+        Excel::create($exportFilename, function($excel) use($warranties) {
+            $excel->sheet('All', function($sheet) use($warranties) {
+                $sheet->fromModel($warranties);
+            });
+        })->download('csv');
+
+        return redirect('warranties')->withMessage('Successfully exported warranties to \''.$exportFilename.'\'');
     }
 
     /**
