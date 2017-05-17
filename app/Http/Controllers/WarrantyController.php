@@ -39,7 +39,7 @@ class WarrantyController extends Controller
      */
     public function index()
     {
-        $warranties = $this->warranty->orderBy('updated_at')->get();
+        $warranties = $this->warranty->orderBy('created_at', 'desc')->get();
         return view('warranty.index')->with('warranties', $warranties);
     }
 
@@ -174,6 +174,22 @@ class WarrantyController extends Controller
         })->download('csv');
 
         return redirect('warranties')->withMessage('Successfully exported warranties to \''.$exportFilename.'\'');
+    }
+
+    /**
+     * Remove all warranties.
+     * 
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function clear(Request $request)
+    {
+        $warrantiesCount = $this->warranty->count();
+        Log::info('Clearing '.$warrantiesCount.' rows of warranty');
+
+        $this->warranty->truncate();
+        
+        return redirect('warranties')->withMessage('Successfully cleared '.$warrantiesCount.' warranties.');
     }
 
     /**

@@ -17,25 +17,19 @@
 					<table class="table table-striped table-bordered">
 						<thead>
 							<tr>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone</th>
-								<th>Address</th>
-								<th>Model</th>
 								<th>Serial No.</th>
+								<th>Name</th>
+								<th>Model</th>
 								<th>Submitted On</th>
-								<th></th>
+								<th>Details</th>
 							</tr>
 						</thead>
 						<tbody>
 						@foreach($warranties as $w)
 							<tr>
-								<td>{{ $w->full_name }}</td>
-								<td>{{ $w->email }}</td>
-								<td>{{ $w->phone_number }}</td>
-								<td>{{ $w->address }}</td>
-								<td>{{ $w->product_model_name }}</td>
 								<td>{{ $w->product_serial_number }}</td>
+								<td>{{ $w->full_name }}</td>
+								<td>{{ $w->product_model_name }}</td>
 								<td>{{ date('Y-m-d', strtotime($w->created_at)) }}</td>
 								<td><a href="{{ url('warranties/'.$w->id) }}">Show</a></td>
 							</tr>				
