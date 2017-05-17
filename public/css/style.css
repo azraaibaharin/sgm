@@ -275,6 +275,11 @@ and (min-width : 1224px) {
 	border: none;
 }
 
+.sale-box {
+	color: #fff;
+	background-color: red;
+}
+
 #products-search,
 #testimonials-search,
 #stores-search,
@@ -377,6 +382,7 @@ and (max-device-width : 480px) {
 #products .sale-box {
 	display: none;
 	color: #fff;
+	font-size: 12px !important;
 	background-color: red;
 }
 
