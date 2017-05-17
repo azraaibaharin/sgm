@@ -103,6 +103,7 @@ class ProductController extends Controller
         $request->session()->flash('categories', $this->product->getCategories(false));
         $request->session()->flash('statuses', $this->product->getStatuses());
         $request->session()->flash('visibility', ['true', 'false']);
+        $request->session()->flash('is_sale_opts', ['yes', 'no']);
 
         return view('product.create');
     }
@@ -133,10 +134,13 @@ class ProductController extends Controller
             $request->weight, 
             $request->delivery_weight,
             $request->dimension, 
-            $request->weight_capacity, 
+            $request->weight_capacity,
             $request->age_requirement, 
             $request->awards,
-            $request->visible
+            $request->visible,
+            $request->tag,
+            $request->sort_index,
+            $request->is_sale
         );
 
         return redirect('products/'.$product->id);
@@ -193,7 +197,10 @@ class ProductController extends Controller
                             is_null($product->weight_capacity) ? $row->weight_capacity : $product->weight_capacity, 
                             is_null($product->age_requirement) ? $row->age_requirement : $product->age_requirement, 
                             is_null($product->awards) ? $row->awards : $product->awards,
-                            'true'
+                            'true',
+                            '',
+                            0,
+                            false
                         );
                         $count++;
                     } else 
@@ -257,6 +264,7 @@ class ProductController extends Controller
         $request->session()->flash('categories', $product->getCategories(false));
         $request->session()->flash('statuses', $product->getStatuses());
         $request->session()->flash('visibility', ['true', 'false']);
+        $request->session()->flash('is_sale_opts', ['yes', 'no']);
 
         return view('product.edit');
     }
@@ -293,7 +301,10 @@ class ProductController extends Controller
             $request->weight_capacity, 
             $request->age_requirement, 
             $request->awards,
-            $request->visible
+            $request->visible,
+            $request->tag,
+            $request->sort_index,
+            $request->is_sale
         );
 
         return redirect('products/'.$product->id)->withMessage('Updated');
@@ -340,9 +351,12 @@ class ProductController extends Controller
      * @param  [type] $age_requirement [description]
      * @param  [type] $awards          [description]
      * @param  [type] $visible         [description]
+     * @param  [type] $tag             [description]
+     * @param  [type] $sort_index      [description]
+     * @param  [type] $is_sale         [description]
      * @return App/Product             [description]
      */
-    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $delivery_weight, $dimension, $weight_capacity, $age_requirement, $awards, $visible)
+    protected function save($product, $brand, $model, $price, $description, $status, $category_id, $category, $image_links, $video_links, $color, $download_links, $weight, $delivery_weight, $dimension, $weight_capacity, $age_requirement, $awards, $visible, $tag, $sort_index, $is_sale)
     {
         $product->brand           = $brand;
         $product->model           = $model;
@@ -362,6 +376,9 @@ class ProductController extends Controller
         $product->age_requirement = $age_requirement;
         $product->awards          = $awards;
         $product->visible         = $visible == 'true';
+        $product->tag             = $tag;
+        $product->sort_index      = $sort_index;
+        $product->is_sale         = $is_sale == 'yes';
 
         $product->save();
 

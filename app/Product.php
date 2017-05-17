@@ -30,7 +30,10 @@ class Product extends Model
     	'age_requirement' => '',
     	'awards' => '',
         'delivery_weight' => 0.00,
-        'visible' => true
+        'visible' => true,
+        'tag' => '',
+        'sort_index' => '99999',
+        'is_sale' => false,
 	];
 
 	/**
@@ -41,7 +44,7 @@ class Product extends Model
     protected $fillable = [
     	'brand', 'model', 'price', 'description', 'category_id', 'category', 'image_links', 'video_links',
     	'status', 'color', 'download_links', 'weight', 'dimension', 'weight_capacity', 'age_requirement',
-    	'awards', 'delivery_weight', 'visible'
+    	'awards', 'delivery_weight', 'visible', 'tag', 'sort_index', 'is_sale'
     ];
 
     /**
@@ -126,7 +129,9 @@ class Product extends Model
             $q = $q->where('visible', true);
         }
 
-        return $q->orderBy('model', 'asc');
+        return $q->orderBy('is_sale', 'desc')
+                 ->orderBy('sort_index', 'desc')
+                 ->orderBy('model', 'asc');
     }
 
     /**

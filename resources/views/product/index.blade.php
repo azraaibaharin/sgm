@@ -67,7 +67,7 @@
 				<small>{{ count($products) }} item(s)</small>
 			</div>
 			@foreach ($products as $p)
-			<div class="col-md-4 {{ $p->brand }} bottom-padding-sm">
+			<div class="col-md-4 {{ $p->brand }} bottom-padding-sm {{ $p->is_sale ? 'on-sale' : '' }}">
 				<div class="row">
 					<div class="col-md-6 img-box text-center">
 						@if (empty($p->getDisplay('image_links')))
@@ -78,6 +78,7 @@
 					</div>
 					<div class="col-md-6 desc-box">
 						<h2>{{ $p->model }}</h2>
+						<h2 class="sale-box">ON SALE</h2>
 						<a href="{{ url('products/'.$p->id) }}">View item</a>
 					</div>
 				</div>

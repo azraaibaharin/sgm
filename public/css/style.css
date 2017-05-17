@@ -374,6 +374,16 @@ and (max-device-width : 480px) {
 	min-height: 150px;
 }
 
+#products .sale-box {
+	display: none;
+	color: #fff;
+	background-color: red;
+}
+
+#products .on-sale .sale-box {
+	display: block;
+}
+
 .babyhood h2 {
 	color: #fff;
 	background-color: #0a64a2;
