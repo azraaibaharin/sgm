@@ -34,7 +34,7 @@
                         @include('shared.form.file', ['name' => 'image_third', 'text' => 'Image 3'])
                         @include('shared.form.file', ['name' => 'image_fourth', 'text' => 'Image 4'])
                         @include('shared.form.file', ['name' => 'image_fifth', 'text' => 'Image 5'])
-                        @include('shared.form.textfield', ['name' => 'tag', 'text' => 'Tags', 'placeholder' => '', 'help' => '* space separated values. E.g. modular cute red'])
+                        @include('shared.form.textfield', ['name' => 'tag', 'text' => 'Tag', 'placeholder' => '', 'help' => '* single word used to link as suggested product. E.g. red, modular'])
                         @include('shared.form.textfield', ['name' => 'sort_index', 'text' => 'Sort Index', 'placeholder' => '0', 'help' => '* higher index comes first. E.g. sort index: 99 will be displayed first in the list before sort index: 9.'])
                         @include('shared.form.select', ['name' => 'is_sale', 'text' => 'On Sale', 'options' => session('is_sale_opts')])
                     </div>

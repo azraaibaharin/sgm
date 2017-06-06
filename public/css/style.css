@@ -407,6 +407,19 @@ and (max-device-width : 480px) {
 	padding: 6px 12px;
 }
 
+#product-suggestions h4 {
+	font-weight: 700;
+}
+#product-suggestions img {
+	max-height: 200px;
+	margin: 30px 0;
+}
+
+#product-suggestions .bg-no-img {
+	height: 200px;
+	margin: 30px 0;
+}
+
 #coupon .ms-container {
 	width: 100%;
 }

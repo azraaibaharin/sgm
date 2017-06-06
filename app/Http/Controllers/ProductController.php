@@ -7,14 +7,16 @@ use Image;
 use Excel;
 use Log;
 
+use App\Http\Requests\StoreProduct;
 use App\Traits\FlashModelAttributes;
+use App\Traits\SuggestsProducts;
 use App\Http\Requests;
 use App\Product;
 use Storage;
 
 class ProductController extends Controller
 {
-    use FlashModelAttributes;
+    use FlashModelAttributes, SuggestsProducts;
 
     /**
      * The Product instance.
@@ -114,7 +116,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProduct $request)
     {
         Log::info('Storing product');
 
@@ -237,7 +239,8 @@ class ProductController extends Controller
 
         return view('product.show', $productArr)
                 ->with('displayImage', $product->getDisplay('image_links'))
-                ->with('displayVideo', $product->getDisplay('video_links'));
+                ->with('displayVideo', $product->getDisplay('video_links'))
+                ->with('suggestions', $this->getSuggestions($product));
     }
 
     /**
@@ -276,7 +279,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreProduct $request, $id)
     {
         Log::info('Updating product id: '.$id);
 

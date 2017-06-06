@@ -107,6 +107,7 @@
 				</div>
 			</div>
 			<hr/>
+			@include('product.suggestions', ['suggestions' => $suggestions])
 			<div class="row">	
 				<div class="col-md-12">
 					<a href="{{ url('products') }}"" class="btn btn-link">Back</a>
@@ -120,7 +121,6 @@
 					@endif
 				</div>
 			</div>
-			
 		</div>
 	</div>
 </div>

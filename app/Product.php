@@ -32,7 +32,7 @@ class Product extends Model
         'delivery_weight' => 0.00,
         'visible' => true,
         'tag' => '',
-        'sort_index' => '99999',
+        'sort_index' => '0',
         'is_sale' => false,
 	];
 
