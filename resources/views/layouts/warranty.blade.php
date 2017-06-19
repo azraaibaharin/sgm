@@ -20,7 +20,7 @@
             <li>
                 <a href="{{ url('/warranties/create') }}">Add Warranty</a>
                 <a href="{{ url('/warranties/export') }}" onclick="event.preventDefault();document.getElementById('export-warranties').submit();">Export Warranties</a>
-                <a href="{{ url('/warranties/clear') }}" onclick="event.preventDefault();document.getElementById('clear-warranties').submit();">Clear Warranties</a>
+                {{-- <a href="{{ url('/warranties/clear') }}" onclick="event.preventDefault();document.getElementById('clear-warranties').submit();">Clear Warranties</a> --}}
                 <a href="{{ url('coupons') }}">View Coupons</a>
                 <a href="{{ url('order') }}">View Orders</a>
                 <a href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
@@ -29,9 +29,9 @@
                     {{ csrf_field() }}
                 </form>
 
-                <form id="clear-warranties" action="{{ url('/warranties/clear') }}" method="POST" style="display: none;">
+                {{-- <form id="clear-warranties" action="{{ url('/warranties/clear') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
-                </form>
+                </form> --}}
 
                 <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
