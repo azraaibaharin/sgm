@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+
 <form class="form-horizontal bottom-padding-sm" role="form" method="POST" action="{{ url('products/'.session('id').'/edit') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="container">
@@ -29,11 +30,11 @@
                         @include('shared.form.textfield', ['name' => 'awards', 'text' => 'Awards', 'placeholder' => 'Red Label', 'help' => '* comma separated. E.g. Best Brands, Red Label'])
                         @include('shared.form.textfield', ['name' => 'video_links', 'text' => 'Video Links', 'placeholder' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/JiElMKX74H8" frameborder="0" allowfullscreen></iframe>', 'help' => '* copy the \'embed\' link in youtube'])
                         @include('shared.form.textfield', ['name' => 'download_links', 'text' => 'Download Links'])
-                        @include('shared.form.file', ['name' => 'image_first', 'text' => 'Image 1'])
-                        @include('shared.form.file', ['name' => 'image_second', 'text' => 'Image 2'])
-                        @include('shared.form.file', ['name' => 'image_third', 'text' => 'Image 3'])
-                        @include('shared.form.file', ['name' => 'image_fourth', 'text' => 'Image 4'])
-                        @include('shared.form.file', ['name' => 'image_fifth', 'text' => 'Image 5'])
+                        @include('shared.form.image', ['name' => 'image_first', 'text' => 'Image 1', 'index' => '0'])   
+                        @include('shared.form.image', ['name' => 'image_second', 'text' => 'Image 2', 'index' => '1'])
+                        @include('shared.form.image', ['name' => 'image_third', 'text' => 'Image 3', 'index' => '2'])
+                        @include('shared.form.image', ['name' => 'image_fourth', 'text' => 'Image 4', 'index' => '3'])
+                        @include('shared.form.image', ['name' => 'image_fifth', 'text' => 'Image 5', 'index' => '4'])   
                         @include('shared.form.textfield', ['name' => 'tag', 'text' => 'Tag', 'placeholder' => '', 'help' => '* single word used to link as suggested product. E.g. red, modular'])
                         @include('shared.form.textfield', ['name' => 'sort_index', 'text' => 'Sort Index', 'placeholder' => '0', 'help' => '* higher index comes first. E.g. sort index: 99 will be displayed first in the list before sort index: 9.'])
                         @include('shared.form.select', ['name' => 'is_sale', 'text' => 'On Sale', 'options' => session('is_sale_opts')])
@@ -49,4 +50,10 @@
         </div>
     </div>
 </form>
+
+<form id="remove-image" action="{{ url('/products/'.session('id').'/removeImage') }}" method="POST" style="display: none;">
+    {{ csrf_field() }}
+    <input id="remove-image-index" type="hidden" name="image_index" value="">
+</form>
+
 @endsection
