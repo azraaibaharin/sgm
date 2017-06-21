@@ -33,6 +33,11 @@
 {{-- Feature --}}
 <div id="feature" class="container-fluid bottom-margin-md">
     <div class="row bg-black">
+        <div class="col-md-6 no-left-right-padding hidden-md hidden-lg">
+            @if ($tagline_link != '' && $tagline_link_text != '')<a href="{{ $tagline_link }}">@endif
+                <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
+            @if ($tagline_link != '' && $tagline_link_text != '')</a>@endif
+        </div>
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $tagline_title }}</h1>
             <p class="text-center">{!! $tagline_text !!}</p>
@@ -40,7 +45,7 @@
                 <p class="top-padding-sm text-center"><a href="{{ $tagline_link }}">{{ $tagline_link_text }}</a></p>
             @endif
         </div>
-        <div class="col-md-6 no-left-right-padding">
+        <div class="col-md-6 no-left-right-padding hidden-xs hidden-sm">
             @if ($tagline_link != '' && $tagline_link_text != '')<a href="{{ $tagline_link }}">@endif
                 <img src="{{ asset('img/'.$tagline_img) }}" class="img-responsive center-block">
             @if ($tagline_link != '' && $tagline_link_text != '')</a>@endif
@@ -74,6 +79,11 @@
 {{-- Product of the month --}}
 <div id="potm" class="container-fluid bottom-margin-md">
     <div class="row bg-black">
+        <div class="col-md-6 no-left-right-padding hidden-md hidden-lg">
+            @if ($potm_link != '' && $potm_link_text != '')<a href="{{ $potm_link }}">@endif
+                <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
+            @if ($potm_link != '' && $potm_link_text != '')</a>@endif
+        </div>
         <div class="col-md-6 padding-md">
             <h1 class="text-center">{{ $potm_title }}</h1>
             <p class="text-center">{!! $potm_text !!}</p>
@@ -81,7 +91,7 @@
                 <p class="top-padding-sm text-center"><a href="{{ $potm_link }}">{{ $potm_link_text }}</a></p>
             @endif
         </div>
-        <div class="col-md-6 no-left-right-padding">
+        <div class="col-md-6 no-left-right-padding hidden-xs hidden-sm">
             @if ($potm_link != '' && $potm_link_text != '')<a href="{{ $potm_link }}">@endif
                 <img src="{{ asset('img/'.$potm_img) }}" class="img-responsive center-block">
             @if ($potm_link != '' && $potm_link_text != '')</a>@endif
