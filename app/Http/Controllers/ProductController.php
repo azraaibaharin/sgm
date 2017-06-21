@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Image;
 use Excel;
 use Log;
+use File;
+use Carbon\Carbon;
 
 use App\Http\Requests\StoreProduct;
 use App\Traits\FlashModelAttributes;
@@ -389,6 +391,78 @@ class ProductController extends Controller
     }
 
     /**
+     * Remove image based on the image index.
+     * 
+     * @param  Request $request the post request that contains information of the image index to remove
+     * @param  String  $id      the product id of the image to remove
+     * @return response to the edit product page
+     */
+    public function removeImage(Request $request, String $id)
+    {
+        Log::info('Removing image of product id: '.$id);
+
+        $product = $this->product->findOrFail($id);
+
+        $imageLinks = $product->image_links;
+        $imageLinksArr = explode(',', $imageLinks);
+        $imageLinksSize = sizeof($imageLinksArr);
+        Log::info('Product with id: '.$id.' has '.$imageLinksSize.' images.');
+        
+        $imageIndex = $request->image_index;
+        Log::info('Image index to remove is: '.$imageIndex);
+            
+        $toRemoveImageLink = $imageLinksArr[$imageIndex];
+        if (!empty($toRemoveImageLink) && !is_null($toRemoveImageLink))
+        {
+            Log::info("To remove image link: ".$toRemoveImageLink);
+            Log::info('Image links before removal: '.$imageLinks);
+            $imageLinks = str_replace($toRemoveImageLink, "", $imageLinks);
+            Log::info('Image links after removal: '.$imageLinks);
+
+            $product->image_links = $imageLinks;
+            $product->save();
+
+            Log::info('Product image links: '.$product->image_links);
+
+            $this->removeImageFiles($toRemoveImageLink);
+        } else 
+        {
+            Log::info('Invalid to remove image links found');
+        }
+
+        return redirect('products/'.$product->id.'/edit')->withMessage('Image removed!');
+    }
+
+    /**
+     * Remove all files related to the image based on the filename.
+     * 
+     * @param  String $filename the image file name to remove
+     * @return void
+     */
+    public function removeImageFiles(String $filename)
+    {
+        $this->removeImageFile($filename);
+        $this->removeImageFile($this->getBigImageName($filename));
+        $this->removeImageFile($this->getSmallImageName($filename));
+        $this->removeImageFile($this->getTinyImageName($filename));
+    }
+
+    /**
+     * Remove image file.
+     *
+     * @param filename the name of file to remove
+     */
+    public function removeImageFile(String $filename)
+    {
+        if (file_exists(public_path('img').'/'.$filename)) {
+            File::delete(public_path('img').'/'.$filename);
+            Log::info('Deleted old image file: '.$filename);
+        } else {
+            Log::info('Old image file not found: '.$filename);
+        }
+    }
+
+    /**
      * Format color string to (if more than 1 color is defined) to '<color_0> (<sku_0>), <color_1> (<sku_1>), <color_2> (<sku_2>)'.
      * E.g. Bisque(0101),Cinder (0201) , Green Mellow(9301) ,Yellow (8710)
      *      --> Bisque (0101), Cinder (0201), Green Mellow (9301), Yellow (8710)
@@ -494,15 +568,28 @@ class ProductController extends Controller
             ]);
 
             $imageFile  = $request->file($field_name);
-            $imageName  = $prefix.'_'.$field_name.'.'.$imageFile->getClientOriginalExtension();
+            $imageName  = $prefix.'_'.$field_name.'-'.Carbon::now()->timestamp.'.'.$imageFile->getClientOriginalExtension();
             $imageMoved = $imageFile->move(public_path('img'), $imageName);
 
             $imgBig   = Image::make($imageMoved->getRealPath())->heighten(2000)->save($this->getBigImagePath($imageName), 100);
             $imgSmall = Image::make($imageMoved->getRealPath())->heighten(560)->save($this->getSmallImagePath($imageName), 100);
             $imgTiny  = Image::make($imageMoved->getRealPath())->heighten(60)->save($this->getTinyImagePath($imageName), 100);
+
+            $this->removeImageFiles($old_value);
         }
 
         return $imageName;
+    }
+
+    /**
+     * Return full file name for product tiny image.
+     *
+     * @param  String $imageName    name of the image
+     * @return String            full file name of the image
+     */
+    private function getTinyImageName($imageName) 
+    {
+        return '/tiny_'.$imageName;
     }
 
     /**
@@ -513,7 +600,18 @@ class ProductController extends Controller
      */
     private function getTinyImagePath($imageName) 
     {
-        return public_path('img').'/tiny_'.$imageName;
+        return public_path('img').$this->getTinyImageName($imageName);
+    }
+
+    /**
+     * Return full file name for product small image.
+     *
+     * @param  String $imageName    name of the image
+     * @return String            full file name of the image
+     */
+    private function getSmallImageName($imageName) 
+    {
+        return '/small_'.$imageName;   
     }
 
     /**
@@ -524,7 +622,18 @@ class ProductController extends Controller
      */
     private function getSmallImagePath($imageName) 
     {
-        return public_path('img').'/small_'.$imageName;   
+        return public_path('img').$this->getSmallImageName($imageName);   
+    }
+
+    /**
+     * Return full file name for product big image.
+     *
+     * @param  String $imageName    name of the image
+     * @return String            full file name of the image
+     */
+    private function getBigImageName($imageName) 
+    {
+        return '/big_'.$imageName;
     }
 
     /**
@@ -535,6 +644,6 @@ class ProductController extends Controller
      */
     private function getBigImagePath($imageName) 
     {
-        return public_path('img').'/big_'.$imageName;
+        return public_path('img').$this->getBigImageName($imageName);
     }
 }

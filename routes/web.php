@@ -36,6 +36,7 @@ Route::post('products/import', 'ProductController@store2')->middleware('auth');
 Route::get('products/{id}', 'ProductController@show');
 Route::get('products/{id}/edit', 'ProductController@edit')->middleware('auth');
 Route::post('products/{id}/edit', 'ProductController@update')->middleware('auth');
+Route::post('products/{id}/removeImage', 'ProductController@removeImage')->middleware('auth');
 Route::post('products/delete', 'ProductController@destroy')->middleware('auth');
 
 // Cart

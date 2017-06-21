@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use File;
 
 use App\Mail\ContactFormSubmitted;
 use App\Http\Requests\ContactFormRequest;
@@ -255,8 +257,16 @@ class HomeController extends Controller
             ]);
 
             $image = $request->file($field_name);
-            $imageName = $field_name.'.'.$image->getClientOriginalExtension();
+            $imageName = $field_name.'-'.Carbon::now()->timestamp.'.'.$image->getClientOriginalExtension();
             $image->move(public_path('img'), $imageName);
+
+            // remove the old image file
+            if (file_exists(public_path('img').'/'.$old_value)) {
+                File::delete(public_path('img').'/'.$old_value);
+                Log::info('Deleted old image file: '.$old_value);
+            } else {
+                Log::info('Old image file not found: '.$old_value);
+            }
         }
 
         return $imageName;
