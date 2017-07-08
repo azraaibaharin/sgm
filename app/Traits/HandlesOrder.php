@@ -342,6 +342,8 @@ trait HandlesOrder {
         Log::info('Calulating delivery cost for East Malaysia for weight: '.$totalWeight);
         Log::info('East Malaysia minimum charge: '.$minCharge);
         Log::info('East Malaysia minimum weight: '.$minWeight);
+        Log::info('Total weight: '.$totalWeight);
+        Log::info('Formula for East Malaysia: ((((($totalWeight-$minWeight)*1.5)+10)*1.35)*1.06)+10');
 
         if ($totalWeight < $minWeight)
         {
@@ -371,13 +373,17 @@ trait HandlesOrder {
         Log::info('Calulating delivery cost for West Malaysia for weight: '.$totalWeight);
         Log::info('West Malaysia minimum charge: '.$minCharge);
         Log::info('West Malaysia minimum weight: '.$minWeight);
+        Log::info('Total weight: '.$totalWeight);
+        Log::info('Formula for West Malaysia: (((($totalWeight-$minWeight)*1.7)+10.5)*1.06)+10');
 
         if ($totalWeight < $minWeight)
         {
             $cost = $minCharge;
         } else
         {
-            $cost = ((((($totalWeight-$minWeight)*1.5)+10)*1.35)*1.06)+10;            
+            // $cost = ((((($totalWeight-$minWeight)*1.5)+10)*1.
+            // 35)*1.06)+10;
+            $cost = (((($totalWeight-$minWeight)*1.7)+10.5)*1.06)+10;
         }
 
         return $cost;
