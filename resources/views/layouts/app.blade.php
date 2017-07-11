@@ -1,9 +1,9 @@
 @extends('layouts.base')
 
 @section('navbar-right')
-    <li><a href="#feature">Feature</a></li>
+    <li><a href="#feature">Announcement</a></li>
     <li><a href="#event">Event</a></li>
-    <li><a href="#potm">Product of The Month</a></li>
+    <li><a href="#potm">Featured Products</a></li>
     <li><a href="#getintouch">Get In Touch</a></li>
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">More <span class="caret"></span></a>
