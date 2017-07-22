@@ -32,7 +32,8 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-79226235-2', 'auto');
+      // ga('create', 'UA-79226235-2', 'auto');
+      ga('create', 'UA-102591474-1', 'auto');
       ga('send', 'pageview');
     </script>
     @yield('js-head')
