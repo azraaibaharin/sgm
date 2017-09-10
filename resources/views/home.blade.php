@@ -21,15 +21,6 @@
     </div>
 </div>
 
-{{-- About --}}
-<div id="about" class="container top-bottom-padding-md">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <p>{!! $about_text !!}</p>
-        </div>
-    </div>
-</div>
-
 {{-- Feature --}}
 <div id="feature" class="container-fluid bottom-margin-md">
     <div class="row bg-black">
@@ -139,6 +130,15 @@
     </div>
 </div>
 @endif
+
+{{-- About --}}
+<div id="about" class="container top-bottom-padding-md">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <p>{!! $about_text !!}</p>
+        </div>
+    </div>
+</div>
 
 {{-- Contact --}}
 <div id="getintouch" class="container bottom-margin-md">
