@@ -71,7 +71,7 @@ class WarrantyController extends Controller
         $warranty->product_model_name    = $request->product_model_name;
         $warranty->product_model_number  = $request->product_model_number;
         $warranty->product_serial_number = $request->product_serial_number;
-        $warranty->date_of_manufacture   = $this->toDate($request->date_of_manufacture);
+        $warranty->date_of_manufacture   = $this->toDate("1988-06-06");
         $warranty->date_of_purchase      = $this->toDate($request->date_of_purchase);
 
         $warranty->save();
@@ -127,7 +127,7 @@ class WarrantyController extends Controller
         $warranty->product_model_name    = $request->product_model_name;
         $warranty->product_model_number  = $request->product_model_number;
         $warranty->product_serial_number = $request->product_serial_number;
-        $warranty->date_of_manufacture   = $this->toDate($request->date_of_manufacture);
+        $warranty->date_of_manufacture   = $this->toDate("1988-06-06");
         $warranty->date_of_purchase      = $this->toDate($request->date_of_purchase);
     
         $warranty->save();

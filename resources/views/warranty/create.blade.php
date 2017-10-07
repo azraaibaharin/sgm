@@ -20,7 +20,6 @@
                         @include('shared.form.textfield', ['name' => 'product_model_name', 'text' => 'Model name', 'placeholder' => 'Model name'])
                         @include('shared.form.textfield', ['name' => 'product_model_number', 'text' => 'Model number', 'placeholder' => 'Model number'])
                         @include('shared.form.textfield', ['name' => 'product_serial_number', 'text' => 'Serial no.', 'placeholder' => 'Serial number'])
-                        @include('shared.form.datepicker', ['name' => 'date_of_manufacture', 'text' => 'Manufacture date', 'help' => '* the following date format YYYY-MM-dd is used', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-05.'])
                         @include('shared.form.datepicker', ['name' => 'date_of_purchase', 'text' => 'Purchase date', 'help' => '* the following date format YYYY-MM-dd is used', 'placeholder' => 'YYYY-MM-dd. E.g. 2016-06-05.'])
                     </div>
                 </div>
