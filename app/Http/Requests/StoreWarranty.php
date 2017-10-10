@@ -31,7 +31,6 @@ class StoreWarranty extends FormRequest
             'product_model_name'    => 'required|max:255',
             'product_model_number'  => 'required|max:255',
             'product_serial_number' => 'required|max:255',
-            'date_of_manufacture'   => 'required|date',
             'date_of_purchase'      => 'required|date',
         ];
     }
