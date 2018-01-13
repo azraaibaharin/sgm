@@ -30,6 +30,8 @@
 							<td class="text-center">
 							@if (strpos(strtolower($o->status), 'unsuccessful') !== false)
 								<span class="label label-danger">{{ ucfirst($o->status) }}</span>
+							@elseif (strpos(strtolower($o->status), 'incomplete') !== false)
+								<span class="label label-warning">{{ ucfirst($o->status) }}</span>
 							@else
 								<span class="label label-success">{{ ucfirst($o->status) }}</span>
 							@endif
