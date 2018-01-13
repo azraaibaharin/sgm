@@ -191,6 +191,58 @@ trait HandlesOrder {
     }
 
     /**
+     * Update Order status based on the order reference number.
+     *
+     * @param  String $status           the order status
+     * @param  String $referenceNumber  the order reference number
+     * @return App/Order the Order instance
+     */
+    public function updateOrderStatus(Request $request, String $status, String $referenceNumber)
+    {
+        Log::info('Updating status of order with reference number: '.$referenceNumber);
+
+        $order = App\Order::where('reference_number')
+
+        $order->status = $status;
+        $order->save();
+
+        return $order;
+    }
+
+    /**
+     * Update Order status to local file for support.
+     * Delete old order details file.
+     * Create new order details file.
+     *
+     * @param  App/Order $order     the Order instance containing all the order information
+     * @return App/Order            the updated order
+     */
+    public function updateOrderFile($order) 
+    {
+        Log::info('Deleting old order details file for support team at '.storage_path('app/orders/').$order->reference_number.'.txt');   
+        Storage::disk('local')->delete('orders/'.$order->reference_number.'.txt');
+
+        $template = Storage::disk('local')->get('orders/order-template.txt');
+        $template = str_replace('{{ id }}', $order->id, $template);
+        $template = str_replace('{{ reference_number }}', $order->reference_number, $template);
+        $template = str_replace('{{ status }}', $order->status, $template);
+        $template = str_replace('{{ name }}', $order->name, $template);
+        $template = str_replace('{{ email }}', $order->email, $template);
+        $template = str_replace('{{ phone_number }}', $order->phone_number, $template);
+        $template = str_replace('{{ address }}', $order->address, $template);
+        $template = str_replace('{{ contents }}', $this->getCartContentString(), $template);
+        $template = str_replace('{{ total_price }}', $order->address, $template);
+        $template = str_replace('{{ coupon_total_value }}', $order->coupon_total_value, $template);
+        $template = str_replace('{{ delivery_cost }}', $order->delivery_cost, $template);
+        $template = str_replace('{{ final_price }}', $order->final_price, $template);
+
+        Log::info('Storing new order details for support team at '.storage_path('app/orders/').$order->reference_number.'.txt');
+
+        Storage::disk('local')->put('orders/'.$order->reference_number.'.txt', $template);
+    }
+    }
+
+    /**
      * Clear all Order related values stored in session.
      *
      * @param  Request $request

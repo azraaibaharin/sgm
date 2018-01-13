@@ -49,4 +49,16 @@ class Order extends Model
         $createdDt = new Carbon($created);
         return $createdDt->diffForHumans(Carbon::now());
     }
+
+    /**
+     * Scope a query to only include order of a given reference number.
+     * 
+     * @param  \Illuminate\Database\Eloquent\Builder $query 
+     * @param  String $refNo the order reference number 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfRefNo($query, $refNo)
+    {
+        return $query->where('reference_number', $refNo);
+    }
 }

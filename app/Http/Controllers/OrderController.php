@@ -159,6 +159,12 @@ class OrderController extends Controller
         $amountStr        = str_replace(['.', ','], "", $amount);
         $currency         = config('payment.currency');
         $signature        = $this->getSignature($merchantKey.$merchantCode.$refNo.$amountStr.$currency);
+        $orderStatus      = 'payment incomplete';
+
+        $order = $this->storeFromSession($request, $orderStatus, $refNo);
+        $this->storeToFile($order);
+        $this->sendEmail($request, $order);
+        $this->sendSupportEmail($request, $order);
 
         return view('order.payment')
                     ->with('merchantCode', $merchantCode)
@@ -286,10 +292,10 @@ class OrderController extends Controller
 
         try 
         {
-            $order = $this->storeFromSession($request, $orderStatus, $refNo);    
+            $order = $this->updateOrderStatus($orderStatus, $refNo);    
+            $this->updateOrderFile($order);
             $this->sendEmail($request, $order);
             $this->sendSupportEmail($request, $order);
-            $this->storeToFile($order);
         } 
         catch (\Exception $ex) 
         {
@@ -349,6 +355,6 @@ class OrderController extends Controller
     	return view('order.complete')
                     ->withReferenceNumber($refNo)
                     ->withMessage($message)
-                    -withIsSuccess($isSuccess);
+                    ->withIsSuccess($isSuccess);
     }
 }
