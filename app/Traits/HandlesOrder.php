@@ -201,7 +201,7 @@ trait HandlesOrder {
     {
         Log::info('Updating status of order with reference number: '.$referenceNumber);
 
-        $order = App\Order::where('reference_number')
+        $order = App\Order::where('reference_number');
 
         $order->status = $status;
         $order->save();
@@ -239,7 +239,6 @@ trait HandlesOrder {
         Log::info('Storing new order details for support team at '.storage_path('app/orders/').$order->reference_number.'.txt');
 
         Storage::disk('local')->put('orders/'.$order->reference_number.'.txt', $template);
-    }
     }
 
     /**
