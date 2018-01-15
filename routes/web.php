@@ -61,7 +61,7 @@ Route::get('payment', 'OrderController@payment');
 // Route::get('payment/test', 'OrderController@paymentTest');
 // Route::get('payment/test/response', 'OrderController@paymentTestResponse');
 Route::post('payment/response', 'OrderController@paymentResponse');
-Route::post('payment/responseBE', 'CartController@paymentResponseBE');
+Route::post('payment/responseBE', 'OrderController@paymentResponseBE');
 
 // Article
 Route::get('articles', 'ArticleController@index');
