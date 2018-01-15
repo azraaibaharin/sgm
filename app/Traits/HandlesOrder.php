@@ -66,11 +66,11 @@ trait HandlesOrder {
      * @param  Request $request 
      * @return void
      */
-    public function sendEmail(Request $request, $order)
+    public function sendEmail(Request $request, $order, $message = '')
     {
     	$salesEmail = is_null(Configuration::emailSales()->first()) ? 'dominoseffect@gmail.com' : Configuration::emailSales()->first()->value;
 
-        Log::info('Send email notification to sales team: '.$salesEmail);
+        Log::info($message.' Send email notification to sales team: '.$salesEmail.'. Ref noL '.$order->reference_number);
 
         Mail::to($salesEmail)->send(new OrderSubmitted(
         	$order,
@@ -84,11 +84,11 @@ trait HandlesOrder {
      * @param  Request $request 
      * @return void
      */
-    public function sendSupportEmail(Request $request, $order)
+    public function sendSupportEmail(Request $request, $order, $message = '')
     {
         $supportEmail = 'dominoseffect@gmail.com';
 
-        Log::info('Send debugging information to support team: '.$supportEmail);
+        Log::info($message.' Send debugging information to support team: '.$supportEmail.'. Ref no: '.$order->reference_number);
 
         Mail::to($supportEmail)->send(new OrderSupportSubmitted(
             $order,

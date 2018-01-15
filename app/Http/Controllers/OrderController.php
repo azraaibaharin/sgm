@@ -163,8 +163,8 @@ class OrderController extends Controller
 
         $order = $this->storeFromSession($request, $orderStatus, $refNo);
         $this->storeToFile($order);
-        $this->sendEmail($request, $order);
-        $this->sendSupportEmail($request, $order);
+        $this->sendEmail($request, $order, 'Pre-payment');
+        $this->sendSupportEmail($request, $order, 'Pre-payment');
 
         return view('order.payment')
                     ->with('merchantCode', $merchantCode)
@@ -294,8 +294,8 @@ class OrderController extends Controller
         {
             $order = $this->updateOrderStatus($orderStatus, $refNo);    
             $this->updateOrderFile($order);
-            $this->sendEmail($request, $order);
-            $this->sendSupportEmail($request, $order);
+            $this->sendEmail($request, $order, 'Post-payment');
+            $this->sendSupportEmail($request, $order, 'Post-payment');
         } 
         catch (\Exception $ex) 
         {
