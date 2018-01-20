@@ -20,7 +20,8 @@ class Order extends Model
     	'delivery_cost' => 0.00,
         'coupon_total_value' => 0.00,
     	'status' => '',
-    	'shoppingcart_id' => ''
+    	'shoppingcart_id' => '',
+        'contents' => ''
     ];
 
     /**
@@ -36,7 +37,8 @@ class Order extends Model
     	'delivery_cost',
         'coupon_total_value',
         'status',
-    	'shoppingcart_id'
+    	'shoppingcart_id',
+        'contents'
     ];
 
     /**

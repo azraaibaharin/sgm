@@ -56,9 +56,12 @@ class OrderController extends Controller
     {
         Log::info('Showing order id: '.$orderId);
 
-        $order = $this->order->findOrFail($orderId);
+        $order      = $this->order->findOrFail($orderId);
+        $contents   = unserialize(base64_decode($order->contents)); 
 
-        return view('order.show')->with('order', $order);
+        return view('order.show')
+                ->with('order', $order)
+                ->with('contents', $contents);
     }
 
     /**
@@ -98,7 +101,7 @@ class OrderController extends Controller
         $this->flashAttributesToSession($request, $this->order->findOrFail($id));
 
         return view('order.edit')->with('statuses', 
-            ['payment unsuccessful', 'payment successful', 'payment received', 'order processed', 'order shipped']);
+            ['payment incomplete', 'payment unsuccessful', 'payment successful', 'payment received', 'order processed', 'order shipped']);
     }
 
     /**
@@ -292,7 +295,7 @@ class OrderController extends Controller
 
         try 
         {
-            $order = $this->updateOrderStatus($orderStatus, $refNo);    
+            $order = $this->updateOrderStatus($request, $orderStatus, $refNo);    
             $this->updateOrderFile($order);
             $this->sendEmail($request, $order, 'Post-payment');
             $this->sendSupportEmail($request, $order, 'Post-payment');

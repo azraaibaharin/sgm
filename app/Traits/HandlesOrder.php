@@ -126,6 +126,8 @@ trait HandlesOrder {
 
     /**
      * Get converted cart content rows to string.
+     * @param $contents Cart::content()
+     * 
      * @return String cart contents
      */
     private function getCartContentString()
@@ -184,6 +186,7 @@ trait HandlesOrder {
     	$order->coupon_total_value = $request->session()->get($this->couponTotalValueKey);
     	$order->total_price		   = $request->session()->get($this->orderTotalPriceKey);
     	$order->final_price 	   = $request->session()->get($this->orderFinalPriceKey);
+        $order->contents           = base64_encode((serialize(Cart::content())));
     	
     	$order->save();
 
